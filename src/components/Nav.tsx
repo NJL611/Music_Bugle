@@ -13,16 +13,16 @@ export default function Nav({ }) {
     <>
       <div className='flex flex-col w-full'>
         <div className='relative px-6 w-full h-[68px] flex flex-row justify-center lg:justify-between items-center'>
-          {isSmall || isMedium ?
-            <div className='w-fit sm:absolute sm:transform sm:-translate-x-1/2 sm:left-1/2'>
+          {(isSmall || isMedium) ?
+            <div className='absolute transform -translate-x-1/2 w-fit left-1/2'>
               <LogoIcon />
             </div> :
             <div className="w-fit">
               <LogoIcon />
             </div>
           }
-          {isMedium &&
-            <div className='ml-auto w-fit'>
+          {(isSmall || isMedium) &&
+            <div className='ml-auto cursor-pointer w-fit'>
               <HamburgerIcon />
             </div>
           }
