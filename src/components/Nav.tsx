@@ -54,15 +54,14 @@ export default function Nav({ }) {
           </div>
         </div>
         {/* bottom nav items */}
-        <div className='w-full h-[34px] bg-[#1B1B1B] flex-row justify-center items-center px-6 flex overflow-scroll'>
-          <div className='flex flex-row items-center justify-center w-full gap-8 lg:justify-start'>
+        <div className='h-[34px] bg-[#1B1B1B] flex-row justify-center items-center px-6 flex overflow-scroll'>
+          <div className='flex flex-row items-center justify-center w-full gap-4 lg:gap-8 lg:justify-start'>
             {trendingItems.map(item => (
               <a key={item.label} href={item.link} className='text-[13px] font-light hover:text-white text-[#c1c1c1] transition-all cursor-pointer whitespace-nowrap'>{item.label}</a>
             ))}
           </div>
         </div>
       </div>
-
     </>
   );
 }
