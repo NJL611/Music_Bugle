@@ -34,6 +34,6 @@
   font-size: 15px;
 }
 
-span {
+span, a {
   font-family: GraphikLight;
 }
