@@ -41,13 +41,16 @@ const Carousel: React.FC = () => {
 
     const prevSlide = useCallback(() => {
         setCurrentIndex(currentIndex === 0 ? imageData.length - 1 : currentIndex - 1);
+        resetTimer()
     }, [currentIndex]);
 
     const nextSlide = useCallback(() => {
         setCurrentIndex(currentIndex === imageData.length - 1 ? 0 : currentIndex + 1);
+        resetTimer()
     }, [currentIndex]);
 
     const goToSlide = useCallback((index: number) => {
+        resetTimer()
         setCurrentIndex(index);
     }, []);
 
