@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import LeftArrowIcon from '../../public/svgs/chevronLeft.js';
-import RightArrowIcon from '../../public/svgs/chevronRight.js';
+import LeftArrowIcon from '../../public/svgs/ChevronLeft.js';
+import RightArrowIcon from '../../public/svgs/ChevronRight.js';
 import CircleIcon from '../../public/svgs/CircleIcon.js';
 
 const Carousel: React.FC = () => {
