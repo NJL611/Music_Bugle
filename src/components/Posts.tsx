@@ -5,6 +5,8 @@ import Image from "next/image";
 
 import { dataset, projectId } from "../../sanity/env";
 
+export const dynamic = 'force-static'
+
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function Posts({ posts }: { posts: SanityDocument[] }) {
