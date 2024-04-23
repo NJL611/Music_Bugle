@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @font-face {
+  font-family: AbrilFatface;
+  src: url('/fonts/AbrilFatface-Regular.woff') format('woff');
+}
+
+@font-face {
   font-family: GraphikLight;
   src: url('/fonts/Graphik-300-Light.woff') format('woff');
 }
@@ -36,4 +41,12 @@
 
 span, a {
   font-family: GraphikLight;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: AbrilFatface;
+}
+
+h2 {
+  /* font-size: calc(1vw + 1vh); */
 }
