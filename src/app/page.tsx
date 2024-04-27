@@ -23,7 +23,7 @@ export default async function Home() {
       {/* {loaded && ( */}
       <>
         <Nav />
-        <Carousel />
+        <Carousel posts={initial.data}/>
         {draftMode().isEnabled ? (
           <PostsPreview initial={initial} params={[]} />
         ) : (

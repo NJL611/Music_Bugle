@@ -5,6 +5,7 @@
 import { POST_QUERY } from "../../sanity/lib/queries";
 import { QueryResponseInitial, useQuery } from "@sanity/react-loader";
 import { QueryParams, SanityDocument } from "next-sanity";
+import React from 'react';
 
 import Post from "@/components/Post";
 
