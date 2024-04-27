@@ -1,35 +1,62 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import ChevronLeft from '../../public/svgs/ChevronLeft.js';
-import ChevronRight from '../../public/svgs/ChevronRight.js';
-import CircleIcon from '../../public/svgs/CircleIcon.js';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import ChevronLeft from "../../public/svgs/ChevronLeft.js";
+import ChevronRight from "../../public/svgs/ChevronRight.js";
+import CircleIcon from "../../public/svgs/CircleIcon.js";
 
-const Carousel: React.FC = () => {
+import Image from "next/image";
+import { PortableText } from "@portabletext/react";
+import imageUrlBuilder from "@sanity/image-url";
+import { SanityDocument } from "next-sanity";
+
+import { dataset, projectId } from "../../sanity/env";
+import Link from "next/link";
+export const dynamic = "force-dynamic";
+
+const builder = imageUrlBuilder({ projectId, dataset });
+
+export default function Carousel({ posts }: { posts: SanityDocument[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  console.log(posts);
+
   interface ImageData {
     image: string;
   }
 
-  const imageData: ImageData[] = [
-    { image: '/carousel-Images/pexels-elviss-railijs-bitāns-1389429.jpg' },
-    { image: '/carousel-Images/pexels-stephen-niemeier-63703.jpg' },
-    { image: '/carousel-Images/pexels-suvan-chowdhury-144429.jpg' },
-    { image: '/carousel-Images/pexels-vishnu-r-nair-1105666.jpg' },
-  ];
+  const sanityImagesUrl = posts.map((post) => {
+    const imageUrl =
+      builder
+        .image(post.mainImage?.asset)
+        .width(1920)
+        // .height(2000)
+        .fit("clip")
+        .auto("format")
+        .url() ?? "/path/to/default/image.jpg";
+    return imageUrl;
+  });
+
+  // const sanityImagesUrl: any = [
+  //   { image: '/carousel-Images/pexels-elviss-railijs-bitāns-1389429.jpg' },
+  //   { image: '/carousel-Images/pexels-stephen-niemeier-63703.jpg' },
+  //   { image: '/carousel-Images/pexels-suvan-chowdhury-144429.jpg' },
+  //   { image: '/carousel-Images/pexels-vishnu-r-nair-1105666.jpg' },
+  // ];
 
   const resetTimer = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
     intervalRef.current = setInterval(() => {
-      setCurrentIndex(prevIndex => (prevIndex + 1) % imageData.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % sanityImagesUrl.length);
     }, 3000);
-  }, []);
+  }, [sanityImagesUrl.length]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") { // Ensures the code runs only in the browser
+    if (typeof window !== "undefined") {
+      // Ensures the code runs only in the browser
       resetTimer();
       return () => {
         if (intervalRef.current) {
@@ -40,44 +67,78 @@ const Carousel: React.FC = () => {
   }, [resetTimer]);
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex(currentIndex === 0 ? imageData.length - 1 : currentIndex - 1);
+    setCurrentIndex(
+      currentIndex === 0 ? sanityImagesUrl.length - 1 : currentIndex - 1
+    );
     resetTimer()
-  }, [currentIndex]);
+  }, [currentIndex, sanityImagesUrl.length, resetTimer]);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex(currentIndex === imageData.length - 1 ? 0 : currentIndex + 1);
+    setCurrentIndex(
+      currentIndex === sanityImagesUrl.length - 1 ? 0 : currentIndex + 1
+    );
     resetTimer()
-  }, [currentIndex]);
+  }, [currentIndex, sanityImagesUrl.length, resetTimer]);
 
-  const goToSlide = useCallback((index: number) => {
-    resetTimer()
-    setCurrentIndex(index);
-  }, []);
+  const goToSlide = useCallback(
+    (index: number) => {
+      resetTimer();
+      setCurrentIndex(index);
+    },
+    [resetTimer]
+  );
 
-  const indicators = imageData.map((item, index) => (
+  const indicators = sanityImagesUrl.map((item: any, index: any) => (
     <CircleIcon
       key={index}
-      className={`mx-1 cursor-pointer ${index === currentIndex ? 'text-blue-500' : 'text-gray-400'}`}
+      className={`mx-1 cursor-pointer ${
+        index === currentIndex ? "text-blue-500" : "text-gray-400"
+      }`}
       onClick={() => goToSlide(index)}
     />
   ));
 
   return (
-    <div className='mt-0 w-full h-[549px] bg-[#444444]'>
-      <div className='max-w-[1920px] h-[549px] w-full m-auto relative group'>
-        <div style={{ backgroundImage: `url(${imageData[currentIndex].image})` }} className="w-full h-full bg-center bg-cover duration-500"></div>
-        <div className="absolute left-1/2 bottom-5 transform -translate-x-1/2 flex items-center space-x-2 sm:space-x-4">
+    <div className="mt-0 w-full h-[549px] bg-[#444444]">
+      <div className="max-w-[1920px] h-[549px] w-full m-auto relative group">
+        <Link className="block w-full h-full" href={posts[currentIndex].slug || "/"}>  
+            <div className="w-full h-full bg-gradient-to-b from-[#3636344d]  to-[#36363454] absolute z-[1]" />  
+            <Image
+              className="w-full h-full object-cover duration-500 my-auto absolute"
+              width={1920}
+              height={1080}
+              src={sanityImagesUrl[currentIndex]}
+              alt={"Post Image"}
+            />
+              
+          <h2 className="absolute text-white translate-x-1/2 right-1/2 bottom-[164px] text-[34px] text-center leading-[44px] z-[2] w-[96%] md:w-auto">
+            {posts[currentIndex].title}
+          </h2>
+          <span className="absolute text-white translate-x-1/2 right-1/2 bottom-[72px] text-[18px] text-center z-[2] w-[80%] line-clamp-3">
+          {posts[currentIndex]?.body[0]?.children[0].text}
+        </span> 
+        </Link>
+
+        <div className="absolute left-1/2 bottom-5 transform -translate-x-1/2 flex items-center space-x-2 sm:space-x-4 z-[2]">
           <div className="p-2 text-white cursor-pointer">
-            <ChevronLeft className="text-blue-500 hover:text-blue-700" width={50} height={50} onClick={prevSlide} />
+            <ChevronLeft
+              className="text-blue-500 hover:text-blue-700"
+              width={50}
+              height={50}
+              onClick={prevSlide}
+            />
           </div>
           {indicators}
           <div className="p-2 text-white cursor-pointer">
-            <ChevronRight className="text-blue-500 hover:text-blue-700" width={50} height={50} onClick={nextSlide} />
+            <ChevronRight
+              className="text-blue-500 hover:text-blue-700"
+              width={50}
+              height={50}
+              onClick={nextSlide}
+            />
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default Carousel;

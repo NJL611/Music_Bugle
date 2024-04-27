@@ -48,5 +48,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2 {
-  /* font-size: calc(1vw + 1vh); */
+  font-size: calc(1vw + 1vh);
+}
+
+img {
+  max-width: none;
 }
