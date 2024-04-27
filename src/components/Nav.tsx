@@ -4,6 +4,7 @@ import SearchIcon from '../../public/svgs/SearchIcon'
 import HamburgerIcon from '../../public/svgs/HamburgerIcon'
 import useWindowUtils from '@/hooks/useWindowUtils';
 import Button from '@/components/Button';
+import React from 'react';
 
 const navItems = [
   { label: 'News', link: '#' },
