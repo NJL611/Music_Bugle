@@ -2,6 +2,7 @@ import { SanityDocument } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 import Link from "next/link";
 import Image from "next/image";
+import React from 'react';
 
 import { dataset, projectId } from "../../sanity/env";
 

@@ -6,6 +6,8 @@ import imageUrlBuilder from "@sanity/image-url";
 import { SanityDocument } from "next-sanity";
 
 import { dataset, projectId } from "../../sanity/env";
+import React from 'react';
+
 
 const builder = imageUrlBuilder({ projectId, dataset });
 

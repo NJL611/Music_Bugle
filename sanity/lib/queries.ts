@@ -17,6 +17,7 @@ export const POSTS_QUERY = groq`
       name,
       _id
     },
+    body,
     "categories": categories[]->{
       title,
       _id
