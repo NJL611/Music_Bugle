@@ -9,6 +9,7 @@ import Post from "@/components/Post";
 import PostPreview from "@/components/PostPreview";
 import { client } from "../../../sanity/lib/client";
 import Nav from "@/components/Nav";
+import Disqus from "@/components/Disqus";
 
 export const dynamic = 'force-static'
 
@@ -33,6 +34,7 @@ export default async function Page({ params }: { params: QueryParams }) {
     <>
       <Nav />
       <Post post={initial.data} />
+      {/* <Disqus post = {initial.data}/> */}
     </>
   );
 }
