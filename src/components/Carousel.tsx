@@ -20,7 +20,7 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  console.log(posts);
+  // console.log(posts);
 
   interface ImageData {
     image: string;
