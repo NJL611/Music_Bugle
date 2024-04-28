@@ -7,12 +7,15 @@ import { SanityDocument } from "next-sanity";
 
 import { dataset, projectId } from "../../sanity/env";
 import React from 'react';
+import Disqus from "../components/Disqus"
 
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function Post({ post }: { post: SanityDocument }) {
   const { title, mainImage, body } = post;
+
+console.log(post)
 
   return (
     <main className="container mx-auto prose prose-lg p-4">
@@ -27,6 +30,7 @@ export default function Post({ post }: { post: SanityDocument }) {
         />
       ) : null}
       {body ? <PortableText value={body} /> : null}
+      <Disqus post = {post}/>
     </main>
   );
 }
