@@ -52,3 +52,26 @@ export const POST_QUERY = groq`
     _updatedAt
   }
 `;
+
+export const SEARCH_QUERY = groq`
+  *[_type == "post" && defined(slug) && (title match $search || categories[]->title match $search)] {
+    title,
+    "slug": slug.current,
+    mainImage {
+      asset->{
+        _id,
+        url
+      }
+    },
+    "author": author->{
+      name,
+      _id
+    },
+    body,
+    "categories": categories[]->{
+      title,
+      _id
+    },
+    publishedAt,
+  }
+`;

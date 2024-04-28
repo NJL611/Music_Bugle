@@ -1,21 +1,40 @@
 import { SanityDocument } from "next-sanity";
+import { draftMode } from "next/headers";
+import { loadQuery } from "../../../sanity/lib/store";
+import { POSTS_QUERY, SEARCH_QUERY } from "../../../sanity/lib/queries";
+import { client } from "../../../sanity/lib/client";
+import Nav from "@/components/Nav";
 import imageUrlBuilder from "@sanity/image-url";
+import { dataset, projectId } from "../../../sanity/env";
+import Image from "next/image"
 import Link from "next/link";
-import Image from "next/image";
-
-import { dataset, projectId } from "../../sanity/env";
-
-export const dynamic = 'force-static'
-
 const builder = imageUrlBuilder({ projectId, dataset });
 
-export default function Posts({ posts }: { posts: SanityDocument[] }) {
+export async function generateStaticParams() {
+  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY)
+
+  return posts.map((post) => ({
+    slug: post.slug.current,
+  }))
+}
+
+export default async function Page({ params, searchParams }: {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  const searchValue = searchParams.search || '';
+
+  const initial = await loadQuery<SanityDocument>(SEARCH_QUERY, { ...params, search: searchValue }, {
+    perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+  });
+
   return (
-    <div className="xl:px-[103px] px-4 md:px-4 lg:px-6 py-12 ">
-      <span className="w-full text-lg mb-4 text-left">LATEST</span>
-      <main className="mx-auto flex flex-wrap gap-[14px] justify-center py-4">
-        {posts?.length > 0 ? (
-          posts.map((post) => {
+    <>
+      <Nav />
+      <div className='p-6'>
+        <h1>Search Results for {searchParams.search}</h1>
+        {initial ? (
+          initial.data.map((post: any) => {
             const imageUrl = builder.image(post.mainImage?.asset)
               .width(298)
               .height(192)
@@ -30,7 +49,7 @@ export default function Posts({ posts }: { posts: SanityDocument[] }) {
             });
 
             return (
-              <div key={post._id} className="py-4 w-full md:w-[48%] lg:w-[48%] xl:w-[24%]">
+              <div key={post.slug} className="py-4 w-full md:w-[48%] lg:w-[48%] xl:w-[24%]">
                 <Image
                   className="w-full h-auto object-cover"
                   width={298}
@@ -50,12 +69,10 @@ export default function Posts({ posts }: { posts: SanityDocument[] }) {
                   </div>
                 </Link>
               </div>
-            );
+            )
           })
-        ) : (
-          <div className="text-red-500">No posts found</div>
-        )}
-      </main>
-    </div>
+        ) : <p>No results found.</p>}
+      </div>
+    </>
   );
 }
