@@ -14,13 +14,18 @@
     "@sanity/overlays": "^2.3.9",
     "@sanity/react-loader": "^1.8.2",
     "@sanity/vision": "^3.38.0",
+    "@stripe/react-stripe-js": "^2.7.0",
+    "@stripe/stripe-js": "^3.3.0",
+    "add": "^2.0.6",
     "disqus-react": "^1.1.5",
     "next": "14.2.0",
     "next-sanity": "^7.1.4",
     "react": "^18",
     "react-dom": "^18",
     "sanity": "^3.38.0",
-    "styled-components": "^6.1.8"
+    "stripe": "^15.5.0",
+    "styled-components": "^6.1.8",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",

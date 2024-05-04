@@ -20,6 +20,7 @@ const useWindowUtils = () => {
   }, []);
 
   useEffect(() => {
+    console.log('infinite loop action')
     if (windowWidth < 640) {
       setSize('small');
     } else if (windowWidth < 1024) {
@@ -33,7 +34,7 @@ const useWindowUtils = () => {
     if (size && !loaded) {
       setLoaded(true);
     }
-  }, [size]);
+  }, [size, loaded]);
 
   return { windowWidth, size, loaded };
 }
