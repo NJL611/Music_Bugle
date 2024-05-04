@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { draftMode } from "next/headers";
 import VisualEditing from "@/components/VisualEditing";
+import "../../styles.css";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
