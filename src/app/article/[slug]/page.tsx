@@ -2,11 +2,12 @@ import { QueryParams, SanityDocument } from "next-sanity";
 import { draftMode } from "next/headers";
 import { loadQuery } from "../../../../sanity/lib/store";
 import { POSTS_QUERY, POST_QUERY } from "../../../../sanity/lib/queries";
-import Post from "@/components/Post"; // Default import
-import PostPreview from "@/components/PostPreview"; // Default import
+import Post from "@/components/Post";
+import PostPreview from "@/components/PostPreview";
 import { client } from "../../../../sanity/lib/client";
-import Nav from "@/components/Nav"; // Default import
-import ExtendMetadata from "../../../components/ExtendMetadata"; // Default import
+import Nav from "@/components/Nav";
+import ExtendMetadata from "../../../components/ExtendMetadata";
+import Footer from "@/components/Footer";
 
 export const dynamic = 'force-static';
 
@@ -112,6 +113,7 @@ export default async function Page({ params }: { params: { slug: string; }; }) {
       <ExtendMetadata meta={metadata} />
       <Nav />
       <Post post={initial.data} />
+      <Footer />
     </>
   );
 }
