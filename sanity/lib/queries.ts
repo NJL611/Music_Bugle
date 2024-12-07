@@ -6,6 +6,7 @@ export const POSTS_QUERY = groq`
   *[_type == "post" && defined(slug)]{
     _id,
     title,
+    subtitle,
     "slug": slug.current,
     mainImage {
       asset->{
@@ -22,6 +23,11 @@ export const POSTS_QUERY = groq`
       title,
       _id
     },
+    "tags": tags[]->{
+      title,
+      _id,
+      description
+    },
     publishedAt,
     _updatedAt
   }
@@ -31,6 +37,7 @@ export const POST_QUERY = groq`
   *[_type == "post" && slug.current == $slug][0]{
     _id,
     title,
+    subtitle,
     "slug": slug.current,
     mainImage {
       asset->{
@@ -48,14 +55,22 @@ export const POST_QUERY = groq`
       _id,
       description
     },
+    "tags": coalesce(tags[]->{
+      title,
+      _id,
+      description
+    }, []),
     publishedAt,
     _updatedAt
   }
 `;
 
+
 export const SEARCH_QUERY = groq`
   *[_type == "post" && defined(slug) && (title match $search || categories[]->title match $search)] {
+    _id,
     title,
+    subtitle,
     "slug": slug.current,
     mainImage {
       asset->{
@@ -72,6 +87,12 @@ export const SEARCH_QUERY = groq`
       title,
       _id
     },
+    "tags": tags[]->{
+      title,
+      _id
+    },
     publishedAt,
+    _updatedAt
   }
 `;
+

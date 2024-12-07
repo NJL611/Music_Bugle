@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-export default function Button({ text, href, bgColor, textColor }: { text: string; href: string; bgColor?: string; textColor?: string }) {
+export default function Button({ text, href, bgColor = '#C14E4E', textColor = '#FFF' }: { text: string; href: string; bgColor?: string; textColor?: string }) {
   return (
     <a
       href={href}
