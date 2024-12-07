@@ -15,7 +15,7 @@ export default function ExtendMetadata({ meta }: { meta: ExtendedMetadata }) {
   const titleTemplate = '%s - The Music Bugle';
   const defaultTitle = meta.title;
 
-  console.log(meta);
+  // console.log(meta);
 
   return (
     <Head>
