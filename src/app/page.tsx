@@ -9,28 +9,30 @@ import Posts from "../components/Posts";
 import PostsPreview from "../components/PostPreview";
 import { loadQuery } from "../../sanity/lib/store";
 import { POSTS_QUERY } from "../../sanity/lib/queries";
+import Footer from "@/components/Footer";
+
 
 export default async function Home() {
   const initial: any = await loadQuery<SanityDocument[]>(POSTS_QUERY, {}, {
     perspective: draftMode().isEnabled ? "previewDrafts" : "published",
   });
 
-
   // const { loaded } = useWindowUtils();
 
   return (
-    <main className="flex flex-col items-center w-full">
-      {/* {loaded && ( */}
+    <main>
       <>
         <Nav />
-        <Carousel posts={initial.data}/>
+        <Carousel posts={initial.data} />
         {draftMode().isEnabled ? (
           <PostsPreview initial={initial} params={[]} />
         ) : (
-          <Posts posts={initial.data} />
+          <>
+            <Posts posts={initial.data} />
+            <Footer />
+          </>
         )}
       </>
-      {/* )} */}
     </main>
   );
 }
