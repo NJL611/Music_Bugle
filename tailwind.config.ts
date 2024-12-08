@@ -21,7 +21,11 @@ const config: Config = {
     graphiknormal: ['GraphikNormal', 'sans-serif'],
     graphikmedium: ['GraphikMedium', 'sans-serif'],
     graphiksemibold: ['GraphikSemibold', 'sans-serif'],
-    graphikbold: ['GraphikBold', 'sans-serif']
+    graphikbold: ['GraphikBold', 'sans-serif'],
+    gentiumBookPlusRegular: ['GentiumBookPlus-Regular', 'serif'],
+    gentiumBookPlusItalic: ['GentiumBookPlus-Italic', 'serif'],
+    gentiumBookPlusBold: ['GentiumBookPlus-Bold', 'serif'],
+    gentiumBookPlusBoldItalic: ['GentiumBookPlus-BoldItalic', 'serif'],
   },
   plugins: [],
 };

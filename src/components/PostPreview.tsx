@@ -23,7 +23,7 @@ export default function PostPreview({
   );
 
   return data ? (
-    <Post post={data} />
+    <Post post={data} posts={[]} />
   ) : (
     <div className="bg-red-100">Post not found</div>
   );

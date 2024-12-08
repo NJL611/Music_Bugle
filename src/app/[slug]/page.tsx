@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: QueryParams }) {
   ) : (
     <>
       <Nav />
-      <Post post={initial.data} />
+      <Post post={initial.data} posts={[]} />
       {/* <Disqus post = {initial.data}/> */}
     </>
   );
