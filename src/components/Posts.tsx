@@ -16,12 +16,20 @@ export default function Posts({ posts, amount = 4 }: { posts: SanityDocument[], 
       <div className="mx-auto flex flex-wrap gap-[14px] justify-center py-4">
         {posts?.length > 0 ? (
           posts.slice(0, amount).map((post) => {
-            const imageUrl = builder.image(post.mainImage?.asset)
-              .width(298)
-              .height(192)
-              .fit('crop')
-              .auto('format')
-              .url() ?? "/path/to/default/image.jpg";
+
+            let imageUrl = post.mainImage?.asset?._ref || post.mainImage?.asset?._id;
+            if (imageUrl) {
+              imageUrl = builder
+                .image(post.mainImage.asset)
+                .width(1920)
+                .fit("clip")
+                .auto("format")
+                .url();
+            } else if (post.featured_image) {
+              imageUrl = post.featured_image;
+            } else {
+              imageUrl = "/carousel-Images/pexels-elviss-railijs-bitāns-1389429.jpg";
+            }
 
             const formattedDate = new Date(post.publishedAt).toLocaleDateString('en-GB', {
               day: '2-digit',
@@ -41,7 +49,7 @@ export default function Posts({ posts, amount = 4 }: { posts: SanityDocument[], 
                 <Link
                   className="inline-block"
                   href={`article/${post.slug}` || '/'}>
-                  {post.categories.map((category: any) => (
+                  {post?.categories?.map((category: any) => (
                     <span key={category._id} className="inline-block text-sm text-[#808080] py-2">{category.title}</span>
                   ))}
                   <div>

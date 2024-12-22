@@ -6,7 +6,6 @@ import ChevronRight from "../../public/svgs/ChevronRight.js";
 import CircleIcon from "../../public/svgs/CircleIcon.js";
 
 import Image from "next/image";
-import { PortableText } from "@portabletext/react";
 import imageUrlBuilder from "@sanity/image-url";
 import { SanityDocument } from "next-sanity";
 
@@ -21,29 +20,27 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // console.log(posts);
-
   interface ImageData {
     image: string;
   }
 
+  console.log('posts', posts);
+
   const sanityImagesUrl = posts.map((post) => {
-    const imageUrl =
-      builder
-        .image(post.mainImage?.asset)
+    const hasMainImage = post.mainImage?.asset?._ref || post.mainImage?.asset?._id;
+    if (hasMainImage) {
+      return builder
+        .image(post.mainImage.asset)
         .width(1920)
-        // .height(2000)
         .fit("clip")
         .auto("format")
-        .url() ?? "/path/to/default/image.jpg";
-    return imageUrl;
+        .url();
+    } else if (post.featured_image) {
+      return post.featured_image;
+    } else {
+      return "/carousel-Images/pexels-elviss-railijs-bitāns-1389429.jpg";
+    }
   });
-
-  // const sanityImagesUrl: any = [
-  //   { image: '/carousel-Images/pexels-elviss-railijs-bitāns-1389429.jpg' },
-  //   { image: '/carousel-Images/pexels-stephen-niemeier-63703.jpg' },
-  //   { image: '/carousel-Images/pexels-suvan-chowdhury-144429.jpg' },
-  //   { image: '/carousel-Images/pexels-vishnu-r-nair-1105666.jpg' },
-  // ];
 
   const resetTimer = useCallback(() => {
     if (intervalRef.current) {
@@ -91,9 +88,8 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
   const indicators = sanityImagesUrl.map((item: any, index: any) => (
     <CircleIcon
       key={index}
-      className={`mx-1 cursor-pointer ${
-        index === currentIndex ? "text-blue-500" : "text-gray-400"
-      }`}
+      className={`mx-1 cursor-pointer ${index === currentIndex ? "text-blue-500" : "text-gray-400"
+        }`}
       onClick={() => goToSlide(index)}
     />
   ));
@@ -101,22 +97,22 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
   return (
     <div className="mt-0 w-full h-[549px] bg-[#444444]">
       <div className="max-w-[1920px] h-[549px] w-full m-auto relative group">
-        <Link className="block w-full h-full" href={posts[currentIndex].slug || "/"}>  
-            <div className="w-full h-full bg-gradient-to-b from-[#3636344d]  to-[#36363454] absolute z-[1]" />  
-            <Image
-              className="w-full h-full object-cover duration-500 my-auto absolute"
-              width={1920}
-              height={1080}
-              src={sanityImagesUrl[currentIndex]}
-              alt={"Post Image"}
-            />
-              
+        <Link className="block w-full h-full" href={posts[currentIndex]?.slug || "/"}>
+          <div className="w-full h-full bg-gradient-to-b from-[#3636344d]  to-[#36363454] absolute z-[1]" />
+          <Image
+            className="w-full h-full object-cover duration-500 my-auto absolute"
+            width={1920}
+            height={1080}
+            src={sanityImagesUrl[currentIndex]}
+            alt={"Post Image"}
+          />
+
           <h2 className="absolute text-white translate-x-1/2 right-1/2 bottom-[164px] text-[34px] text-center leading-[44px] z-[2] w-[96%] md:w-auto">
-            {posts[currentIndex].title}
+            {posts[currentIndex]?.title}
           </h2>
           <span className="absolute text-white translate-x-1/2 right-1/2 bottom-[72px] text-[18px] text-center z-[2] w-[80%] line-clamp-3">
-          {posts[currentIndex]?.body[0]?.children[0].text}
-        </span> 
+            {posts[currentIndex]?.body[0]?.children[0].text}
+          </span>
         </Link>
 
         <div className="absolute left-1/2 bottom-5 transform -translate-x-1/2 flex items-center space-x-2 sm:space-x-4 z-[2]">
