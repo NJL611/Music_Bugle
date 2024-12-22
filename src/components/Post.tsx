@@ -27,11 +27,50 @@ const Advertisement = () => (
 
 const components: PortableTextComponents = {
   block: {
-    normal: ({ children }) => (
-      <p className="text-[16px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto">
-        {children}
-      </p>
-    ),
+    normal: ({ children, value }) => {
+      const text = value.children.map(child => child.text).join('').trim();
+
+      const youTubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+
+      if (youTubeRegex.test(text)) {
+        const getYouTubeId = (url) => {
+          const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&]+)/;
+          const match = url.match(regex);
+          return match ? match[1] : null;
+        };
+
+        const videoId = getYouTubeId(text);
+
+        if (videoId) {
+          const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+
+          return (
+            <div className="youtube-container my-4 relative" style={{ paddingBottom: '56.25%', height: 0 }}>
+              <iframe
+                src={embedUrl}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute top-0 left-0 w-full h-full"
+              ></iframe>
+            </div>
+          );
+        } else {
+          return (
+            <p className="text-[16px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto">
+              {children}
+            </p>
+          );
+        }
+      }
+
+      return (
+        <p className="text-[16px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto">
+          {children}
+        </p>
+      );
+    },
     h1: ({ children }) => (
       <h1 className="text-3xl font-bold my-4">{children}</h1>
     ),
@@ -71,6 +110,14 @@ const components: PortableTextComponents = {
         </>
       );
     },
+    imageUrl: ({ value }) => {
+      return (
+        <div className="mt-6 w-[95%] h-[225px] md:h-[500px] md:w-full m-auto relative group">
+          <Image src={value.url} alt={value.alt || ''} layout="fill" objectFit="cover" />
+          {value.alt && <figcaption>{value.alt}</figcaption>}
+        </div>
+      )
+    },
     ad: () => <Advertisement />,
   },
 };
@@ -81,9 +128,9 @@ interface Props {
 }
 
 export default function Post({ post, posts }: Props) {
-  const { title, subtitle, mainImage, body, author, publishedAt } = post;
+  const { title, subtitle, mainImage, body, author, publishedAt, featured_image } = post;
 
-  // console.log('post', post);
+  console.log('post', post);
 
   const processedBody: PortableTextBlock[] = [];
   let paragraphCounter = 0;
@@ -177,6 +224,16 @@ export default function Post({ post, posts }: Props) {
                     .url() ?? "/path/to/default/image.jpg"
                 }
                 alt={mainImage.alt || ""}
+              />
+            </div>
+          ) : featured_image ? (
+            <div className="h-[300px] md:h-[549px] w-full m-auto relative group">
+              <Image
+                className="w-full h-full object-cover duration-500 my-auto absolute"
+                width={1920}
+                height={2000}
+                src={featured_image}
+                alt={""}
               />
             </div>
           ) : null}

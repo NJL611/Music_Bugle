@@ -1,5 +1,4 @@
 import { defineField, defineType } from 'sanity'
-import tag from './tag'
 
 export default defineType({
   name: 'post',
@@ -52,6 +51,11 @@ export default defineType({
           title: 'Alternative Text',
         }
       ]
+    }),
+    defineField({
+      name: 'featured_image',
+      title: 'Featured Image',
+      type: 'string',
     }),
     defineField({
       name: 'description',
