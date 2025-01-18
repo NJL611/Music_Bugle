@@ -7,6 +7,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "cdn.sanity.io",
       },
+      {
+        protocol: "https",
+        hostname: "i0.wp.com",
+      },
     ],
   },
   experimental: {

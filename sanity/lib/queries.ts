@@ -8,10 +8,13 @@ export const POSTS_QUERY = groq`
     title,
     subtitle,
     "slug": slug.current,
+    featured_image,
     mainImage {
-      asset->{
+      asset-> {
         _id,
-        url
+        _ref,
+        url,
+        metadata
       }
     },
     "author": author->{
@@ -39,10 +42,13 @@ export const POST_QUERY = groq`
     title,
     subtitle,
     "slug": slug.current,
+    featured_image,
     mainImage {
-      asset->{
+      asset-> {
         _id,
-        url
+        _ref,
+        url,
+        metadata
       }
     },
     "author": author->{
@@ -73,9 +79,11 @@ export const SEARCH_QUERY = groq`
     subtitle,
     "slug": slug.current,
     mainImage {
-      asset->{
+      asset-> {
         _id,
-        url
+        _ref,
+        url,
+        metadata
       }
     },
     "author": author->{

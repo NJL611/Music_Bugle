@@ -24,13 +24,19 @@ export default function Suggestions({ posts }: { posts: SanityDocument[] }) {
                 <div className="mx-auto grid grid-cols-2 lg:grid-cols-1 gap-4 items-stretch">
                     {posts?.length > 0 ? (
                         posts.map((post, index) => {
-                            const imageUrl =
-                                builder.image(post.mainImage?.asset)
-                                    .width(298)
-                                    .height(192)
-                                    .fit('crop')
-                                    .auto('format')
-                                    .url() ?? '/path/to/default/image.jpg';
+                            let imageUrl = post.mainImage?.asset?._ref || post.mainImage?.asset?._id;
+                            if (imageUrl) {
+                                imageUrl = builder
+                                    .image(post.mainImage.asset)
+                                    .width(1920)
+                                    .fit("clip")
+                                    .auto("format")
+                                    .url();
+                            } else if (post.featured_image) {
+                                imageUrl = post.featured_image;
+                            } else {
+                                imageUrl = "/carousel-Images/pexels-elviss-railijs-bitāns-1389429.jpg";
+                            }
                             return (
                                 <div
                                     key={post._id}
@@ -74,13 +80,19 @@ export default function Suggestions({ posts }: { posts: SanityDocument[] }) {
                 <div className="mx-auto grid grid-cols-2 lg:grid-cols-1 gap-4 items-stretch">
                     {posts?.length > 0 ? (
                         posts.map((post, index) => {
-                            const imageUrl =
-                                builder.image(post.mainImage?.asset)
-                                    .width(298)
-                                    .height(192)
-                                    .fit('crop')
-                                    .auto('format')
-                                    .url() ?? '/path/to/default/image.jpg';
+                            let imageUrl = post.mainImage?.asset?._ref || post.mainImage?.asset?._id;
+                            if (imageUrl) {
+                                imageUrl = builder
+                                    .image(post.mainImage.asset)
+                                    .width(1920)
+                                    .fit("clip")
+                                    .auto("format")
+                                    .url();
+                            } else if (post.featured_image) {
+                                imageUrl = post.featured_image;
+                            } else {
+                                imageUrl = "/carousel-Images/pexels-elviss-railijs-bitāns-1389429.jpg";
+                            }
                             return (
                                 <div
                                     key={post._id}
