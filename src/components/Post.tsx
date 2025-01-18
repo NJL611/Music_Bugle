@@ -33,7 +33,7 @@ const components: PortableTextComponents = {
       const youTubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
 
       if (youTubeRegex.test(text)) {
-        const getYouTubeId = (url) => {
+        const getYouTubeId = (url: string) => {
           const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&]+)/;
           const match = url.match(regex);
           return match ? match[1] : null;
