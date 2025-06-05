@@ -58,7 +58,7 @@ const components: PortableTextComponents = {
           );
         } else {
           return (
-            <p className="text-[16px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto">
+            <p className="text-[16px] leading-[24px] text-gray-700 mb-4 max-w-[750px] mx-auto">
               {children}
             </p>
           );
@@ -66,7 +66,7 @@ const components: PortableTextComponents = {
       }
 
       return (
-        <p className="text-[16px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto">
+        <p className="text-[17px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto">
           {children}
         </p>
       );

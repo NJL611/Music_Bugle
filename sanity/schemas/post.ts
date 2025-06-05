@@ -34,9 +34,8 @@ export default defineType({
       name: 'tags',
       title: 'Tags',
       type: 'array',
-      of: [{ type: 'reference', to: { type: 'tag' } }],
+      of: [{ type: 'string' }],
     }),
-
     defineField({
       name: 'mainImage',
       title: 'Main image',
