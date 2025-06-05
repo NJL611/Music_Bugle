@@ -52,6 +52,16 @@
   src: url('/fonts/GentiumBookPlus-BoldItalic.woff') format('woff');
 }
 
+@font-face {
+  font-family: Cormorant-Regular;
+  src: url('/fonts/Cormorant-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: Cormorant-SemiBold;
+  src: url('/fonts/Cormorant-SemiBold.woff') format('woff');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -59,11 +69,17 @@
   font-size: 15px;
 }
 
-span, a {
+span,
+a {
   font-family: GraphikLight;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: AbrilFatface;
 }
 
@@ -81,6 +97,7 @@ img {
 
 .body-text {
   @apply text-lg text-black normal-case font-[lighter] leading-[1.85] text-left;
+  /* @apply text-black normal-case font-[lighter] text-left; */
   font-family: GentiumBookPlus-Regular;
 }
 

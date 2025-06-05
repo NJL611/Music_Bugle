@@ -71,7 +71,6 @@ export const POST_QUERY = groq`
   }
 `;
 
-
 export const SEARCH_QUERY = groq`
   *[_type == "post" && defined(slug) && (title match $search || categories[]->title match $search)] {
     _id,
@@ -103,4 +102,3 @@ export const SEARCH_QUERY = groq`
     _updatedAt
   }
 `;
-

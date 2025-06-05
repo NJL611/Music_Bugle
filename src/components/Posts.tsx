@@ -11,7 +11,7 @@ const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function Posts({ posts, amount = 4 }: { posts: SanityDocument[], amount?: number }): JSX.Element {
   return (
-    <div className="xl:px-[103px] px-4 md:px-4 lg:px-6 py-12 ">
+    <div className="xl:px-[103px] px-4 md:px-4 lg:px-6 pt-8 pb-2">
       <span className="w-full text-lg mb-4 text-left">LATEST</span>
       <div className="mx-auto flex flex-wrap gap-[14px] justify-center py-4">
         {posts?.length > 0 ? (
@@ -21,7 +21,8 @@ export default function Posts({ posts, amount = 4 }: { posts: SanityDocument[], 
             if (imageUrl) {
               imageUrl = builder
                 .image(post.mainImage.asset)
-                .width(1920)
+                .width(300)
+                .height(200)
                 .fit("clip")
                 .auto("format")
                 .url();
@@ -40,9 +41,9 @@ export default function Posts({ posts, amount = 4 }: { posts: SanityDocument[], 
             return (
               <div key={post._id} className="py-4 w-full md:w-[48%] lg:w-[48%] xl:w-[24%]">
                 <Image
-                  className="w-full h-auto object-cover"
-                  width={298}
-                  height={192}
+                  className="w-full h-[200px] object-cover"
+                  width={300}
+                  height={200}
                   src={imageUrl}
                   alt={post.title || 'Post Image'}
                 />
@@ -50,11 +51,17 @@ export default function Posts({ posts, amount = 4 }: { posts: SanityDocument[], 
                   className="inline-block"
                   href={`article/${post.slug}` || '/'}>
                   {post?.categories?.map((category: any) => (
-                    <span key={category._id} className="inline-block text-sm text-[#808080] py-2">{category.title}</span>
+                    <span key={category._id} className="inline-block text-sm text-[#808080] py-2">
+                      {category.title}
+                    </span>
                   ))}
                   <div>
-                    <h2 className="text-[22px] font-bold inline-block">{post.title}</h2>
-                    {post.author && <p className="text-sm">By <span className="bold">{post.author.name}</span> | {formattedDate}</p>}
+                    <h2 className="text-[22px] leading-[1.5] font-bold inline-block">{post.title}</h2>
+                    {post.author && (
+                      <p className="text-sm">
+                        By <span className="bold">{post.author.name}</span> | {formattedDate}
+                      </p>
+                    )}
                   </div>
                 </Link>
               </div>

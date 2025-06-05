@@ -48,7 +48,7 @@ export default function Nav({ }) {
   return (
     <>
       <div className='flex flex-col w-full'>
-        <div className='relative px-6 w-full h-[68px] flex flex-row justify-center lg:justify-between items-center'>
+        <div className='relative px-6 w-full h-[56px] flex flex-row justify-center lg:justify-between items-center'>
           <div className={`${(size === 'small' || size === 'medium') ? 'absolute transform -translate-x-1/2 left-1/2' : 'w-fit'}`}>
             <Link href='/'>
               <LogoIcon />

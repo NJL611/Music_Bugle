@@ -26,6 +26,8 @@ const config: Config = {
     gentiumBookPlusItalic: ['GentiumBookPlus-Italic', 'serif'],
     gentiumBookPlusBold: ['GentiumBookPlus-Bold', 'serif'],
     gentiumBookPlusBoldItalic: ['GentiumBookPlus-BoldItalic', 'serif'],
+    CormorantRegular: ['Cormorant-Regular', 'serif'],
+    CormorantSemiBold: ['Cormorant-SemiBold', 'serif']
   },
   plugins: [],
 };
