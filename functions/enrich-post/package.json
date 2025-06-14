@@ -1,0 +1,8 @@
+{
+  "name": "enrich-post",
+  "type": "module",
+  "main": "index.ts",
+  "dependencies": {
+    "@sanity/functions": "1.0.2"
+  }
+}
