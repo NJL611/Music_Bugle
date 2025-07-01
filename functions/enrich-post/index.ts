@@ -4,10 +4,6 @@ import { createClient, type SanityClient } from '@sanity/client'
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-1.5-flash-latest'
 
-function slugify(input: string): string {
-  return input.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-')
-}
-
 async function fetchWithBackoff(url: string, init: RequestInit, retries = 3): Promise<Response> {
   for (let attempt = 1; attempt <= retries; attempt++) {
     const res = await fetch(url, init)
