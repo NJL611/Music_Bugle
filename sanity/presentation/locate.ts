@@ -10,7 +10,7 @@ export const locate: DocumentLocationResolver = (params, context) => {
     // Subscribe to the latest slug and title
     const doc$ = context.documentStore.listenQuery(
       `*[_id == $id][0]{slug,title}`,
-      params,
+      { id: params.id },
       { perspective: "previewDrafts" } // returns a draft article if it exists
     );
     // Return a streaming list of locations
