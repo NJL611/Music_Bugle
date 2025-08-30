@@ -12,9 +12,11 @@
 # next.js
 /.next/
 /out/
+/dist
 
 # production
 /build
+.env
 
 # misc
 .DS_Store
@@ -34,3 +36,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# Sanity Functions
+functions/**/.env*
+functions/**/.build/
+functions/**/node_modules/
