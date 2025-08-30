@@ -2,32 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@font-face {
+  font-family: AbrilFatface;
+  src: url('/fonts/AbrilFatface-Regular.woff') format('woff');
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+@font-face {
+  font-family: GraphikLight;
+  src: url('/fonts/Graphik-300-Light.woff') format('woff');
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@font-face {
+  font-family: GraphikNormal;
+  src: url('/fonts/Graphik-400-Regular.woff') format('woff');
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+@font-face {
+  font-family: GraphikMedium;
+  src: url('/fonts/Graphik-500-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-family: GraphikSemibold;
+  src: url('/fonts/Graphik-600-Semibold.woff') format('woff');
+}
+
+@font-face {
+  font-family: GraphikBold;
+  src: url('/fonts/Graphik-700-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: GentiumBookPlus-Regular;
+  src: url('/fonts/GentiumBookPlus-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: GentiumBookPlus-Italic;
+  src: url('/fonts/GentiumBookPlus-Italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: GentiumBookPlus-Bold;
+  src: url('/fonts/GentiumBookPlus-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: GentiumBookPlus-BoldItalic;
+  src: url('/fonts/GentiumBookPlus-BoldItalic.woff') format('woff');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+
+span, a {
+  font-family: GraphikLight;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: AbrilFatface;
+}
+
+h2 {
+  font-size: calc(1vw + 1vh);
+}
+
+img {
+  max-width: none;
+}
+
+.node-content-body {
+  @apply inline-block relative max-w-[900px] md:ml-[calc(0px_+_3.3846153846vw)] md:mr-6 pt-10;
+}
+
+.body-text {
+  @apply text-lg text-black normal-case font-[lighter] leading-[1.85] text-left;
+  font-family: GentiumBookPlus-Regular;
+}
+
+#reactions {
+  display: none !important;
 }
