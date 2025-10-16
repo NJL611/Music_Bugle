@@ -9,6 +9,7 @@ import Nav from "@/components/Nav";
 import ExtendMetadata from "../../../components/ExtendMetadata";
 import Footer from "@/components/Footer";
 import Disqus from "@/components/Disqus";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 import TwitterLogo from "public/svgs/TwitterLogo";
 import FacebookLogo from "public/svgs/FacebookLogo";
 import PinterestLogo from "public/svgs/PinterestLogo";
@@ -112,6 +113,7 @@ export default async function Page({ params }: { params: { slug: string; }; }) {
   ) : (
     <>
       <ExtendMetadata meta={metadata} />
+      <AnalyticsTracker articleTitle={initial.data.title} articleSlug={initial.data.slug.current} />
       <Nav />
       <Post post={initial.data} posts={posts} />
       <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
