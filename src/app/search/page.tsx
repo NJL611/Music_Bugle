@@ -57,17 +57,26 @@ export default async function Page({ params, searchParams }: {
                   src={imageUrl}
                   alt={post.title || 'Post Image'}
                 />
-                <Link
-                  className="inline-block"
-                  href={`article/${post.slug}` || '/'}>
-                  {post.categories.map((category: any) => (
-                    <span key={category._id} className="inline-block text-sm text-[#808080] py-2">{category.title}</span>
-                  ))}
-                  <div>
-                    <h2 className="text-[22px] font-bold inline-block">{post.title}</h2>
-                    {post.author && <p className="text-sm">By <span className="bold">{post.author.name}</span> | {formattedDate}</p>}
+                <div className="inline-block">
+                  <div className="mb-2">
+                    {post.categories.map((category: any) => (
+                      <Link
+                        key={category._id}
+                        href={`/category/${category.slug}`}
+                        className="inline-block text-sm text-[#808080] hover:text-[#606060] py-2 mr-2 transition-colors duration-200"
+                      >
+                        {category.title}
+                      </Link>
+                    ))}
                   </div>
-                </Link>
+                  <Link
+                    href={`/article/${post.slug}` || '/'}>
+                    <div>
+                      <h2 className="text-[22px] font-bold inline-block hover:text-gray-700 transition-colors duration-200">{post.title}</h2>
+                      {post.author && <p className="text-sm">By <span className="bold">{post.author.name}</span> | {formattedDate}</p>}
+                    </div>
+                  </Link>
+                </div>
               </div>
             )
           })

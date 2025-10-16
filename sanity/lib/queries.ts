@@ -24,11 +24,13 @@ export const POSTS_QUERY = groq`
     body,
     "categories": categories[]->{
       title,
-      _id
+      _id,
+      "slug": slug.current
     },
     "tags": tags[]->{
       title,
       _id,
+      "slug": slug.current,
       description
     },
     publishedAt,
@@ -59,11 +61,13 @@ export const POST_QUERY = groq`
     "categories": categories[]->{
       title,
       _id,
+      "slug": slug.current,
       description
     },
     "tags": coalesce(tags[]->{
       title,
       _id,
+      "slug": slug.current,
       description
     }, []),
     publishedAt,
@@ -93,14 +97,124 @@ export const SEARCH_QUERY = groq`
     body,
     "categories": categories[]->{
       title,
-      _id
+      _id,
+      "slug": slug.current
     },
     "tags": tags[]->{
       title,
-      _id
+      _id,
+      "slug": slug.current
     },
     publishedAt,
     _updatedAt
+  }
+`;
+
+// Tag-related queries
+export const TAG_QUERY = groq`
+  *[_type == "tag" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    description
+  }
+`;
+
+export const POSTS_BY_TAG_QUERY = groq`
+  *[_type == "post" && defined(slug) && references(*[_type == "tag" && slug.current == $slug]._id)] | order(publishedAt desc) {
+    _id,
+    title,
+    subtitle,
+    "slug": slug.current,
+    featured_image,
+    mainImage {
+      asset-> {
+        _id,
+        _ref,
+        url,
+        metadata
+      }
+    },
+    "author": author->{
+      name,
+      _id
+    },
+    body,
+    "categories": categories[]->{
+      title,
+      _id,
+      "slug": slug.current
+    },
+    "tags": tags[]->{
+      title,
+      _id,
+      "slug": slug.current
+    },
+    publishedAt,
+    _updatedAt
+  }
+`;
+
+export const ALL_TAGS_QUERY = groq`
+  *[_type == "tag" && defined(slug)] | order(title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    description
+  }
+`;
+
+// Category-related queries
+export const CATEGORY_QUERY = groq`
+  *[_type == "category" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    description
+  }
+`;
+
+export const POSTS_BY_CATEGORY_QUERY = groq`
+  *[_type == "post" && defined(slug) && references(*[_type == "category" && slug.current == $slug]._id)] | order(publishedAt desc) {
+    _id,
+    title,
+    subtitle,
+    "slug": slug.current,
+    featured_image,
+    mainImage {
+      asset-> {
+        _id,
+        _ref,
+        url,
+        metadata
+      }
+    },
+    "author": author->{
+      name,
+      _id
+    },
+    body,
+    "categories": categories[]->{
+      title,
+      _id,
+      "slug": slug.current
+    },
+    "tags": tags[]->{
+      title,
+      _id,
+      "slug": slug.current
+    },
+    publishedAt,
+    _updatedAt
+  }
+`;
+
+export const ALL_CATEGORIES_QUERY = groq`
+  *[_type == "category" && defined(slug)] | order(title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    description
   }
 `;
 

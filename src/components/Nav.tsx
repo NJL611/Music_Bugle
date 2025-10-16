@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import LogoIcon from '../../public/svgs/LogoIcon';
 import SearchIcon from '../../public/svgs/SearchIcon';
@@ -7,30 +7,59 @@ import HamburgerIcon from '../../public/svgs/HamburgerIcon';
 import useWindowUtils from '@/hooks/useWindowUtils';
 import Button from '@/components/Button';
 import Link from 'next/link';
+import { client } from '../../sanity/lib/client';
 
-const navItems = [
-  { label: 'News', link: '#' },
-  { label: 'Q&A', link: '#' },
-  { label: 'Songs', link: '#' },
-  { label: 'Music Videos', link: '#' },
-  { label: 'Upcoming Releases', link: '#' },
-  { label: 'Tours', link: '#' },
-  { label: 'Books', link: '#' },
+const fallbackNavItems = [
+  { label: 'News', link: '/category/news' },
+  { label: 'Q&A', link: '/category/q-and-a' },
+  { label: 'Songs', link: '/category/songs' },
+  { label: 'Music Videos', link: '/category/music-videos' },
+  { label: 'Upcoming Releases', link: '/category/upcoming-releases' },
+  { label: 'Tours', link: '/category/tours' },
 ];
 
 const trendingItems = [
-  { label: 'Trending', link: '/trending' },
-  { label: 'Latest', link: '/latest' },
-  { label: 'Notable Releases', link: '/notable-releases' },
-  { label: 'Album Reviews', link: '/album-reviews' },
-  { label: 'New Songs', link: '/new-songs' }
+  { label: 'Trending', link: '/category/trending' },
+  { label: 'Latest', link: '/category/latest' },
+  { label: 'Notable Releases', link: '/category/notable-releases' },
+  { label: 'Album Reviews', link: '/category/album-reviews' },
+  { label: 'New Songs', link: '/category/new-songs' }
 ];
 
 export default function Nav({ }) {
   const { size } = useWindowUtils();
   const [query, setQuery] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [navItems, setNavItems] = useState(fallbackNavItems);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const categories = await client.fetch(`
+          *[_type == "category" && defined(slug)] | order(title asc) {
+            title,
+            "slug": slug.current
+          }[0..5]
+        `);
+
+        if (categories.length > 0) {
+          const dynamicNavItems = categories.map((category: { title: any; slug: any; }) => ({
+            label: category.title,
+            link: `/category/${category.slug}`
+          }));
+          setNavItems(dynamicNavItems);
+        }
+      } catch (error) {
+        console.error('Failed to fetch categories for navigation:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchCategories();
+  }, []);
 
   const handleSearchChange = (e: any) => {
     setQuery(e.target.value);
@@ -61,9 +90,9 @@ export default function Nav({ }) {
           }
           <div className='flex-row items-center justify-between hidden gap-[8px] w-[614px] bg-transparent lg:flex px-4'>
             {navItems.map(item => (
-              <a href={item.link} key={item.label} className='whitespace-nowrap font-light text-[#363434] transition-all hover:text-[#B94445] cursor-pointer'>
+              <Link href={item.link} key={item.label} className='whitespace-nowrap font-light text-[#363434] transition-all hover:text-[#B94445] cursor-pointer'>
                 {item.label}
-              </a>
+              </Link>
             ))}
           </div>
           <div className='flex-row items-center justify-center hidden gap-4 lg:flex'>
@@ -91,7 +120,7 @@ export default function Nav({ }) {
         <div className='h-[34px] bg-[#1B1B1B] flex-row justify-center items-center px-6 flex overflow-scroll'>
           <div className='flex flex-row items-center justify-center w-full gap-4 lg:gap-8 lg:justify-start'>
             {trendingItems.map(item => (
-              <a key={item.label} href={item.link} className='text-[13px] font-light hover:text-white text-[#c1c1c1] transition-all cursor-pointer whitespace-nowrap'>{item.label}</a>
+              <Link key={item.label} href={item.link} className='text-[13px] font-light hover:text-white text-[#c1c1c1] transition-all cursor-pointer whitespace-nowrap'>{item.label}</Link>
             ))}
           </div>
         </div>

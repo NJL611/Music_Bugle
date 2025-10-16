@@ -9,6 +9,7 @@ import Nav from "@/components/Nav";
 import ExtendMetadata from "../../../components/ExtendMetadata";
 import Footer from "@/components/Footer";
 import Disqus from "@/components/Disqus";
+import Link from "next/link";
 import TwitterLogo from "public/svgs/TwitterLogo";
 import FacebookLogo from "public/svgs/FacebookLogo";
 import PinterestLogo from "public/svgs/PinterestLogo";
@@ -144,16 +145,42 @@ export default async function Page({ params }: { params: { slug: string; }; }) {
           </a>
         </div>
       </div>
-      <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
-        <span className="block text-lg mb-4">Tags:</span>
-        <div className="flex gap-2 flex-wrap">
-          {initial.data.tags?.map((tag: any) => (
-            <span key={tag._id} className="px-2 py-1 bg-gray-100 rounded-full text-sm whitespace-nowrap">
-              {tag.title}
-            </span>
-          ))}
+      {(initial.data.categories?.length > 0 || initial.data.tags?.length > 0) && (
+        <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
+          {initial.data.categories?.length > 0 && (
+            <div className="mb-6">
+              <span className="block text-lg mb-4">Categories:</span>
+              <div className="flex gap-2 flex-wrap">
+                {initial.data.categories.map((category: any) => (
+                  <Link
+                    key={category._id}
+                    href={`/category/${category.slug}`}
+                    className="px-2 py-1 bg-blue-100 hover:bg-blue-200 rounded-full text-sm whitespace-nowrap transition-colors duration-200"
+                  >
+                    {category.title}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          {initial.data.tags?.length > 0 && (
+            <div>
+              <span className="block text-lg mb-4">Tags:</span>
+              <div className="flex gap-2 flex-wrap">
+                {initial.data.tags.map((tag: any) => (
+                  <Link
+                    key={tag._id}
+                    href={`/tag/${tag.slug}`}
+                    className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm whitespace-nowrap transition-colors duration-200"
+                  >
+                    {tag.title}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      </div>
+      )}
       <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
         <Disqus post={initial.data} />
       </div>
