@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import VisualEditing from '@/components/VisualEditing';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 import { draftMode } from 'next/headers';
 
 
@@ -53,6 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
         {children}
         {draftMode().isEnabled && <VisualEditing />}
       </body>

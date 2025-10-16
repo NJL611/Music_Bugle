@@ -2,6 +2,22 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+### Environment Setup
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```bash
+# Google Analytics Configuration
+# Get your measurement ID from Google Analytics 4 (GA4)
+# Format: G-XXXXXXXXXX
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+
+# Site URL
+SITE_URL=https://themusicbugle.com
+```
+
+### Running the Development Server
+
 First, run the development server:
 
 ```bash
