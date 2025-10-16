@@ -64,7 +64,7 @@ export default async function TagPage({ params }: { params: { slug: string; }; }
                         <h1 className="text-3xl font-bold mb-4">Tag Not Found</h1>
                         <p className="text-gray-600 mb-4">The tag you are looking for does not exist or may not have a proper URL.</p>
                         <p className="text-sm text-gray-500">
-                            This could happen if the tag was recently created and hasn't been properly configured yet.
+                            This could happen if the tag was recently created and hasn&apos;t been properly configured yet.
                         </p>
                     </div>
                     <Footer />
@@ -87,7 +87,7 @@ export default async function TagPage({ params }: { params: { slug: string; }; }
                     </div>
 
                     {posts.length > 0 ? (
-                        <Posts posts={posts} amount={posts.length} label="ARTICLES" />
+                        <Posts posts={posts} amount={posts.length} />
                     ) : (
                         <div className="text-center py-12">
                             <p className="text-lg text-gray-600">No articles found for this tag.</p>
