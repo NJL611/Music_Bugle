@@ -6,7 +6,7 @@ import LogoFooter from 'public/svgs/LogoFooter';
 export default function Footer() {
     return (
         <>
-            <footer className="bg-[#1B1B1B] w-full lg:px-24 mx-auto pt-8 px-6 pb-6 text-white text-sm">
+            <footer className="bg-[#1B1B1B] w-full mx-auto pt-8 px-8 pb-6 text-white text-sm">
                 <div className="w-full mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* First Column */}
                     <div className="flex flex-col items-start min-w-[270px] max-w-[355px]">
@@ -46,7 +46,7 @@ export default function Footer() {
                                 <input
                                     type="email"
                                     placeholder="Enter your email here"
-                                    className="w-full px-4 py-2 border border-gray-400 text-black text-[14px] rounded-md focus:outline-none"
+                                    className="w-full px-4 py-2 border border-gray-400 text-black text-[14px] rounded-sm focus:outline-none"
                                 />
                             </div>
                         </div>

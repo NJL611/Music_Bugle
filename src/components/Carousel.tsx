@@ -1,46 +1,20 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import ChevronLeft from "../../public/svgs/ChevronLeft.js";
-import ChevronRight from "../../public/svgs/ChevronRight.js";
 import CircleIcon from "../../public/svgs/CircleIcon.js";
 
 import Image from "next/image";
-import imageUrlBuilder from "@sanity/image-url";
 import { SanityDocument } from "next-sanity";
 
-import { dataset, projectId } from "../../sanity/env";
 import Link from "next/link";
+import { getPostImage } from "../utils/sanityHelpers";
 export const dynamic = "force-dynamic";
-
-const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function Carousel({ posts }: { posts: SanityDocument[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // console.log(posts);
-  interface ImageData {
-    image: string;
-  }
-
-  console.log('posts', posts);
-
-  const sanityImagesUrl = posts.map((post) => {
-    const hasMainImage = post.mainImage?.asset?._ref || post.mainImage?.asset?._id;
-    if (hasMainImage) {
-      return builder
-        .image(post.mainImage.asset)
-        .width(1920)
-        .fit("clip")
-        .auto("format")
-        .url();
-    } else if (post.featured_image) {
-      return post.featured_image;
-    } else {
-      return "/carousel-Images/pexels-elviss-railijs-bitāns-1389429.jpg";
-    }
-  });
+  const sanityImagesUrl = posts.map((post) => getPostImage(post, 1200));
 
   const resetTimer = useCallback(() => {
     if (intervalRef.current) {
@@ -48,12 +22,11 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
     }
     intervalRef.current = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % sanityImagesUrl.length);
-    }, 3000);
+    }, 5000);
   }, [sanityImagesUrl.length]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Ensures the code runs only in the browser
       resetTimer();
       return () => {
         if (intervalRef.current) {
@@ -62,20 +35,6 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
       };
     }
   }, [resetTimer]);
-
-  const prevSlide = useCallback(() => {
-    setCurrentIndex(
-      currentIndex === 0 ? sanityImagesUrl.length - 1 : currentIndex - 1
-    );
-    resetTimer()
-  }, [currentIndex, sanityImagesUrl.length, resetTimer]);
-
-  const nextSlide = useCallback(() => {
-    setCurrentIndex(
-      currentIndex === sanityImagesUrl.length - 1 ? 0 : currentIndex + 1
-    );
-    resetTimer()
-  }, [currentIndex, sanityImagesUrl.length, resetTimer]);
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -88,51 +47,41 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
   const indicators = sanityImagesUrl.map((item: any, index: any) => (
     <CircleIcon
       key={index}
-      className={`mx-1 cursor-pointer ${index === currentIndex ? "text-blue-500" : "text-gray-400"
-        }`}
+      className={`mx-1 cursor-pointer w-[8px] h-[8px] ${index === currentIndex ? "text-white" : "text-white/50"}`}
       onClick={() => goToSlide(index)}
     />
   ));
 
+  if (!posts || posts.length === 0) return null;
+
   return (
-    <div className="mt-0 w-full h-[549px] bg-[#444444]">
-      <div className="max-w-[1920px] h-[549px] w-full m-auto relative group">
-        <Link className="block w-full h-full" href={posts[currentIndex]?.slug || "/"}>
-          <div className="w-full h-full bg-gradient-to-b from-[#3636344d]  to-[#36363454] absolute z-[1]" />
+    <div className="w-full h-[300px] md:h-[450px] relative bg-[#444444]">
+      <div className="w-full h-full relative group overflow-hidden">
+        <Link className="block w-full h-full" href={posts[currentIndex]?.slug ? `/article/${posts[currentIndex].slug}` : "/"}>
+          <div className="w-full h-full bg-gradient-to-b from-transparent via-transparent to-black/80 absolute z-[1]" />
           <Image
-            className="w-full h-full object-cover duration-500 my-auto absolute"
-            width={1920}
-            height={1080}
+            className="w-full h-full object-cover duration-500 absolute"
+            width={1200}
+            height={675}
             src={sanityImagesUrl[currentIndex]}
-            alt={"Post Image"}
+            alt={posts[currentIndex]?.title || "Post Image"}
+            priority
           />
 
-          <h2 className="absolute text-white translate-x-1/2 right-1/2 bottom-[164px] text-[34px] text-center leading-[44px] z-[2] w-[96%] md:w-auto">
-            {posts[currentIndex]?.title}
-          </h2>
-          <span className="absolute text-white translate-x-1/2 right-1/2 bottom-[72px] text-[18px] text-center z-[2] w-[80%] line-clamp-3">
-            {posts[currentIndex]?.body[0]?.children[0].text}
-          </span>
+          <div className="absolute bottom-[30px] left-0 w-full z-[2] px-6 md:px-10">
+            <div className="max-w-full md:max-w-[90%]">
+              <h2 className="text-white text-[24px] md:text-[36px] font-bold leading-tight mb-2 drop-shadow-lg">
+                {posts[currentIndex]?.title}
+              </h2>
+              <p className="text-white text-[14px] md:text-[16px] leading-relaxed opacity-90 line-clamp-2 drop-shadow-md hidden md:block">
+                {posts[currentIndex]?.body?.[0]?.children?.[0]?.text || posts[currentIndex]?.subtitle}
+              </p>
+            </div>
+          </div>
         </Link>
 
-        <div className="absolute left-1/2 bottom-5 transform -translate-x-1/2 flex items-center space-x-2 sm:space-x-4 z-[2]">
-          <div className="p-2 text-white cursor-pointer">
-            <ChevronLeft
-              className="text-blue-500 hover:text-blue-700"
-              width={50}
-              height={50}
-              onClick={prevSlide}
-            />
-          </div>
+        <div className="absolute bottom-6 right-6 md:right-10 z-[2] flex items-center gap-2">
           {indicators}
-          <div className="p-2 text-white cursor-pointer">
-            <ChevronRight
-              className="text-blue-500 hover:text-blue-700"
-              width={50}
-              height={50}
-              onClick={nextSlide}
-            />
-          </div>
         </div>
       </div>
     </div>
