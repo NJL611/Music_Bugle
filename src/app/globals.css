@@ -52,6 +52,11 @@
   src: url('/fonts/GentiumBookPlus-BoldItalic.woff') format('woff');
 }
 
+@font-face {
+  font-family: Prata;
+  src: url('/fonts/Prata-Regular.woff') format('woff');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -59,11 +64,17 @@
   font-size: 15px;
 }
 
-span, a {
+span,
+a {
   font-family: GraphikLight;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: AbrilFatface;
 }
 

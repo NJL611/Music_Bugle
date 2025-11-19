@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { distributePosts } from "@/utils/postHelpers";
 import PostGrid from "@/components/PostGrid";
 import PostList from "@/components/PostList";
+import AdUnit from "@/components/AdUnit";
 
 import {
   TopStory,
@@ -16,7 +17,10 @@ import {
   SidebarArticles,
   SupportBanner,
   StickyAd,
-  SectionHeader
+  SectionHeader,
+  LatestPosts,
+  BottomSection,
+  VideoSection
 } from "@/components/HomeSections";
 
 export default async function Home() {
@@ -27,11 +31,13 @@ export default async function Home() {
   const allPosts = initial.data || [];
   const content = distributePosts(allPosts);
 
-  const containerClass = "w-full mx-auto px-8 py-6";
+  const containerClass = "w-full mx-auto px-8 py-6 2xl:px-64";
 
   return (
     <main className="bg-white min-h-screen">
       <Nav />
+
+      {/* <AdUnit width="w-full" height="h-[386px]" className="mx-auto" /> */}
 
       <div className={containerClass}>
         <div className="flex flex-col lg:flex-row gap-8">
@@ -47,7 +53,7 @@ export default async function Home() {
           <div className="w-full lg:w-[31%] flex flex-col">
             <SidebarAd />
             <div className="mt-2">
-              <h4 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Latest News</h4>
+              <h4 className="text-lg font-bold font-prata mb-4 border-b border-gray-200 pb-2">Latest News</h4>
               <SidebarArticles posts={content.sidebar} />
             </div>
           </div>
@@ -68,7 +74,7 @@ export default async function Home() {
               <SectionHeader title="Must Read" viewAllLink="/must-read" />
 
               <div className="mb-8">
-                <PostGrid posts={content.editorsPicksLarge} columns={4} />
+                <PostGrid posts={content.editorsPicksLarge} columns={3} />
               </div>
 
               <PostList posts={content.editorsPicksSmall} columns={3} />
@@ -88,15 +94,15 @@ export default async function Home() {
         {draftMode().isEnabled ? (
           <PostsPreview initial={initial} params={[]} />
         ) : (
-          <PostGrid
-            posts={content.remaining}
-            title="Latest"
-            columns={4}
-          />
+          <>
+            <LatestPosts posts={content.latestNews} />
+            <BottomSection posts={content.bottomSection} />
+            <VideoSection posts={content.mustWatch} />
+          </>
         )}
       </div>
 
-      <Footer />
+      <Footer posts={allPosts} />
     </main>
   );
 }

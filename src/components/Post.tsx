@@ -52,7 +52,7 @@ export default function Post({ post, posts }: Props) {
         <div className="lg:col-span-6 lg:border-r lg:pr-6">
           <span className="mt-4 block text-[13px]">Home {'>'} News</span>
           {title ? (
-            <h1 className="mx-auto text-3xl md:text-[36px] md:w-[90%] lg:text-[42px] text-center md:leading-[38px] lg:leading-[52px] tracking-[0.1px] pt-8 pb-4">
+            <h1 className="mx-auto text-3xl md:text-[28px] md:w-[90%] lg:text-[42px] text-center md:leading-[38px] lg:leading-[52px] tracking-[0.1px] pt-8 pb-4">
               {title}
             </h1>
           ) : null}

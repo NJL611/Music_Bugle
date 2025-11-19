@@ -23,7 +23,7 @@ export default function PostList({ posts, columns = 3, showImage = false }: Post
   }[columns];
 
   return (
-    <div className={`grid ${gridColsClass} gap-x-6 gap-y-6 border-t border-gray-200 pt-8`}>
+    <div className={`grid ${gridColsClass} gap-x-6 gap-y-2 border-t border-gray-200 pt-8`}>
       {posts.map((post) => {
         const imageUrl = showImage ? getPostImage(post, 300, 200) : null;
 
@@ -40,7 +40,7 @@ export default function PostList({ posts, columns = 3, showImage = false }: Post
                   />
                 </div>
               )}
-              <h4 className="text-[16px] leading-[20px] font-bold text-black font-serif group-hover:text-[#B94445] transition-colors line-clamp-2 mb-2">
+              <h4 className="text-[14px] leading-[20px] font-bold text-black font-prata group-hover:text-[#B94445] transition-colors line-clamp-2 mb-2">
                 {post.title}
               </h4>
             </Link>

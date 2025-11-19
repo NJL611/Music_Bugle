@@ -51,7 +51,7 @@ export default function PostGrid({
 
                             <div className="flex flex-col">
                                 <Link href={`/article/${post.slug?.current || post.slug}`}>
-                                    <h3 className="text-[18px] leading-[22px] font-bold text-black mb-2 font-serif line-clamp-3 hover:text-[#B94445] transition-colors">
+                                    <h3 className="text-[18px] leading-[22px] font-bold text-black mb-2 font-prata line-clamp-3 hover:text-[#B94445] transition-colors">
                                         {post.title}
                                     </h3>
                                 </Link>
