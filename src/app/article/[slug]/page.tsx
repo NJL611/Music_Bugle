@@ -14,6 +14,7 @@ import FacebookLogo from "public/svgs/FacebookLogo";
 import PinterestLogo from "public/svgs/PinterestLogo";
 import MailIcon from "public/svgs/MailIcon";
 import InstagramLogo from "public/svgs/InstagramLogo";
+import Link from "next/link";
 
 export const dynamic = 'force-static';
 
@@ -148,9 +149,11 @@ export default async function Page({ params }: { params: { slug: string; }; }) {
         <span className="block text-lg mb-4">Tags:</span>
         <div className="flex gap-2 flex-wrap">
           {initial.data.tags?.map((tag: any) => (
-            <span key={tag._id} className="px-2 py-1 bg-gray-100 rounded-full text-sm whitespace-nowrap">
-              {tag.title}
-            </span>
+            <Link href={`/tag/${tag.slug}`} key={tag._id}>
+              <span key={tag._id} className="px-2 py-1 bg-gray-100 rounded-full text-sm whitespace-nowrap">
+                {tag.title}
+              </span>
+            </Link>
           ))}
         </div>
       </div>

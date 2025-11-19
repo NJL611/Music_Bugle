@@ -97,7 +97,7 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
   return (
     <div className="mt-0 w-full h-[549px] bg-[#444444]">
       <div className="max-w-[1920px] h-[549px] w-full m-auto relative group">
-        <Link className="block w-full h-full" href={posts[currentIndex]?.slug || "/"}>
+        <Link className="block w-full h-full" href={`article/` + posts[currentIndex]?.slug || "/"}>
           <div className="w-full h-full bg-gradient-to-b from-[#3636344d]  to-[#36363454] absolute z-[1]" />
           <Image
             className="w-full h-full object-cover duration-500 my-auto absolute"

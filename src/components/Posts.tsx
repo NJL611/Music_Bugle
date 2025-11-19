@@ -9,10 +9,16 @@ export const dynamic = 'force-static'
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-export default function Posts({ posts, amount = 4 }: { posts: SanityDocument[], amount?: number }): JSX.Element {
+type PostsProps = {
+  posts: SanityDocument[];
+  amount?: number;
+  label?: string;
+};
+
+export default function Posts({ posts, amount = 4, label = "LATEST" }: PostsProps): JSX.Element {
   return (
     <div className="xl:px-[103px] px-4 md:px-4 lg:px-6 py-12 ">
-      <span className="w-full text-lg mb-4 text-left">LATEST</span>
+      <span className="w-full text-lg mb-4 text-left">{label}</span>
       <div className="mx-auto flex flex-wrap gap-[14px] justify-center py-4">
         {posts?.length > 0 ? (
           posts.slice(0, amount).map((post) => {

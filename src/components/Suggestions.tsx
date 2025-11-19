@@ -23,7 +23,7 @@ export default function Suggestions({ posts }: { posts: SanityDocument[] }) {
                 <span className="text-lg mb-4">Related Articles</span>
                 <div className="mx-auto grid grid-cols-2 lg:grid-cols-1 gap-4 items-stretch">
                     {posts?.length > 0 ? (
-                        posts.map((post, index) => {
+                        posts.slice(0, 6).map((post, index) => {
                             let imageUrl = post.mainImage?.asset?._ref || post.mainImage?.asset?._id;
                             if (imageUrl) {
                                 imageUrl = builder
@@ -79,7 +79,7 @@ export default function Suggestions({ posts }: { posts: SanityDocument[] }) {
                 <span className="text-lg mb-4">Trending</span>
                 <div className="mx-auto grid grid-cols-2 lg:grid-cols-1 gap-4 items-stretch">
                     {posts?.length > 0 ? (
-                        posts.map((post, index) => {
+                        posts.slice(0, 6).map((post, index) => {
                             let imageUrl = post.mainImage?.asset?._ref || post.mainImage?.asset?._id;
                             if (imageUrl) {
                                 imageUrl = builder
