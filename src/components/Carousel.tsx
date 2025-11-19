@@ -68,12 +68,12 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
             priority
           />
 
-          <div className="absolute bottom-[30px] left-0 w-full z-[2] px-6 md:px-10">
-            <div className="max-w-full md:max-w-[90%]">
-              <h2 className="text-white text-[24px] md:text-[36px] font-bold leading-tight mb-2 drop-shadow-lg">
+          <div className="absolute bottom-[30px] left-0 w-full z-[2] px-6 md:px-10 flex justify-center">
+            <div className="max-w-full md:max-w-[90%] text-center">
+              <h2 className="text-white text-[24px] md:text-[28px] font-bold leading-tight mb-2 drop-shadow-lg">
                 {posts[currentIndex]?.title}
               </h2>
-              <p className="text-white text-[14px] md:text-[16px] leading-relaxed opacity-90 line-clamp-2 drop-shadow-md hidden md:block">
+              <p className="text-white text-[14px] md:text-[16px] leading-relaxed opacity-90 line-clamp-2 drop-shadow-md hidden md:block mx-auto">
                 {posts[currentIndex]?.body?.[0]?.children?.[0]?.text || posts[currentIndex]?.subtitle}
               </p>
             </div>
