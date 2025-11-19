@@ -33,7 +33,7 @@ const useWindowUtils = () => {
     if (size && !loaded) {
       setLoaded(true);
     }
-  }, [size]);
+  }, [size, loaded]);
 
   return { windowWidth, size, loaded };
 }
