@@ -40,7 +40,7 @@ export const portableTextComponents: PortableTextComponents = {
                     );
                 } else {
                     return (
-                        <p className="text-[16px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto">
+                        <p className="text-[15px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto font-prata">
                             {children}
                         </p>
                     );
@@ -48,7 +48,7 @@ export const portableTextComponents: PortableTextComponents = {
             }
 
             return (
-                <p className="text-[16px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto">
+                <p className="text-[15px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto font-prata">
                     {children}
                 </p>
             );

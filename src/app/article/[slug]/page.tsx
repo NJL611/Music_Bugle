@@ -10,11 +10,7 @@ import ExtendMetadata from "../../../components/ExtendMetadata";
 import Footer from "@/components/Footer";
 import Disqus from "@/components/Disqus";
 import AdUnit from "@/components/AdUnit";
-import TwitterLogo from "public/svgs/TwitterLogo";
-import FacebookLogo from "public/svgs/FacebookLogo";
-import PinterestLogo from "public/svgs/PinterestLogo";
-import MailIcon from "public/svgs/MailIcon";
-import InstagramLogo from "public/svgs/InstagramLogo";
+import MoreLikeThis from "@/components/MoreLikeThis";
 
 export const dynamic = 'force-static';
 
@@ -116,36 +112,6 @@ export default async function Page({ params }: { params: { slug: string; }; }) {
       <Nav />
       <Post post={initial.data} posts={posts} />
       <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
-        <span className="block text-lg mb-5">Share this:</span>
-        <div className="flex gap-2">
-          <a href="#" aria-label="Twitter" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.75]">
-              <TwitterLogo />
-            </div>
-          </a>
-          <a href="#" aria-label="Facebook" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.75]">
-              <FacebookLogo />
-            </div>
-          </a>
-          <a href="#" aria-label="Pinterest" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.75]">
-              <PinterestLogo />
-            </div>
-          </a>
-          <a href="#" aria-label="Mail" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.75]">
-              <MailIcon />
-            </div>
-          </a>
-          <a href="#" aria-label="Instagram" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.8]">
-              <InstagramLogo />
-            </div>
-          </a>
-        </div>
-      </div>
-      <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
         <span className="block text-lg mb-4">Tags:</span>
         <div className="flex gap-2 flex-wrap">
           {initial.data?.tags?.map((tag: any) => (
@@ -154,6 +120,9 @@ export default async function Page({ params }: { params: { slug: string; }; }) {
             </span>
           ))}
         </div>
+      </div>
+      <div className="lg:px-24 mx-auto pb-10 px-6">
+        <MoreLikeThis posts={posts} currentPostId={initial.data._id} />
       </div>
       <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
         <Disqus post={initial.data} />
