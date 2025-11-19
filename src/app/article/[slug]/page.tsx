@@ -15,6 +15,7 @@ import FacebookLogo from "public/svgs/FacebookLogo";
 import PinterestLogo from "public/svgs/PinterestLogo";
 import MailIcon from "public/svgs/MailIcon";
 import InstagramLogo from "public/svgs/InstagramLogo";
+import Link from "next/link";
 
 export const dynamic = 'force-static';
 

@@ -5,13 +5,7 @@ import { draftMode } from 'next/headers';
 import { loadQuery } from '../../sanity/lib/store';
 import { POSTS_QUERY } from '../../sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
-import { Bodoni_Moda, Prata } from 'next/font/google';
-
-const bodoniModa = Bodoni_Moda({
-  subsets: ['latin'],
-  variable: '--font-bodoni-moda',
-  display: 'swap',
-});
+import { Prata } from 'next/font/google';
 
 const prata = Prata({
   subsets: ['latin'],
@@ -71,7 +65,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`font-graphiknormal ${bodoniModa.variable} ${prata.variable}`}>
+      <body className={`font-graphiknormal ${prata.variable}`}>
         {children}
         {draftMode().isEnabled && <VisualEditing />}
       </body>
