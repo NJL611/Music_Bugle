@@ -3,7 +3,6 @@ import { client } from "../../../../sanity/lib/client";
 import { POSTS_BY_CATEGORY_QUERY, CATEGORY_QUERY, ALL_CATEGORIES_QUERY } from "../../../../sanity/lib/queries";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import Posts from "@/components/Posts";
 
 export const dynamic = 'force-static';
 
@@ -87,7 +86,8 @@ export default async function CategoryPage({ params }: { params: { slug: string;
                     </div>
 
                     {posts.length > 0 ? (
-                        <Posts posts={posts} amount={posts.length} label="ARTICLES" />
+                        // TODO: create new post components
+                        <></>
                     ) : (
                         <div className="text-center py-12">
                             <p className="text-lg text-gray-600">No articles found in this category.</p>
