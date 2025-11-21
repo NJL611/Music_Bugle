@@ -17,16 +17,16 @@ export default function Suggestions({ posts }: { posts: SanityDocument[] }) {
 
             {/* Related Articles */}
             <div className="mb-8">
-                <span className="text-lg font-bold block mb-4 border-b pb-2">Related Articles</span>
-                <div className="mt-[-2rem] border-t-0">
+                <span className="text-lg font-bold block mb-4 pb-2">Related Articles</span>
+                <div className="mt-[-1rem] border-t-0">
                     <PostList posts={suggestionPosts} columns={1} showImage={true} />
                 </div>
             </div>
 
             {/* Trending Section */}
             <div>
-                <span className="text-lg font-bold block mb-4 border-b pb-2">Trending</span>
-                <div className="mt-[-2rem] border-t-0">
+                <span className="text-lg font-bold block mb-4 pb-2">Trending</span>
+                <div className="mt-[-1rem] border-t-0">
                     <PostList posts={suggestionPosts} columns={1} showImage={true} />
                 </div>
             </div>
