@@ -9,6 +9,7 @@ import Nav from "@/components/Nav";
 import ExtendMetadata from "../../../components/ExtendMetadata";
 import Footer from "@/components/Footer";
 import Disqus from "@/components/Disqus";
+import AdUnit from "@/components/AdUnit";
 import TwitterLogo from "public/svgs/TwitterLogo";
 import FacebookLogo from "public/svgs/FacebookLogo";
 import PinterestLogo from "public/svgs/PinterestLogo";
@@ -148,24 +149,17 @@ export default async function Page({ params }: { params: { slug: string; }; }) {
       <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
         <span className="block text-lg mb-4">Tags:</span>
         <div className="flex gap-2 flex-wrap">
-          {initial.data.tags?.map((tag: any) => (
-            <Link href={`/tag/${tag.slug}`} key={tag._id}>
-              <span key={tag._id} className="px-2 py-1 bg-gray-100 rounded-full text-sm whitespace-nowrap">
-                {tag.title}
-              </span>
-            </Link>
+          {initial.data?.tags?.map((tag: any) => (
+            <span key={tag._id} className="px-2 py-1 bg-gray-100 rounded-full text-sm whitespace-nowrap">
+              {tag.title}
+            </span>
           ))}
         </div>
       </div>
       <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
         <Disqus post={initial.data} />
       </div>
-      <div className="mx-auto my-5 bg-[#D9D9D9] w-[320px] md:w-[728px] lg:w-[970px]">
-        <div className="h-[20px]">
-          <span className="px-2 text-left text-[10px] text-gray-500">Advertisement</span>
-        </div>
-        <div className="bg-[#D9D9D9] h-[50px] md:h-[90px] lg:h-[90px]" />
-      </div>
+      <AdUnit width="w-[320px] md:w-[728px] lg:w-[970px]" height="h-[50px] md:h-[90px] lg:h-[90px]" />
       <Footer />
     </>
   );

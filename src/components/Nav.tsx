@@ -48,7 +48,7 @@ export default function Nav({ }) {
   return (
     <>
       <div className='flex flex-col w-full'>
-        <div className='relative px-6 w-full h-[68px] flex flex-row justify-center lg:justify-between items-center'>
+        <div className='relative px-8 2xl:px-64 w-full h-[68px] flex flex-row justify-center lg:justify-between items-center'>
           <div className={`${(size === 'small' || size === 'medium') ? 'absolute transform -translate-x-1/2 left-1/2' : 'w-fit'}`}>
             <Link href='/'>
               <LogoIcon />
@@ -75,7 +75,7 @@ export default function Nav({ }) {
           </div>
         </div>
         {isSearchVisible && (
-          <div className={'px-6 py-2 flex-row items-center justify-center hidden gap-4 lg:flex w-full'}>
+          <div className={'px-8 py-2 flex-row items-center justify-center hidden gap-4 lg:flex w-full'}>
             <form onSubmit={handleSearchSubmit} className="flex flex-row items-center relative w-full">
               <input
                 type="text"
@@ -88,7 +88,7 @@ export default function Nav({ }) {
           </div>
 
         )}
-        <div className='h-[34px] bg-[#1B1B1B] flex-row justify-center items-center px-6 flex overflow-scroll'>
+        <div className='h-[34px] bg-[#1B1B1B] flex-row justify-center items-center px-8 2xl:px-64 flex'>
           <div className='flex flex-row items-center justify-center w-full gap-4 lg:gap-8 lg:justify-start'>
             {trendingItems.map(item => (
               <a key={item.label} href={item.link} className='text-[13px] font-light hover:text-white text-[#c1c1c1] transition-all cursor-pointer whitespace-nowrap'>{item.label}</a>
