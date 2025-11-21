@@ -29,11 +29,11 @@ const useWindowUtils = () => {
     }
   }, [windowWidth]);
 
-useEffect(() => {
-  if (size && !loaded) {
-    setLoaded(true);
-  }
-}, [size, loaded]);
+  useEffect(() => {
+    if (size && !loaded) {
+      setLoaded(true);
+    }
+  }, [size, loaded]);
 
   return { windowWidth, size, loaded };
 }

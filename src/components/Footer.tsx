@@ -1,64 +1,113 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import Button from '@/components/Button';
 import LogoFooter from 'public/svgs/LogoFooter';
+import FacebookLogo from 'public/svgs/FacebookLogo';
+import TwitterLogo from 'public/svgs/TwitterLogo';
+import InstagramLogo from 'public/svgs/InstagramLogo';
+import PinterestLogo from 'public/svgs/PinterestLogo';
+import { SanityDocument } from 'next-sanity';
+import { formatDate } from '../../utils/formatDate';
 
-export default function Footer() {
+export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
+    const latestPosts = posts.slice(0, 3);
+
     return (
         <>
-            <footer className="bg-[#1B1B1B] w-full lg:px-24 mx-auto pt-8 px-6 pb-6 text-white text-sm">
-                <div className="w-full mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* First Column */}
-                    <div className="flex flex-col items-start min-w-[270px] max-w-[355px]">
-                        <LogoFooter color="white" />
-                        <span className="mb-4 mt-4 text-sm">
-                            Your donation supports local artists, events, and helps us expand our reach.
-                        </span>
-                        <Button text="Donate" href="#" bgColor="#ffffff" textColor="black" />
+            <footer className="bg-[#1B1B1B] w-full mx-auto pt-12 px-8 pb-8 text-white text-sm">
+                {/* Top Row: Logo and Categories */}
+                <div className="w-full mx-auto flex flex-col md:flex-row items-start md:items-center justify-between border-b border-gray-600 pb-8 mb-8 gap-6 md:gap-0">
+                    <LogoFooter color="white" />
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold tracking-wide">
+                        <Link href="#" className="hover:text-[#B94445] transition-colors">News</Link>
+                        <Link href="#" className="hover:text-[#B94445] transition-colors">Q&A</Link>
+                        <Link href="#" className="hover:text-[#B94445] transition-colors">Songs</Link>
+                        <Link href="#" className="hover:text-[#B94445] transition-colors">Music Videos</Link>
+                        <Link href="#" className="hover:text-[#B94445] transition-colors">Upcoming Releases</Link>
+                        <Link href="#" className="hover:text-[#B94445] transition-colors">Tours</Link>
+                        <Link href="#" className="hover:text-[#B94445] transition-colors">Books</Link>
+                    </div>
+                </div>
+
+                {/* Main Content Grid */}
+                <div className="w-full mx-auto grid grid-cols-1 lg:grid-cols-[2fr_1.5fr_2.5fr_2.5fr] gap-8">
+                    {/* Column 1: About Us */}
+                    <div className="flex flex-col">
+                        <h3 className="text-[18px] font-bold font-prata mb-4">About us</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-6 font-graphik">
+                            Each template in our ever growing studio library can be added and moved around within any page effortlessly with one click.
+                        </p>
+                        <div className="flex gap-4">
+                            <Link href="#" className="hover:opacity-80 transition-opacity"><FacebookLogo /></Link>
+                            <Link href="#" className="hover:opacity-80 transition-opacity"><TwitterLogo /></Link>
+                            <Link href="#" className="hover:opacity-80 transition-opacity"><InstagramLogo /></Link>
+                            <Link href="#" className="hover:opacity-80 transition-opacity"><PinterestLogo /></Link>
+                        </div>
                     </div>
 
-                    {/* Second Column */}
-                    <div className="grid grid-cols-2 gap-8 md:gap-14 w-full my-5 ">
-                        <div>
-                            <ul>
-                                <li><Link href="#" className="hover:underline">News</Link></li>
-                                <li><Link href="#" className="hover:underline">Q&A</Link></li>
-                                <li><Link href="#" className="hover:underline">Songs</Link></li>
-                                <li><Link href="#" className="hover:underline whitespace-nowrap">Music Videos</Link></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <ul>
-                                <li><Link href="#" className="hover:underline whitespace-nowrap">Album Releases</Link></li>
-                                <li><Link href="#" className="hover:underline">Tours</Link></li>
-                                <li><Link href="#" className="hover:underline">Books</Link></li>
-                                <li><Link href="#" className="hover:underline">Other</Link></li>
-                            </ul>
+                    {/* Column 2: Company */}
+                    <div className="flex flex-col">
+                        <h3 className="text-[18px] font-bold font-prata mb-4">Company</h3>
+                        <ul className="space-y-3 text-sm font-bold">
+                            <li><Link href="#" className="hover:text-[#B94445] transition-colors">About</Link></li>
+                            <li><Link href="#" className="hover:text-[#B94445] transition-colors">Contact us</Link></li>
+                            <li><Link href="#" className="hover:text-[#B94445] transition-colors">Subscription Plans</Link></li>
+                            <li><Link href="#" className="hover:text-[#B94445] transition-colors">My account</Link></li>
+                        </ul>
+                    </div>
+
+                    {/* Column 3: The Latest */}
+                    <div className="flex flex-col">
+                        <h3 className="text-[18px] font-bold font-prata mb-4">The latest</h3>
+                        <div className="flex flex-col gap-4">
+                            {latestPosts.map((post) => {
+                                return (
+                                    <div key={post._id} className="flex gap-3 group cursor-pointer">
+                                        <div className="flex flex-col justify-center">
+                                            <Link href={`/article/${post.slug?.current || post.slug}`} className="text-[13px] font-bold text-white leading-snug hover:text-[#B94445] transition-colors line-clamp-2 mb-1">
+                                                {post.title}
+                                            </Link>
+                                            <div className="flex items-center gap-2 text-[10px] text-gray-500 font-bold">
+                                                {post.categories?.[0] && (
+                                                    <span className="text-white text-[13px]">{post.categories[0].title}</span>
+                                                )}
+                                                <span className="text-gray-500 font-normal text-[13px]">{formatDate(post.publishedAt)}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
 
-                    {/* Third Column */}
-                    <div className="flex flex-col items-start justify-between md:items-end">
-                        <span className="font-bold md:text-right text-sm">Subscribe to Our Newsletter</span>
-                        <div className="">
-                            <span className="mt-2 inline-block md:text-right text-sm justify-end">Sign up for email updates on the latest music, talks, interviews, live events and shows.</span>
-                            <div className="w-full flex justify-end mt-3">
+                    {/* Column 4: Subscribe */}
+                    <div className="flex flex-col">
+                        <h3 className="text-[18px] font-bold font-prata mb-4">Subscribe</h3>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex w-full">
                                 <input
                                     type="email"
-                                    placeholder="Enter your email here"
-                                    className="w-full px-4 py-2 border border-gray-400 text-black text-[14px] rounded-md focus:outline-none"
+                                    placeholder="Email address"
+                                    className="w-full px-4 py-3 bg-white text-black text-sm rounded-sm focus:outline-none placeholder-gray-500"
                                 />
+                            </div>
+                            <button className="w-full bg-black text-white px-4 py-3 text-sm font-bold rounded-sm hover:bg-gray-900 transition-colors border border-white/20 flex justify-center items-center gap-2">
+                                I want in <span className="text-lg">→</span>
+                            </button>
+                            <div className="flex items-start gap-2 mt-1">
+                                <input type="checkbox" className="mt-1 accent-white" />
+                                <span className="text-[13px] text-gray-400">
+                                    I&apos;ve read and accept the <Link href="#" className="text-[#EC3535] hover:underline">Privacy Policy</Link>.
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="border-t border-gray-700 mt-6 pt-4 flex flex-col md:flex-row justify-between items-center">
-                    <span className='text-sm'>© 2024 The Music Bugle. All rights reserved.</span>
-                    <div className="flex space-x-4 mt-4 md:mt-0">
-                        <Link href="#" className="text-sm hover:underline">Privacy Policy</Link>
-                        <Link href="#" className="text-sm hover:underline">Terms of Service</Link>
-                    </div>
+                {/* Bottom Bar */}
+                <div className="border-t border-gray-600 mt-12 pt-8 flex justify-center items-center text-gray-400 text-xs font-medium">
+                    <span>© 2026 The Music Bugle. All rights reserved.</span>
                 </div>
             </footer>
         </>

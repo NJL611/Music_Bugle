@@ -1,9 +1,18 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import VisualEditing from '@/components/VisualEditing';
 import { draftMode } from 'next/headers';
+import { loadQuery } from '../../sanity/lib/store';
+import { POSTS_QUERY } from '../../sanity/lib/queries';
+import { SanityDocument } from 'next-sanity';
+import { Prata } from 'next/font/google';
 
+const prata = Prata({
+  subsets: ['latin'],
+  variable: '--font-prata',
+  display: 'swap',
+  weight: '400',
+});
 
 const meta = {
   title: 'The Music Bugle',
@@ -43,16 +52,20 @@ export const metadata: Metadata = {
 };
 
 
-const inter = Inter({ subsets: ['latin'] });
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Fetch latest posts for the footer
+  const initial = await loadQuery<SanityDocument[]>(POSTS_QUERY, {}, {
+    perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+  });
+  const posts = initial.data || [];
+
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`font-graphiknormal ${prata.variable}`}>
         {children}
         {draftMode().isEnabled && <VisualEditing />}
       </body>
