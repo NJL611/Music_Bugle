@@ -3,7 +3,7 @@ import { client } from "../../../../sanity/lib/client";
 import { POSTS_BY_TAG_QUERY, TAG_QUERY, ALL_TAGS_QUERY } from "../../../../sanity/lib/queries";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import Posts from "@/components/Posts";
+import PostGrid from "@/components/PostGrid";
 
 export const dynamic = 'force-static';
 
@@ -87,7 +87,8 @@ export default async function TagPage({ params }: { params: { slug: string; }; }
                     </div>
 
                     {posts.length > 0 ? (
-                        <Posts posts={posts} amount={posts.length} label="ARTICLES" />
+                        // TODO: create new post components
+                        <></>
                     ) : (
                         <div className="text-center py-12">
                             <p className="text-lg text-gray-600">No articles found for this tag.</p>
