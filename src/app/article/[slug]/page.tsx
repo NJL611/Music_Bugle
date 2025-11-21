@@ -12,6 +12,7 @@ import Disqus from "@/components/Disqus";
 import AdUnit from "@/components/AdUnit";
 import MoreLikeThis from "@/components/MoreLikeThis";
 
+
 export const dynamic = 'force-static';
 
 export async function generateStaticParams() {
