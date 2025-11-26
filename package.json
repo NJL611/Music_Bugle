@@ -2,6 +2,20 @@
   "name": "music_bugle",
   "version": "0.1.0",
   "private": true,
+  "browserslist": {
+    "production": [
+      "Chrome >= 92",
+      "Edge >= 92",
+      "Firefox >= 91",
+      "Safari >= 15",
+      "not ie <= 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,19 +29,19 @@
     "@sanity/react-loader": "^1.11.11",
     "@sanity/vision": "^3.92.0",
     "@sanity/visual-editing": "^2.15.0",
-    "anchor-pki": "^0.3.2",
+    "@stripe/react-stripe-js": "^3.6.0",
+    "@stripe/stripe-js": "^7.0.0",
     "disqus-react": "^1.1.5",
     "next": "14.2.0",
     "next-sanity": "^9.12.0",
     "react": "^18",
     "react-dom": "^18",
     "sanity": "^3.92.0",
-    "styled-components": "^6.1.8",
-    "stripe": "^18.0.0",
-    "@stripe/react-stripe-js": "^3.6.0",
-    "@stripe/stripe-js": "^7.0.0"
+    "sharp": "^0.34.5",
+    "stripe": "^18.0.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.0.4",
     "@sanity/blueprints": "^0.0.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",

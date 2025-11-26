@@ -1,13 +1,10 @@
-'use client';
 import Link from 'next/link';
-import Image from 'next/image';
-import Button from '@/components/Button';
 import LogoFooter from 'public/svgs/LogoFooter';
 import FacebookLogo from 'public/svgs/FacebookLogo';
 import TwitterLogo from 'public/svgs/TwitterLogo';
 import InstagramLogo from 'public/svgs/InstagramLogo';
 import PinterestLogo from 'public/svgs/PinterestLogo';
-import { SanityDocument } from 'next-sanity';
+import type { SanityDocument } from 'next-sanity';
 import { formatDate } from '../../utils/formatDate';
 
 export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {

@@ -95,7 +95,13 @@ export const portableTextComponents: PortableTextComponents = {
         imageUrl: ({ value }) => {
             return (
                 <div className="mt-6 w-[95%] h-[225px] md:h-[500px] md:w-full m-auto relative group">
-                    <Image src={value.url} alt={value.alt || ''} layout="fill" objectFit="cover" />
+                    <Image
+                        src={value.url}
+                        alt={value.alt || ''}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 800px"
+                    />
                     {value.alt && <figcaption>{value.alt}</figcaption>}
                 </div>
             )

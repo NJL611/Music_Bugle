@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
 import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
 import Image from 'next/image';
+import dynamic from "next/dynamic";
 
 // STRIPE IMPORTS
 import CheckoutPage from "@/components/CheckoutPage";
@@ -14,6 +14,15 @@ if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
     throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined");
 }
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+
+const Footer = dynamic(() => import("@/components/Footer"), {
+    ssr: false,
+    loading: () => (
+        <div className="w-full py-12 text-center text-xs text-gray-400">
+            Loading footer…
+        </div>
+    ),
+});
 
 
 export default function DonatePage() {
@@ -45,7 +54,6 @@ export default function DonatePage() {
                         alt="Donate"
                         fill
                         className="object-contain"
-                        priority
                     />
                 </div>
                 <div className="absolute left-1/2 top-[33%] transform -translate-x-1/2 -translate-y-1/2">

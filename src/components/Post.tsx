@@ -4,7 +4,7 @@ import { PortableText, PortableTextBlock } from "@portabletext/react";
 import imageUrlBuilder from "@sanity/image-url";
 import { dataset, projectId } from "../../sanity/env";
 import Sidebar from "../components/Sidebar";
-import { SanityDocument } from "@sanity/client";
+import type { SanityDocument } from "next-sanity";
 import AdUnit from "./AdUnit";
 import { portableTextComponents } from "./PortableTextComponents";
 import ShareButtons from "./ShareButtons"; // Import ShareButtons
@@ -45,27 +45,21 @@ export default function Post({ post, posts }: Props) {
 
       <div className="lg:pl-24 px-6 lg:pr-6 mx-auto mt-5 grid grid-cols-1 lg:grid-cols-8 border-b border-t">
         <div className="lg:col-span-6 lg:border-r lg:pr-6">
-          <span className="mt-4 block text-[11px] uppercase tracking-widest font-graphikregular">Home {'>'} News</span>
+          <span className="mt-4 block text-[11px] uppercase tracking-widest font-graphiknormal">Home {'>'} News</span>
           {title ? (
             <h1 className="mx-auto text-[36px] md:w-[90%] text-center md:leading-[1.1] lg:leading-[1.1] tracking-tight pt-8 pb-4 font-abrilFatface text-gray-900">
               {title}
             </h1>
           ) : null}
           {subtitle ? (
-            <p className="leading-[24px] font-light mb-4 text-center text-gray-600 text-lg font-gentiumBookPlusRegular max-w-[90%] mx-auto">
+            <p className="leading-[24px] font-light mb-4 text-center text-gray-600 text-lg font-graphiklight max-w-[90%] mx-auto">
               {subtitle}
             </p>
           ) : null}
 
           {/* Metadata Row with Share Buttons */}
           <div className="flex flex-col md:flex-row items-center justify-between mb-4 mx-auto">
-            {author && publishedAt ? (
-              <div className="flex items-center">
-                <p className="text-left inline-block text-[11px] uppercase tracking-widest font-graphikmedium text-gray-500">
-                  By <span className="text-black font-bold">{author.name}</span> | <span className="text-gray-500">{formatDate(publishedAt)}</span>
-                </p>
-              </div>
-            ) : <></>}
+
             <span className="text-[11px] font-bold uppercase tracking-widest mr-3 inline-block align-middle">Share Post:</span>
 
             {/* Share Buttons aligned to the right */}
@@ -94,6 +88,7 @@ export default function Post({ post, posts }: Props) {
                     .url() ?? "/path/to/default/image.jpg"
                 }
                 alt={mainImage.alt || ""}
+                priority
               />
             </div>
           ) : featured_image ? (
@@ -104,6 +99,7 @@ export default function Post({ post, posts }: Props) {
                 height={2000}
                 src={featured_image}
                 alt={""}
+                priority
               />
             </div>
           ) : null}

@@ -1,5 +1,5 @@
 import React from "react";
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 import Suggestions from "./Suggestions";
 import ShareButtons from "./ShareButtons";
 import SubscribeForm from "./SubscribeForm";

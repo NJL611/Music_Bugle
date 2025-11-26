@@ -1,4 +1,4 @@
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 import { dataset, projectId } from "../../sanity/env";
 

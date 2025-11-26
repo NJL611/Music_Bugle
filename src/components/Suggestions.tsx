@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 import PostList from "./PostList";
 import AdUnit from "./AdUnit";
 

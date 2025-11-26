@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 import { SectionHeader, PostMeta } from "./HomeSections";
 import { getPostImage } from "../utils/sanityHelpers";
 

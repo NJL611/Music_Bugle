@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 import { getPostImage } from "../utils/sanityHelpers";
 import { formatDate } from "../../utils/formatDate";
 

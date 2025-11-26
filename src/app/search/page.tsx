@@ -1,4 +1,4 @@
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 import { draftMode } from "next/headers";
 import { loadQuery } from "../../../sanity/lib/store";
 import { POSTS_QUERY, SEARCH_QUERY } from "../../../sanity/lib/queries";
