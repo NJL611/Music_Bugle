@@ -9,21 +9,21 @@ import Button from '@/components/Button';
 import Link from 'next/link';
 
 const navItems = [
-  { label: 'News', link: '#' },
-  { label: 'Q&A', link: '#' },
-  { label: 'Songs', link: '#' },
-  { label: 'Music Videos', link: '#' },
-  { label: 'Upcoming Releases', link: '#' },
-  { label: 'Tours', link: '#' },
-  { label: 'Books', link: '#' },
+  { label: 'News', link: '/category/news' },
+  { label: 'Q&A', link: '/category/q-and-a' },
+  { label: 'Songs', link: '/category/songs' },
+  { label: 'Music Videos', link: '/category/music-videos' },
+  { label: 'Upcoming Releases', link: '/category/upcoming-releases' },
+  { label: 'Tours', link: '/category/tours' },
+  { label: 'Books', link: '/category/books' },
 ];
 
 const trendingItems = [
-  { label: 'Trending', link: '/trending' },
-  { label: 'Latest', link: '/latest' },
-  { label: 'Notable Releases', link: '/notable-releases' },
-  { label: 'Album Reviews', link: '/album-reviews' },
-  { label: 'New Songs', link: '/new-songs' }
+  { label: 'Trending', link: '/category/trending' },
+  { label: 'Latest', link: '/category/latest' },
+  { label: 'Notable Releases', link: '/category/notable-releases' },
+  { label: 'Album Reviews', link: '/category/album-reviews' },
+  { label: 'New Songs', link: '/category/new-songs' }
 ];
 
 export default function Nav({ }) {

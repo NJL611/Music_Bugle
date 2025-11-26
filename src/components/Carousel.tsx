@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import CircleIcon from "../../public/svgs/CircleIcon.js";
 
 import Image from "next/image";
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 
 import Link from "next/link";
 import { getPostImage } from "../utils/sanityHelpers";
@@ -65,6 +65,7 @@ export default function Carousel({ posts }: { posts: SanityDocument[] }) {
             height={675}
             src={sanityImagesUrl[currentIndex]}
             alt={posts[currentIndex]?.title || "Post Image"}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
             priority
           />
 

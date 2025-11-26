@@ -2,23 +2,36 @@ import type { Metadata } from 'next';
 import './globals.css';
 import VisualEditing from '@/components/VisualEditing';
 import { draftMode } from 'next/headers';
-import { loadQuery } from '../../sanity/lib/store';
-import { POSTS_QUERY } from '../../sanity/lib/queries';
-import { SanityDocument } from 'next-sanity';
-import { Prata } from 'next/font/google';
-
-const prata = Prata({
-  subsets: ['latin'],
-  variable: '--font-prata',
-  display: 'swap',
-  weight: '400',
-});
-
+import localFont from 'next/font/local';
 const meta = {
   title: 'The Music Bugle',
   description: 'Your source for the latest music news.',
   image: `${process.env.SITE_URL || 'https://themusicbugle.com'}/og-preview.jpg`,
 };
+
+const graphik = localFont({
+  src: [
+    { path: '../../public/fonts/Graphik-300-Light.woff', weight: '300', style: 'normal' },
+    { path: '../../public/fonts/Graphik-400-Regular.woff', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/Graphik-500-Medium.woff', weight: '500', style: 'normal' },
+    { path: '../../public/fonts/Graphik-600-Semibold.woff', weight: '600', style: 'normal' },
+    { path: '../../public/fonts/Graphik-700-Bold.woff', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-graphik',
+  display: 'swap',
+});
+
+const abril = localFont({
+  src: [{ path: '../../public/fonts/AbrilFatface-Regular.woff', weight: '400', style: 'normal' }],
+  variable: '--font-abril',
+  display: 'swap',
+});
+
+const prata = localFont({
+  src: [{ path: '../../public/fonts/Prata-Regular.woff', weight: '400', style: 'normal' }],
+  variable: '--font-prata',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://themusicbugle.com'),
@@ -52,20 +65,14 @@ export const metadata: Metadata = {
 };
 
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Fetch latest posts for the footer
-  const initial = await loadQuery<SanityDocument[]>(POSTS_QUERY, {}, {
-    perspective: draftMode().isEnabled ? "previewDrafts" : "published",
-  });
-  const posts = initial.data || [];
-
   return (
     <html lang="en">
-      <body className={`font-graphiknormal ${prata.variable}`}>
+      <body className={`font-graphiknormal ${graphik.variable} ${abril.variable} ${prata.variable}`}>
         {children}
         {draftMode().isEnabled && <VisualEditing />}
       </body>

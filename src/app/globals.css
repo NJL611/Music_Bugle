@@ -2,61 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: AbrilFatface;
-  src: url('/fonts/AbrilFatface-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: GraphikLight;
-  src: url('/fonts/Graphik-300-Light.woff') format('woff');
-}
-
-@font-face {
-  font-family: GraphikNormal;
-  src: url('/fonts/Graphik-400-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: GraphikMedium;
-  src: url('/fonts/Graphik-500-Medium.woff') format('woff');
-}
-
-@font-face {
-  font-family: GraphikSemibold;
-  src: url('/fonts/Graphik-600-Semibold.woff') format('woff');
-}
-
-@font-face {
-  font-family: GraphikBold;
-  src: url('/fonts/Graphik-700-Bold.woff') format('woff');
-}
-
-@font-face {
-  font-family: GentiumBookPlus-Regular;
-  src: url('/fonts/GentiumBookPlus-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: GentiumBookPlus-Italic;
-  src: url('/fonts/GentiumBookPlus-Italic.woff') format('woff');
-}
-
-@font-face {
-  font-family: GentiumBookPlus-Bold;
-  src: url('/fonts/GentiumBookPlus-Bold.woff') format('woff');
-}
-
-@font-face {
-  font-family: GentiumBookPlus-BoldItalic;
-  src: url('/fonts/GentiumBookPlus-BoldItalic.woff') format('woff');
-}
-
-@font-face {
-  font-family: Prata;
-  src: url('/fonts/Prata-Regular.woff') format('woff');
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -66,7 +11,7 @@
 
 span,
 a {
-  font-family: GraphikLight;
+  font-family: var(--font-graphik), sans-serif;
 }
 
 h1,
@@ -75,7 +20,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: AbrilFatface;
+  font-family: var(--font-abril), serif;
 }
 
 h2 {
@@ -92,9 +37,36 @@ img {
 
 .body-text {
   @apply text-lg text-black normal-case font-[lighter] leading-[1.85] text-left;
-  font-family: GentiumBookPlus-Regular;
+  font-family: var(--font-graphik), sans-serif;
 }
 
 #reactions {
   display: none !important;
+}
+
+@layer utilities {
+  .font-graphiklight {
+    font-family: var(--font-graphik), sans-serif;
+    font-weight: 300;
+  }
+
+  .font-graphiknormal {
+    font-family: var(--font-graphik), sans-serif;
+    font-weight: 400;
+  }
+
+  .font-graphikmedium {
+    font-family: var(--font-graphik), sans-serif;
+    font-weight: 500;
+  }
+
+  .font-graphiksemibold {
+    font-family: var(--font-graphik), sans-serif;
+    font-weight: 600;
+  }
+
+  .font-graphikbold {
+    font-family: var(--font-graphik), sans-serif;
+    font-weight: 700;
+  }
 }

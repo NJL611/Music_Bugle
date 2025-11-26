@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { SanityDocument } from 'next-sanity';
+import type { SanityDocument } from 'next-sanity';
 import { draftMode } from 'next/headers';
 
 import { loadQuery } from '../../sanity/lib/store';

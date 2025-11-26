@@ -1,4 +1,4 @@
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 import { draftMode } from "next/headers";
 import { loadQuery } from "../../../../sanity/lib/store";
 import { POSTS_QUERY, POST_QUERY } from "../../../../sanity/lib/queries";
@@ -7,13 +7,32 @@ import PostPreview from "@/components/PostPreview";
 import { client } from "../../../../sanity/lib/client";
 import Nav from "@/components/Nav";
 import ExtendMetadata from "../../../components/ExtendMetadata";
-import Footer from "@/components/Footer";
-import Disqus from "@/components/Disqus";
 import AdUnit from "@/components/AdUnit";
 import MoreLikeThis from "@/components/MoreLikeThis";
+import nextDynamic from "next/dynamic";
 
+import Link from "next/link";
 
 export const dynamic = 'force-static';
+export const revalidate = 600;
+
+const Disqus = nextDynamic(() => import('@/components/Disqus'), {
+  ssr: false,
+  loading: () => (
+    <div className="text-center text-sm text-gray-500 py-8">
+      Loading comments…
+    </div>
+  ),
+});
+
+const Footer = nextDynamic(() => import('@/components/Footer'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full py-12 text-center text-xs text-gray-400">
+      Loading footer…
+    </div>
+  ),
+});
 
 export async function generateStaticParams() {
   const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY);
@@ -113,13 +132,22 @@ export default async function Page({ params }: { params: { slug: string; }; }) {
       <Nav />
       <Post post={initial.data} posts={posts} />
       <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
-        <span className="block text-lg mb-4">Tags:</span>
+        <span className="block text-lg mb-4 font-prata font-bold">Tags:</span>
         <div className="flex gap-2 flex-wrap">
-          {initial.data?.tags?.map((tag: any) => (
-            <span key={tag._id} className="px-2 py-1 bg-gray-100 rounded-full text-sm whitespace-nowrap">
-              {tag.title}
-            </span>
-          ))}
+          {initial.data?.tags?.map((tag: any) => {
+            if (tag.slug) {
+              return (
+                <Link href={`/tag/${tag.slug}`} key={tag._id} className="px-3 py-1 bg-gray-100 hover:bg-[#B94445] hover:text-white transition-colors rounded-full text-sm font-graphiknormal whitespace-nowrap">
+                  {tag.title}
+                </Link>
+              );
+            }
+            return (
+              <span key={tag._id} className="px-3 py-1 bg-gray-100 rounded-full text-sm font-graphiknormal whitespace-nowrap text-gray-500">
+                {tag.title}
+              </span>
+            );
+          })}
         </div>
       </div>
       <div className="lg:px-24 mx-auto pb-10 px-6">

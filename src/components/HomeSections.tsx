@@ -1,9 +1,7 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { SanityDocument } from "next-sanity";
+import type { SanityDocument } from "next-sanity";
 import { formatDate } from "../../utils/formatDate";
 import ChevronRight from "public/svgs/ChevronRight";
 import { getPostImage } from "../utils/sanityHelpers";
@@ -185,7 +183,7 @@ export function LatestPosts({ posts }: { posts: SanityDocument[] }) {
 
             {/* Top Grid (Vertical Cards) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 mb-10">
-                {topPosts.map((post) => {
+                {topPosts.map((post, index) => {
                     const imageUrl = getPostImage(post, 400, 260);
                     const isExclusive = post.tags?.some((t: any) => t.title?.toLowerCase() === 'exclusive');
 
@@ -197,6 +195,7 @@ export function LatestPosts({ posts }: { posts: SanityDocument[] }) {
                                     alt={post.title}
                                     fill
                                     className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                    loading={index === 0 ? "eager" : undefined}
                                 />
                                 {isExclusive && (
                                     <div className="absolute bottom-0 left-0 bg-[#EC3535] text-white text-[10px] font-bold px-2 py-1">
