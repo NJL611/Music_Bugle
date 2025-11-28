@@ -1,85 +1,25 @@
-import Carousel from "@/components/Carousel";
-import Nav from "@/components/Nav";
-import type { SanityDocument } from "next-sanity";
-import { draftMode } from "next/headers";
 import dynamic from "next/dynamic";
-import { loadQuery } from "../../sanity/lib/store";
-import { POSTS_QUERY } from "../../sanity/lib/queries";
-import { distributePosts } from "@/utils/postHelpers";
-import {
-  TopStory,
-  SidebarAd,
-  SidebarArticles,
-  StickyAd,
-  SectionHeader,
-} from "@/components/HomeSections";
-
-const PostGrid = dynamic(() => import("@/components/PostGrid"), {
-  loading: () => <div className="w-full min-h-[200px] animate-pulse bg-gray-100 rounded-sm" />,
-});
-
-const PostList = dynamic(() => import("@/components/PostList"), {
-  loading: () => <div className="w-full min-h-[160px] animate-pulse bg-gray-100 rounded-sm" />,
-});
-
-const SupportBanner = dynamic(
-  () => import("@/components/HomeSections").then((mod) => mod.SupportBanner),
-  {
-    ssr: false,
-    loading: () => <div className="w-full py-16 text-center text-sm text-gray-400">Loading supporter info…</div>,
-  },
-);
-
-const LatestPosts = dynamic(
-  () => import("@/components/HomeSections").then((mod) => mod.LatestPosts),
-  {
-    ssr: false,
-    loading: () => <div className="w-full min-h-[280px] animate-pulse bg-gray-50 rounded-sm" />,
-  },
-);
-
-const BottomSection = dynamic(
-  () => import("@/components/HomeSections").then((mod) => mod.BottomSection),
-  {
-    ssr: false,
-    loading: () => <div className="w-full min-h-[320px] animate-pulse bg-gray-50 rounded-sm" />,
-  },
-);
-
-const VideoSection = dynamic(
-  () => import("@/components/HomeSections").then((mod) => mod.VideoSection),
-  {
-    ssr: false,
-    loading: () => <div className="w-full min-h-[240px] animate-pulse bg-gray-50 rounded-sm" />,
-  },
-);
-
-const PostsPreview = dynamic(() => import("../components/PostPreview"), {
-  ssr: false,
-});
-
-const Footer = dynamic(() => import("@/components/Footer"), {
-  ssr: false,
-  loading: () => <div className="w-full py-12 text-center text-xs text-gray-400">Loading footer…</div>,
-});
+import type { SanityDocument } from "next-sanity";
+import { client } from "@sanity/lib/client";
+import { POSTS_PREVIEW_QUERY } from "@sanity/lib/queries";
+import Nav from "@/components/layout/Nav";
+import { distributePosts } from "@/lib/utils";
+import { TopStory, SidebarArticles } from "@/components/sections/HomeSections";
+import { SectionHeader } from "@/components/sections/SectionHeader";
+import { AdUnit } from "@/components/ui/Primitives";
+import { AD_SIZES } from "@/lib/constants";
 
 export const revalidate = 600;
 
 export default async function Home() {
-  const initial: any = await loadQuery<SanityDocument[]>(POSTS_QUERY, {}, {
-    perspective: draftMode().isEnabled ? "previewDrafts" : "published",
-  });
-
-  const allPosts = initial.data || [];
+  const allPosts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
   const content = distributePosts(allPosts);
-
-  const containerClass = "w-full mx-auto px-8 py-6 2xl:px-64";
 
   return (
     <main className="bg-white min-h-screen">
       <Nav />
 
-      <div className={containerClass}>
+      <div className={"w-full mx-auto px-8 py-6 2xl:px-64"}>
         <div className="flex flex-col lg:flex-row gap-8">
 
           <div className="w-full lg:w-2/3 flex flex-col gap-8">
@@ -91,20 +31,21 @@ export default async function Home() {
           </div>
 
           <div className="w-full lg:w-[31%] flex flex-col">
-            <SidebarAd />
+            <AdUnit width={AD_SIZES.SIDEBAR.width} height={AD_SIZES.SIDEBAR.height} className="mb-6 rounded-sm" />
             <div className="mt-2">
-              <h4 className="text-lg font-bold font-prata mb-4 border-b border-gray-200 pb-2">Latest News</h4>
+              <h4 className="text-lg   font-prata mb-4 border-b border-gray-200 pb-2">Latest News</h4>
               <SidebarArticles posts={content.sidebar} />
             </div>
           </div>
 
         </div>
 
-        <PostGrid
+        <PostFeed
           posts={content.newReleases}
           title="New Releases"
           viewAllLink="/new-releases"
           columns={4}
+          variant="grid"
         />
 
         <div className="w-full mt-12">
@@ -114,14 +55,16 @@ export default async function Home() {
               <SectionHeader title="Must Read" viewAllLink="/must-read" />
 
               <div className="mb-8">
-                <PostGrid posts={content.editorsPicksLarge} columns={3} />
+                <PostFeed posts={content.editorsPicksLarge} columns={3} variant="grid" />
               </div>
 
-              <PostList posts={content.editorsPicksSmall} columns={3} />
+              <PostFeed posts={content.editorsPicksSmall} columns={3} variant="list" showImage={false} />
             </div>
 
             <div className="w-full lg:w-1/4">
-              <StickyAd />
+              <div className="sticky top-4">
+                <AdUnit width={AD_SIZES.LARGE_VERTICAL.width} height={AD_SIZES.LARGE_VERTICAL.height} />
+              </div>
             </div>
           </div>
         </div>
@@ -130,19 +73,56 @@ export default async function Home() {
 
       <SupportBanner />
 
-      <div className={containerClass}>
-        {draftMode().isEnabled ? (
-          <PostsPreview initial={initial} params={[]} />
-        ) : (
-          <>
-            <LatestPosts posts={content.latestNews} />
-            <BottomSection posts={content.bottomSection} />
-            <VideoSection posts={content.mustWatch} />
-          </>
-        )}
+      <div className={"w-full mx-auto px-8 py-6 2xl:px-64"}>
+        <LatestPosts posts={content.latestNews} />
+        <BottomSection posts={content.bottomSection} />
+        <MustReadSection posts={content.mustWatch} />
       </div>
 
       <Footer posts={allPosts} />
     </main>
   );
 }
+
+const Carousel = dynamic(
+  () => import("@/components/sections/HomeSections").then((mod) => mod.Carousel),
+  {
+    loading: () => <div className="w-full h-[300px] md:h-[450px] bg-[#444444] animate-pulse" />,
+  },
+);
+
+const PostFeed = dynamic(() => import("@/components/posts/PostFeed"), {
+  loading: () => <div className="w-full min-h-[200px] animate-pulse bg-gray-100 rounded-sm" />,
+});
+
+const SupportBanner = dynamic(
+  () => import("@/components/sections/HomeSections").then((mod) => mod.SupportBanner),
+  {
+    loading: () => <div className="w-full py-16 text-center text-sm text-gray-400" />,
+  },
+);
+
+const LatestPosts = dynamic(
+  () => import("@/components/sections/HomeSections").then((mod) => mod.LatestPosts),
+  {
+    loading: () => <div className="w-full min-h-[280px] animate-pulse bg-gray-50 rounded-sm" />,
+  },
+);
+
+const BottomSection = dynamic(
+  () => import("@/components/sections/HomeSections").then((mod) => mod.BottomSection),
+  {
+    loading: () => <div className="w-full min-h-[320px] animate-pulse bg-gray-50 rounded-sm" />,
+  },
+);
+
+const MustReadSection = dynamic(
+  () => import("@/components/sections/HomeSections").then((mod) => mod.MustReadSection),
+  {
+    loading: () => <div className="w-full min-h-[240px] animate-pulse bg-gray-50 rounded-sm" />,
+  },
+);
+
+const Footer = dynamic(() => import("@/components/layout/Footer"), {
+  loading: () => <div className="w-full py-12 text-center text-xs text-gray-400" />,
+});
