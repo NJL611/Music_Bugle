@@ -1,100 +1,126 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* stylelint-disable at-rule-no-unknown */
+@config "../../tailwind.config.ts";
+/* stylelint-enable at-rule-no-unknown */
+@import 'tailwindcss';
 
 @font-face {
-  font-family: AbrilFatface;
-  src: url('/fonts/AbrilFatface-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: GraphikLight;
+  font-family: 'Graphik Light';
   src: url('/fonts/Graphik-300-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: GraphikNormal;
+  font-family: 'Graphik Normal';
   src: url('/fonts/Graphik-400-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: GraphikMedium;
-  src: url('/fonts/Graphik-500-Medium.woff') format('woff');
+  font-family: 'Abril Fatface';
+  src: url('/fonts/AbrilFatface-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: GraphikSemibold;
-  src: url('/fonts/Graphik-600-Semibold.woff') format('woff');
-}
-
-@font-face {
-  font-family: GraphikBold;
-  src: url('/fonts/Graphik-700-Bold.woff') format('woff');
-}
-
-@font-face {
-  font-family: GentiumBookPlus-Regular;
-  src: url('/fonts/GentiumBookPlus-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: GentiumBookPlus-Italic;
-  src: url('/fonts/GentiumBookPlus-Italic.woff') format('woff');
-}
-
-@font-face {
-  font-family: GentiumBookPlus-Bold;
-  src: url('/fonts/GentiumBookPlus-Bold.woff') format('woff');
-}
-
-@font-face {
-  font-family: GentiumBookPlus-BoldItalic;
-  src: url('/fonts/GentiumBookPlus-BoldItalic.woff') format('woff');
-}
-
-@font-face {
-  font-family: Prata;
+  font-family: 'Prata';
   src: url('/fonts/Prata-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-size: 15px;
+:root {
+  --font-graphiklight: 'Graphik Light';
+  --font-graphiknormal: 'Graphik Normal';
+  --font-abril: 'Abril Fatface';
+  --font-prata: 'Prata';
 }
 
-span,
-a {
-  font-family: GraphikLight;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@layer utilities {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 15px;
+  }
+
+  span,
+  a {
+    font-family: var(--font-graphiklight), sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-abril), serif;
+  }
+
+  h2 {
+    font-size: calc(1vw + 1vh);
+  }
+
+  img {
+    max-width: none;
+  }
+
+  .node-content-body {
+    display: inline-block;
+    position: relative;
+    max-width: 900px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .node-content-body {
+      margin-left: calc(0px + 3.3846153846vw);
+      margin-right: 1.5rem;
+    }
+  }
+
+  .body-text {
+    font-size: 1.125rem;
+    color: #000;
+    font-family: var(--font-graphiklight), sans-serif;
+    font-weight: lighter;
+    text-transform: none;
+    line-height: 1.85;
+    text-align: left;
+  }
+
+  #reactions {
+    display: none !important;
+  }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: AbrilFatface;
+
+.font-graphiklight {
+  font-family: var(--font-graphiklight), sans-serif;
+  font-weight: 300;
 }
 
-h2 {
-  font-size: calc(1vw + 1vh);
+.font-graphiknormal {
+  font-family: var(--font-graphiknormal), sans-serif;
+  font-weight: 400;
 }
 
-img {
-  max-width: none;
+.font-prata {
+  font-family: var(--font-prata), serif;
+  font-weight: 400;
 }
 
-.node-content-body {
-  @apply inline-block relative max-w-[900px] md:ml-[calc(0px_+_3.3846153846vw)] md:mr-6 pt-10;
-}
-
-.body-text {
-  @apply text-lg text-black normal-case font-[lighter] leading-[1.85] text-left;
-  font-family: GentiumBookPlus-Regular;
-}
-
-#reactions {
-  display: none !important;
+.font-abril {
+  font-family: var(--font-abril), serif;
+  font-weight: 400;
 }
