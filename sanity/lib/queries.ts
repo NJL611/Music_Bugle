@@ -2,6 +2,7 @@
 
 import { groq } from "next-sanity";
 
+// Full post data with complete body
 export const POSTS_QUERY = groq`
   *[_type == "post" && defined(slug)] | order(publishedAt desc) {
     _id,
@@ -22,6 +23,43 @@ export const POSTS_QUERY = groq`
       _id
     },
     body,
+    "categories": coalesce(categories[]->{
+      title,
+      _id,
+      "slug": slug.current
+    }, []),
+    "tags": coalesce(tags[]->{
+      title,
+      _id,
+      "slug": slug.current,
+      description
+    }, []),
+    publishedAt,
+    _updatedAt
+  }
+`;
+
+// Preview data with truncated body for lists/grids
+export const POSTS_PREVIEW_QUERY = groq`
+  *[_type == "post" && defined(slug)] | order(publishedAt desc) {
+    _id,
+    title,
+    subtitle,
+    "slug": slug.current,
+    featured_image,
+    mainImage {
+      asset-> {
+        _id,
+        _ref,
+        url,
+        metadata
+      }
+    },
+    "author": author->{
+      name,
+      _id
+    },
+    "body": body[0...1], 
     "categories": coalesce(categories[]->{
       title,
       _id,
@@ -87,6 +125,7 @@ export const SEARCH_QUERY = groq`
     title,
     subtitle,
     "slug": slug.current,
+    featured_image,
     mainImage {
       asset-> {
         _id,
@@ -99,7 +138,7 @@ export const SEARCH_QUERY = groq`
       name,
       _id
     },
-    body,
+    "body": body[0...1],
     "categories": coalesce(categories[]->{
       title,
       _id,
@@ -144,7 +183,7 @@ export const POSTS_BY_TAG_QUERY = groq`
       name,
       _id
     },
-    body,
+    "body": body[0...1],
     "categories": coalesce(categories[]->{
       title,
       _id,
@@ -198,7 +237,7 @@ export const POSTS_BY_CATEGORY_QUERY = groq`
       name,
       _id
     },
-    body,
+    "body": body[0...1],
     "categories": coalesce(categories[]->{
       title,
       _id,
@@ -222,4 +261,3 @@ export const ALL_CATEGORIES_QUERY = groq`
     description
   }
 `;
-

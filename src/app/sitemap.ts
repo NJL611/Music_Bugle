@@ -1,11 +1,8 @@
 import { MetadataRoute } from 'next';
-import { SanityDocument } from 'next-sanity';
-import { draftMode } from 'next/headers';
-
-import { loadQuery } from '../../sanity/lib/store';
-import { POSTS_QUERY } from '../../sanity/lib/queries';
-
-const WEBSITE_HOST_URL = process.env.SITE_URL || 'https://themusicbugle.com';
+import type { SanityDocument } from 'next-sanity';
+import { client } from '@sanity/lib/client';
+import { POSTS_QUERY } from '@sanity/lib/queries';
+import { SITE_URL } from '@/lib/constants';
 
 type ChangeFrequency =
   | 'always'
@@ -16,27 +13,18 @@ type ChangeFrequency =
   | 'yearly'
   | 'never';
 
-interface Article {
-  slug: string;
-  date: string;
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const initial: any = await loadQuery<SanityDocument[]>(POSTS_QUERY, {}, {
-    perspective: draftMode().isEnabled ? 'previewDrafts' : 'published',
-  });
-
-  let articles: Article[] = initial.data;
+  const articles = await client.fetch<SanityDocument[]>(POSTS_QUERY);
   const changeFrequency: ChangeFrequency = 'daily';
 
   const posts = articles.map(({ slug, date }) => ({
-    url: `${WEBSITE_HOST_URL}/posts/${slug}`,
+    url: `${SITE_URL}/posts/${slug}`,
     lastModified: date,
     changeFrequency,
   }));
 
   const routes = ['', '/about', '/article'].map((route) => ({
-    url: `${WEBSITE_HOST_URL}${route}`,
+    url: `${SITE_URL}${route}`,
     lastModified: new Date().toISOString(),
     changeFrequency,
   }));
