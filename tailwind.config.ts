@@ -14,7 +14,6 @@ const config: Config = {
                     button: '#C14E4E',
                     banner: '#BB4242',
                     border: '#EC3535',
-                    share: '#E93F33',
                     dark: '#1B1B1B',
                     text: '#363434',
                     'ad-bg': '#D9D9D9',
