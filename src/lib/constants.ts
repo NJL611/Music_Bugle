@@ -1,4 +1,6 @@
 export const SITE_URL = process.env.SITE_URL || 'https://themusicbugle.com';
+export const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || '';
+export const GOOGLE_TAG_MANAGER_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || '';
 
 export const NAV_ITEMS = [
     { label: 'News', link: '/category/news' },
