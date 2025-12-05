@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { SITE_URL, METADATA } from '@/lib/constants';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID } from '@/lib/constants';
 
 import './globals.css';
 
@@ -20,6 +21,8 @@ export default async function RootLayout({
       <body className="font-graphiknormal">
         {children}
       </body>
+      {GOOGLE_ANALYTICS_ID && <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />}
+      {GOOGLE_TAG_MANAGER_ID && <GoogleTagManager gtmId={GOOGLE_TAG_MANAGER_ID} />}
     </html>
   );
 }
