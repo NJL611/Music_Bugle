@@ -5,6 +5,56 @@ import type { SanityDocument } from "next-sanity";
 import { DiscussionEmbed } from 'disqus-react';
 import { getPostImage, formatDate, resolvePostPath } from "@/lib/utils";
 
+export function CategoryFeatureGrid({ posts }: { posts: SanityDocument[] }) {
+    if (!posts || posts.length === 0) return null;
+
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 w-[85%] mx-auto">
+            {posts.map((post) => {
+                const imageUrl = getPostImage(post, 400, 500);
+                const category = post.categories?.[0];
+                const isExclusive = post.tags?.some((t: any) => t.title?.toLowerCase() === "exclusive");
+
+                return (
+                    <Link key={post._id} href={resolvePostPath(post)} className="group block relative w-full aspect-[3/4] overflow-hidden bg-gray-100">
+                        <Image
+                            src={imageUrl}
+                            alt={post.title || "Article Image"}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            loading="eager"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        />
+
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+
+                        {/* Content */}
+                        <div className="absolute bottom-0 left-0 w-full p-5 flex flex-col items-start">
+                            <div className="flex gap-2 mb-3">
+                                {category && (
+                                    <span className="bg-theme-red text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wide">
+                                        {category.title}
+                                    </span>
+                                )}
+                                {isExclusive && (
+                                    <span className="bg-black text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wide">
+                                        Exclusive
+                                    </span>
+                                )}
+                            </div>
+
+                            <h3 className="text-white font-prata text-xl leading-tight group-hover:text-gray-200 transition-colors line-clamp-3">
+                                {post.title}
+                            </h3>
+                        </div>
+                    </Link>
+                );
+            })}
+        </div>
+    );
+}
+
 interface MoreLikeThisProps {
     posts: SanityDocument[];
     currentPostId: string;
