@@ -160,14 +160,14 @@ export default function PostFeed({
                     {post.title}
                   </Link>
                   {showCategory && post.categories?.length ? (
-                    <span className="text-[10px] text-gray-600 mt-1">{post.categories[0].title}</span>
+                    <span className="text-[12px] text-gray-600 mt-1">{post.categories[0].title}</span>
                   ) : null}
                   <div className="mt-1">
                     <PostMeta
                       author={post.author}
                       publishedAt={post.publishedAt}
                       showAuthor={displayAuthor}
-                      className="text-gray-600 text-[11px]"
+                      className="text-gray-600 text-[12px] font-graphiklight"
                     />
                   </div>
                 </div>
