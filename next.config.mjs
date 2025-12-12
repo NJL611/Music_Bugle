@@ -1,12 +1,15 @@
-import autoCert from "anchor-pki/auto-cert/integrations/next";
 
-const withAutoCert = autoCert({
-  enabledEnv: "development",
+import bundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    qualities: [65, 75],
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -23,4 +26,4 @@ const nextConfig = {
   },
 };
 
-export default withAutoCert(nextConfig);
+export default withBundleAnalyzer(nextConfig);

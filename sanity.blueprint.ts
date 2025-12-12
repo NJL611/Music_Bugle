@@ -8,9 +8,8 @@ export default defineBlueprint({
       event: {
         on: ['publish'],
         filter: `_type == "post"`,
-        projection: 'title, _id, _type, body'
+        projection: `{title, _id, _type, body}`
       }
     })
-
   ]
 })
