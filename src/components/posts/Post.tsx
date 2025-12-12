@@ -60,7 +60,7 @@ export default function Post({ post, posts }: Props) {
             <div className="mt-4 md:mt-0">
               <ShareButtons
                 className="inline-flex align-middle gap-1"
-                itemClassName="bg-theme-share hover:bg-theme-share/90 rounded-sm w-6 h-6 !important"
+                itemClassName="bg-theme-red hover:bg-theme-red/90 rounded-sm w-6 h-6 text-white !important"
               />
             </div>
           </div>

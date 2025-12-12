@@ -83,7 +83,7 @@ export function PopularPostsWidget({ posts }: { posts: SanityDocument[] }) {
     return (
         <div className="w-full mb-10">
             <div className="bg-theme-red text-white py-3 px-4 mb-6 rounded-t-sm">
-                <h3 className="font-prata   text-lg italic">Popular</h3>
+                <h3 className="font-prata text-lg">Popular</h3>
             </div>
             <div className="flex flex-col gap-6">
                 {posts.map((post, index) => {
@@ -118,7 +118,6 @@ export function PopularPostsWidget({ posts }: { posts: SanityDocument[] }) {
 export function SidebarAdWidget() {
     return (
         <div className="mb-10">
-            <div className="text-[10px] text-gray-600 text-center mb-2 uppercase tracking-widest">Advertisement</div>
             <AdUnit width={AD_SIZES.SIDEBAR.width} height={AD_SIZES.SIDEBAR.height} />
         </div>
     )
