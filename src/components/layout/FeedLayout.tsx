@@ -5,6 +5,7 @@ import type { SanityDocument } from "next-sanity";
 import { FeedPostRow } from "@/components/posts/PostFeed";
 import { PopularPostsWidget, SidebarAdWidget } from "@/components/layout/Sidebar";
 import Nav from "@/components/layout/Nav";
+import { CategoryFeatureGrid } from "@/components/sections/PostSections";
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {
     ssr: false,
@@ -31,22 +32,20 @@ export default function FeedLayout({
     categoryLabel = "Category"
 }: FeedLayoutProps) {
 
-    const featuredPost = mainPosts.length > 0 ? mainPosts[0] : null;
-    const feedPosts = mainPosts.length > 0 ? mainPosts.slice(1) : [];
+    const featuredGridPosts = mainPosts.slice(0, 4);
+    const feedPosts = mainPosts.slice(4);
     const footerPosts = allPostsForFooter && allPostsForFooter.length > 0 ? allPostsForFooter : popularPosts;
 
     return (
         <main className="bg-white min-h-screen">
             <Nav />
 
-            <div className="w-full mx-auto px-6 py-8 xl:px-32 2xl:px-64 max-w-[1600px]">
+            <div className="w-full mx-auto px-8 py-6 2xl:px-64">
 
                 <div className="mb-12 border-b border-gray-200 pb-6">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                         <div>
-                            <span className="text-theme-red text-xs uppercase tracking-widest mb-2 block">
-                                {categoryLabel}
-                            </span>
+
                             <h1 className="text-4xl md:text-5xl font-abril text-gray-900">
                                 {title}
                             </h1>
@@ -59,16 +58,11 @@ export default function FeedLayout({
                     </div>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-12">
+                <CategoryFeatureGrid posts={featuredGridPosts} />
 
-                    <div className="w-full lg:w-[65%]">
+                <div className="flex flex-col lg:flex-row gap-8">
 
-                        {/* Featured Post (Top) */}
-                        {featuredPost && (
-                            <div className="mb-12 pb-12 border-b border-gray-200">
-                                <FeedPostRow post={featuredPost} />
-                            </div>
-                        )}
+                    <div className="w-full lg:w-2/3">
 
                         {/* Feed List */}
                         <div className="flex flex-col gap-10">
@@ -76,7 +70,7 @@ export default function FeedLayout({
                                 <FeedPostRow key={post._id} post={post} />
                             ))}
 
-                            {feedPosts.length === 0 && !featuredPost && (
+                            {feedPosts.length === 0 && featuredGridPosts.length === 0 && (
                                 <div className="py-12 text-center text-gray-500">
                                     No articles found in this section.
                                 </div>
@@ -86,7 +80,7 @@ export default function FeedLayout({
                     </div>
 
                     {/* Sidebar Column (Right, ~1/3) */}
-                    <div className="w-full lg:w-[35%] pl-0 lg:pl-8 flex flex-col gap-10 border-l-0 lg:border-l border-transparent lg:border-gray-100">
+                    <div className="w-full lg:w-[31%] flex flex-col gap-8">
 
                         {/* Advertisement */}
                         <SidebarAdWidget />
