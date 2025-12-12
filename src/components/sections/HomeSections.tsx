@@ -37,7 +37,7 @@ export function TopStory({ post }: { post: SanityDocument }) {
                         {post.title}
                     </h3>
                 </Link>
-                <p className="text-gray-600 mb-4 text-sm line-clamp-3">
+                <p className="text-gray-600 mb-4 text-sm line-clamp-3 font-graphiklight">
                     {previewText}
                 </p>
                 <div className="mt-auto">
@@ -139,14 +139,14 @@ export function LatestPosts({ posts }: { posts: SanityDocument[] }) {
                                 </h3>
                             </Link>
 
-                            <div className="flex items-center gap-2 text-[13px] font-medium font-graphiknormal text-black">
+                            <div className="flex items-center gap-2 text-[12px] font-medium font-graphiknormal text-black">
                                 {post.author?.name && (
                                     <>
-                                        <span>{post.author.name}</span>
+                                        <span className="text-gray-600 text-[12px] font-graphiklight">{post.author.name}</span>
                                         <span>-</span>
                                     </>
                                 )}
-                                <span className="text-gray-600">{formatDate(post.publishedAt)}</span>
+                                <span className="text-gray-600 text-[12px] font-graphiklight">{formatDate(post.publishedAt)}</span>
                             </div>
                         </div>
                     </div>
@@ -202,7 +202,7 @@ export function BottomSection({ posts }: { posts: SanityDocument[] }) {
                                 {mainPost.title}
                             </h3>
                         </Link>
-                        <p className="text-gray-600 mb-4 text-sm line-clamp-3">
+                        <p className="text-gray-600 mb-4 text-sm line-clamp-3 font-graphiklight">
                             {mainPostPreview}
                         </p>
                         <PostMeta author={mainPost.author} publishedAt={mainPost.publishedAt} />
@@ -271,7 +271,7 @@ export function MustReadSection({ posts }: { posts: SanityDocument[] }) {
                                             {post.title}
                                         </h3>
                                     </Link>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-6 mb-3">
+                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-6 mb-3 font-graphiklight">
                                         {previewText}
                                     </p>
                                     <div className="mt-auto">
