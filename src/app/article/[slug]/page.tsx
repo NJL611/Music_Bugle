@@ -1,32 +1,77 @@
-import { SanityDocument } from "next-sanity";
-import { draftMode } from "next/headers";
-import { loadQuery } from "../../../../sanity/lib/store";
-import { POSTS_QUERY, POST_QUERY } from "../../../../sanity/lib/queries";
-import Post from "@/components/Post";
-import PostPreview from "@/components/PostPreview";
-import { client } from "../../../../sanity/lib/client";
-import Nav from "@/components/Nav";
-import ExtendMetadata from "../../../components/ExtendMetadata";
-import Footer from "@/components/Footer";
-import Disqus from "@/components/Disqus";
-import TwitterLogo from "public/svgs/TwitterLogo";
-import FacebookLogo from "public/svgs/FacebookLogo";
-import PinterestLogo from "public/svgs/PinterestLogo";
-import MailIcon from "public/svgs/MailIcon";
-import InstagramLogo from "public/svgs/InstagramLogo";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import nextDynamic from "next/dynamic";
+import type { SanityDocument } from "next-sanity";
+import { POSTS_PREVIEW_QUERY, POST_QUERY } from "@sanity/lib/queries";
+import { client } from "@sanity/lib/client";
+import Nav from "@/components/layout/Nav";
+import { AdUnit } from "@/components/ui/Primitives";
+import { MoreLikeThis } from "@/components/sections/PostSections";
+import Post from "@/components/posts/Post";
+import { SITE_URL, METADATA, AD_SIZES } from "@/lib/constants";
 
 export const dynamic = 'force-static';
+export const revalidate = 600;
 
-export async function generateStaticParams() {
-  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY);
 
-  return posts.map((post) => ({
-    slug: post.slug.current,
-  }));
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await client.fetch<SanityDocument>(POST_QUERY, { slug });
+
+  if (!post) {
+    notFound();
+  }
+
+  const posts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
+  const metadata = await generateMetadata({ params });
+
+  return (
+    <>
+      <Nav />
+      <Post post={post} posts={posts} />
+      <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b border-gray-200">
+        <span className="block text-lg mb-4 font-prata  ">Tags:</span>
+        <div className="flex gap-2 flex-wrap">
+          {post?.tags?.map((tag: any) => {
+            if (tag.slug) {
+              return (
+                <Link href={`/tag/${tag.slug}`} key={tag._id} className="px-3 py-1 bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-full text-sm font-graphiknormal whitespace-nowrap">
+                  {tag.title}
+                </Link>
+              );
+            }
+            return (
+              <span key={tag._id} className="px-3 py-1 bg-gray-100 rounded-full text-sm font-graphiknormal whitespace-nowrap text-gray-500">
+                {tag.title}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+      <div className="lg:px-24 mx-auto pb-10 px-6">
+        <MoreLikeThis posts={posts} currentPostId={post._id} />
+      </div>
+      <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
+        <Disqus post={post} />
+      </div>
+      <AdUnit width={AD_SIZES.LEADERBOARD.width} height={AD_SIZES.LEADERBOARD.height} />
+      <Footer />
+    </>
+  );
 }
 
-export async function generateMetadata({ params }: { params: { slug: string; }; }) {
-  const slug = params.slug;
+
+export async function generateStaticParams() {
+  const posts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
+
+  return posts
+    .map((post) => post?.slug?.current)
+    .filter((slug): slug is string => typeof slug === "string" && slug.length > 0)
+    .map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   try {
     const data = await client.fetch(POST_QUERY, { slug });
@@ -36,9 +81,9 @@ export async function generateMetadata({ params }: { params: { slug: string; }; 
       return {
         title: 'Not Found',
         description: 'The page you are looking for does not exist.',
-        image: 'https://themusicbugle.com/og-preview.jpg',
+        image: METADATA.image,
         keywords: 'music, news, latest updates',
-        author: 'The Music Bugle',
+        author: METADATA.title,
         publishedTime: '',
         modifiedTime: '',
       };
@@ -47,36 +92,36 @@ export async function generateMetadata({ params }: { params: { slug: string; }; 
     return {
       title: meta.title || 'No Title',
       description: meta.description || 'No Description',
-      image: meta.mainImage?.asset.url || 'https://themusicbugle.com/og-preview.jpg',
+      image: meta.mainImage?.asset.url || METADATA.image,
       keywords: meta.keywords || 'music, news, latest updates',
-      author: meta.author.name || 'The Music Bugle',
+      author: meta.author.name || METADATA.title,
       publishedTime: meta.publishedAt || '',
       modifiedTime: meta._updatedAt || '',
       openGraph: {
         title: meta.title,
-        description: meta.description || 'Your source for the latest music news.',
-        url: process.env.SITE_URL || 'https://themusicbugle.com',
+        description: meta.description || METADATA.description,
+        url: SITE_URL,
         locale: 'en-US',
         siteName: meta.title,
         type: 'article',
         images: [
           {
-            url: meta.mainImage?.asset.url || 'https://themusicbugle.com/og-preview.jpg',
+            url: meta.mainImage?.asset.url || METADATA.image,
           },
         ],
-        author: meta.author.name || 'The Music Bugle',
+        author: meta.author.name || METADATA.title,
         published_time: meta.publishedAt || '',
         modified_time: meta._updatedAt || '',
       },
       twitter: {
         title: meta.title,
-        description: meta.description || 'Your source for the latest music news.',
-        images: meta.mainImage?.asset.url || 'https://themusicbugle.com/og-preview.jpg',
+        description: meta.description || METADATA.description,
+        images: meta.mainImage?.asset.url || METADATA.image,
         card: 'summary_large_image',
-        site: '@TheMusicBugle',
+        site: METADATA.twitterHandle,
       },
       alternates: {
-        canonical: process.env.SITE_URL || 'https://themusicbugle.com',
+        canonical: SITE_URL,
       },
       robots: {
         index: true,
@@ -89,81 +134,23 @@ export async function generateMetadata({ params }: { params: { slug: string; }; 
     return {
       title: 'Not Found',
       description: 'The page you are looking for does not exist.',
-      image: 'https://themusicbugle.com/og-preview.jpg',
+      image: METADATA.image,
       keywords: 'music, news, latest updates',
-      author: 'The Music Bugle',
+      author: METADATA.title,
       publishedTime: '',
       modifiedTime: '',
     };
   }
 }
 
-export default async function Page({ params }: { params: { slug: string; }; }) {
-  const initial = await loadQuery<SanityDocument>(POST_QUERY, params, {
-    perspective: draftMode().isEnabled ? "previewDrafts" : "published",
-  });
+const Disqus = nextDynamic(() => import('@/components/sections/PostSections').then(mod => mod.Disqus), {
+  loading: () => (
+    <div className="text-center text-sm text-gray-500 py-8" />
+  ),
+});
 
-  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY);
-
-  const metadata = await generateMetadata({ params });
-
-  return draftMode().isEnabled ? (
-    <PostPreview initial={initial} params={params} />
-  ) : (
-    <>
-      <ExtendMetadata meta={metadata} />
-      <Nav />
-      <Post post={initial.data} posts={posts} />
-      <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
-        <span className="block text-lg mb-5">Share this:</span>
-        <div className="flex gap-2">
-          <a href="#" aria-label="Twitter" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.75]">
-              <TwitterLogo />
-            </div>
-          </a>
-          <a href="#" aria-label="Facebook" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.75]">
-              <FacebookLogo />
-            </div>
-          </a>
-          <a href="#" aria-label="Pinterest" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.75]">
-              <PinterestLogo />
-            </div>
-          </a>
-          <a href="#" aria-label="Mail" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.75]">
-              <MailIcon />
-            </div>
-          </a>
-          <a href="#" aria-label="Instagram" className="flex justify-center rounded-full items-center w-6 h-6 bg-black">
-            <div className="transform scale-[0.8]">
-              <InstagramLogo />
-            </div>
-          </a>
-        </div>
-      </div>
-      <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b">
-        <span className="block text-lg mb-4">Tags:</span>
-        <div className="flex gap-2 flex-wrap">
-          {initial.data.tags?.map((tag: any) => (
-            <span key={tag._id} className="px-2 py-1 bg-gray-100 rounded-full text-sm whitespace-nowrap">
-              {tag.title}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
-        <Disqus post={initial.data} />
-      </div>
-      <div className="mx-auto my-5 bg-[#D9D9D9] w-[320px] md:w-[728px] lg:w-[970px]">
-        <div className="h-[20px]">
-          <span className="px-2 text-left text-[10px] text-gray-500">Advertisement</span>
-        </div>
-        <div className="bg-[#D9D9D9] h-[50px] md:h-[90px] lg:h-[90px]" />
-      </div>
-      <Footer />
-    </>
-  );
-}
+const Footer = nextDynamic(() => import('@/components/layout/Footer'), {
+  loading: () => (
+    <div className="w-full py-12 text-center text-xs text-gray-400" />
+  ),
+});
