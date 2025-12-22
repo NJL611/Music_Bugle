@@ -21,8 +21,8 @@ export const TRENDING_ITEMS = [
 ];
 
 export const FOOTER_COMPANY_ITEMS = [
-    { label: 'About', link: '#' },
-    { label: 'Contact us', link: '#' },
+    { label: 'About', link: '/about' },
+    { label: 'Contact us', link: '/contact' },
     { label: 'Subscription Plans', link: '#' },
     { label: 'My account', link: '#' }
 ];
