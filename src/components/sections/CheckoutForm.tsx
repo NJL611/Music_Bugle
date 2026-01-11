@@ -43,7 +43,7 @@ const CheckoutForm = ({ amount }: { amount: number }) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/payment-success?amount=${amount}`,
+        return_url: `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_SITE_URL || 'https://themusicbugle.com')}/payment-success?amount=${amount}`,
       },
     });
 
