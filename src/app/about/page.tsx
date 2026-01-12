@@ -155,7 +155,7 @@ export default function AboutPage() {
                   href="/donate" 
                   className="inline-block bg-theme-button text-white px-6 py-3 rounded-md hover:bg-theme-red transition-colors font-graphiknormal"
                 >
-                  Make a Donation
+                  Support Us
                 </a>
               </p>
               <p className="text-sm text-gray-500 font-graphiklight">
