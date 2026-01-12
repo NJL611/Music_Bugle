@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
 import { convertToSubcurrency } from "@/lib/utils";
 
-const CheckoutForm = ({ amount }: { amount: number }) => {
+const CheckoutForm = ({ amount, isSubscription = false }: { amount: number; isSubscription?: boolean }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -86,7 +86,7 @@ const CheckoutForm = ({ amount }: { amount: number }) => {
         disabled={!stripe || loading}
         className="text-white w-full p-5 bg-black mt-2 rounded-sm font-bold disabled:opacity-50 disabled:animate-pulse"
       >
-        {!loading ? `Pay $${amount}` : "Processing..."}
+        {!loading ? `Support $${amount}${isSubscription ? '/month' : ''}` : "Processing..."}
       </button>
     </form>
   );

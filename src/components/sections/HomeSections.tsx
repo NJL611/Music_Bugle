@@ -79,9 +79,9 @@ export function SupportBanner() {
 
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
                     <Link href="/donate" className="bg-white text-[#111827] px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors min-w-[250px]">
-                        Make a One-time Donation
+                        Support Independent Journalism
                     </Link>
-                    <Link href="/support" className="bg-transparent border border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors min-w-[250px]">
+                    <Link href="/donate" className="bg-transparent border border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors min-w-[250px]">
                         Become a Monthly Supporter
                     </Link>
                 </div>
