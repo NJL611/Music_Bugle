@@ -57,15 +57,15 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">3. Support Payments and Membership</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">3. Support Payments</h2>
               <p className="mb-4">
                 The Music Bugle offers support payment options for users who wish to support independent music journalism. By making a support payment, you acknowledge that:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
                 <li>Support payments are for content and services, not charitable donations</li>
-                <li>You will receive membership benefits including exclusive content, early access, and ad-light experience</li>
+                <li>Support payments help maintain our independent journalism</li>
                 <li>Support payments are processed through Stripe and subject to Stripe&apos;s terms of service</li>
-                <li>Monthly support subscriptions can be cancelled at any time</li>
+                <li>Recurring monthly support payments can be cancelled at any time</li>
               </ul>
             </section>
 

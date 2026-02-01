@@ -38,7 +38,7 @@ export default function RefundPage() {
             <section>
               <h2 className="text-[28px] font-prata text-gray-900 mb-4">1. Support Payments</h2>
               <p className="mb-4">
-                The Music Bugle offers support payment options to help maintain independent music journalism. Support payments are processed through Stripe and provide you with membership benefits including exclusive content, early access, and an ad-light experience.
+                The Music Bugle offers support payment options to help maintain independent music journalism. Support payments are voluntary contributions to help us continue our mission.
               </p>
             </section>
 
@@ -52,7 +52,6 @@ export default function RefundPage() {
                 <li>Technical errors that resulted in duplicate charges</li>
                 <li>Unauthorized transactions</li>
                 <li>Payment made by mistake (within 48 hours of payment)</li>
-                <li>Failure to receive promised membership benefits due to technical issues on our end</li>
               </ul>
 
               <h3 className="text-[20px] font-prata text-gray-900 mb-3 mt-4">2.2 Refund Process</h3>
@@ -62,26 +61,25 @@ export default function RefundPage() {
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">3. Monthly Support Subscriptions</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">3. Monthly Support Payments</h2>
               <h3 className="text-[20px] font-prata text-gray-900 mb-3 mt-4">3.1 Cancellation</h3>
               <p className="mb-4">
-                You may cancel your monthly support subscription at any time. To cancel:
+                You may cancel your monthly recurring support payment at any time. To cancel:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
-                <li>Contact us at <a href="mailto:info@themusicbugle.com" className="text-theme-red hover:underline">info@themusicbugle.com</a> with your subscription details</li>
-                <li>Or manage your subscription through your Stripe customer portal (if available)</li>
+                <li>Contact us at <a href="mailto:info@themusicbugle.com" className="text-theme-red hover:underline">info@themusicbugle.com</a> with your details</li>
+                <li>Or manage your recurring support through your Stripe customer portal (if available)</li>
               </ul>
               <p className="mb-4">
-                Cancellation will take effect at the end of your current billing period. You will continue to receive membership benefits until the end of the period for which you have already paid.
+                Cancellation will take effect at the end of your current billing period.
               </p>
 
-              <h3 className="text-[20px] font-prata text-gray-900 mb-3 mt-4">3.2 Refunds for Monthly Subscriptions</h3>
+              <h3 className="text-[20px] font-prata text-gray-900 mb-3 mt-4">3.2 Refunds for Monthly Payments</h3>
               <p className="mb-4">
-                Monthly subscription payments are non-refundable once processed. However, if you cancel your subscription, you will not be charged for future billing periods. Refunds for the current billing period may be considered on a case-by-case basis for:
+                Monthly support payments are non-refundable once processed. However, if you cancel, you will not be charged for future billing periods. Refunds for the current period may be considered on a case-by-case basis for:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
-                <li>Technical issues preventing access to membership benefits</li>
-                <li>Unauthorized subscription charges</li>
+                <li>Unauthorized charges</li>
                 <li>Duplicate charges due to system errors</li>
               </ul>
             </section>
@@ -96,14 +94,14 @@ export default function RefundPage() {
             <section>
               <h2 className="text-[28px] font-prata text-gray-900 mb-4">5. Chargebacks</h2>
               <p className="mb-4">
-                If you initiate a chargeback through your bank or credit card company, we reserve the right to dispute the chargeback and provide evidence of the services provided. Chargebacks may result in the immediate termination of your account and membership benefits.
+                If you initiate a chargeback through your bank or credit card company, we reserve the right to dispute the chargeback and provide evidence of the transaction.
               </p>
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">6. Digital Content and Services</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">6. Disputes</h2>
               <p className="mb-4">
-                As support payments provide immediate access to digital content and services (exclusive articles, early access, ad-light experience), refunds may be limited once you have accessed these benefits. This is in accordance with standard practices for digital goods and services.
+                As support payments are voluntary contributions, refunds are generally not provided. However, we are committed to fair resolution of any payment errors.
               </p>
             </section>
 

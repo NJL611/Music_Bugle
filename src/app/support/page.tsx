@@ -53,7 +53,7 @@ export default function SupportPage() {
     return (
         <main className="flex min-h-screen flex-col bg-white">
             <Nav />
-            
+
             <div className="w-full mx-auto px-8 py-12 2xl:px-64">
                 {/* Hero Section */}
                 <div className="text-center mb-12">
@@ -80,7 +80,7 @@ export default function SupportPage() {
                                     </li>
                                 ))}
                             </ul>
-                            
+
                             <div className="mt-8 p-6 bg-gray-50 rounded-sm border border-gray-200">
                                 <p className="text-sm text-gray-600 font-graphiklight leading-relaxed">
                                     <strong className="font-graphiknormal text-gray-900">Note:</strong> Your support payment helps us maintain our independent music journalism platform. By supporting us, you're helping to keep quality music news accessible and ad-light. This is a support payment for content and services, not a charitable donation.
@@ -99,22 +99,20 @@ export default function SupportPage() {
                                 <button
                                     type="button"
                                     onClick={() => setSelectedTier('one-time')}
-                                    className={`flex-1 px-6 py-3 rounded-sm font-graphiknormal transition-colors ${
-                                        selectedTier === 'one-time'
-                                            ? 'bg-theme-red text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
+                                    className={`flex-1 px-6 py-3 rounded-sm font-graphiknormal transition-colors ${selectedTier === 'one-time'
+                                        ? 'bg-theme-red text-white'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
                                 >
                                     One-time Support
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setSelectedTier('monthly')}
-                                    className={`flex-1 px-6 py-3 rounded-sm font-graphiknormal transition-colors ${
-                                        selectedTier === 'monthly'
-                                            ? 'bg-theme-red text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
+                                    className={`flex-1 px-6 py-3 rounded-sm font-graphiknormal transition-colors ${selectedTier === 'monthly'
+                                        ? 'bg-theme-red text-white'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
                                 >
                                     Monthly Support
                                 </button>
@@ -127,11 +125,10 @@ export default function SupportPage() {
                                         key={amount}
                                         type="button"
                                         onClick={() => setSupportAmount(amount)}
-                                        className={`px-4 py-3 rounded-sm font-graphiknormal transition-colors ${
-                                            supportAmount === amount
-                                                ? 'bg-theme-red text-white'
-                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
+                                        className={`px-4 py-3 rounded-sm font-graphiknormal transition-colors ${supportAmount === amount
+                                            ? 'bg-theme-red text-white'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
                                     >
                                         ${amount}
                                     </button>
@@ -165,9 +162,9 @@ export default function SupportPage() {
                             {supportAmount && supportAmount >= 1 && (
                                 <div className="border-t border-gray-200 pt-6">
                                     <p className="text-sm font-graphiknormal text-gray-700 mb-4">
-                                        {selectedTier === 'one-time' 
+                                        {selectedTier === 'one-time'
                                             ? `One-time support payment of $${supportAmount}`
-                                            : `Monthly support payment of $${supportAmount} per month`
+                                            : `Monthly recurring support payment of $${supportAmount} per month`
                                         }
                                     </p>
                                     <p className="text-xs text-gray-500 mb-4 font-graphiklight">
@@ -177,9 +174,7 @@ export default function SupportPage() {
                                         stripe={stripePromise}
                                         options={{
                                             mode: selectedTier === 'monthly' ? "subscription" : "payment",
-                                            amount: supportAmount === '' || supportAmount === 0 
-                                                ? convertToSubcurrency(5) 
-                                                : convertToSubcurrency(supportAmount),
+                                            amount: convertToSubcurrency(supportAmount),
                                             currency: "usd",
                                             appearance: {
                                                 theme: 'flat',
@@ -187,8 +182,8 @@ export default function SupportPage() {
                                             },
                                         }}
                                     >
-                                        <CheckoutForm 
-                                            amount={supportAmount === '' ? 5 : supportAmount}
+                                        <CheckoutForm
+                                            amount={supportAmount}
                                             isSubscription={selectedTier === 'monthly'}
                                         />
                                     </Elements>
@@ -218,7 +213,7 @@ export default function SupportPage() {
                             <div>
                                 <h4 className="text-[20px] font-prata text-gray-900 mb-2">Can I cancel my monthly support?</h4>
                                 <p className="body-text">
-                                    Yes, you can cancel your monthly support at any time. Simply contact us or manage your subscription through your payment method. Your support will continue until the end of your current billing period.
+                                    Yes, you can cancel your monthly recurring support at any time. Simply contact us or manage your recurring support through your payment method. Your support will continue until the end of your current billing period.
                                 </p>
                             </div>
                         </div>
