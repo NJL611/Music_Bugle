@@ -57,7 +57,7 @@ export default function Nav({ }) {
           <div onClick={toggleSearch} className="cursor-pointer">
             <SearchIcon />
           </div>
-          <Button text='Support' href='/donate' />
+          <Button text='Support' href='/support' />
           <Button text='Contact' href='/contact' />
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function Nav({ }) {
           </div>
 
           <div className="flex flex-col gap-3 w-3/4">
-            <Button text='Support' href='/donate' className="bg-theme-button text-white w-full" />
+            <Button text='Support' href='/support' className="bg-theme-button text-white w-full" />
             <Button text='Contact' href='/contact' className="bg-theme-button text-white w-full" />
           </div>
         </div>
