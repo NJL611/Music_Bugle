@@ -1,4 +1,4 @@
-export default function DonateLayout({
+export default function SupportLayout({
     children,
 }: {
     children: React.ReactNode

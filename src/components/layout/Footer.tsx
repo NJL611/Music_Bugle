@@ -25,9 +25,20 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                 {/* Column 1: About Us */}
                 <div className="flex flex-col">
                     <h3 className="text-[18px]   font-prata mb-4">About us</h3>
-                    <p className="text-gray-400 text-sm font-lightleading-relaxed mb-6 font-graphik">
-                        Each template in our ever growing studio library can be added and moved around within any page effortlessly with one click.
+                    <p className="text-gray-400 text-sm font-lightleading-relaxed mb-4 font-graphik">
+                        The Music Bugle is committed to delivering quality music coverage without paywalls. Your support helps us remain independent and ad-light.
                     </p>
+                    <div className="mb-4">
+                        <p className="text-gray-400 text-sm font-graphiklight mb-2">
+                            <strong className="text-white">Contact:</strong>
+                        </p>
+                        <p className="text-gray-400 text-sm font-graphiklight mb-1">
+                            <a href="mailto:info@themusicbugle.com" className="hover:text-white transition-colors">info@themusicbugle.com</a>
+                        </p>
+                        <p className="text-gray-400 text-sm font-graphiklight">
+                            <a href="/contact" className="hover:text-white transition-colors">Contact Form</a>
+                        </p>
+                    </div>
                     <div className="flex gap-4">
                         <Link href="#" aria-label="Facebook" className="hover:opacity-80 transition-opacity"><FacebookLogo /></Link>
                         <Link href="#" aria-label="Twitter" className="hover:opacity-80 transition-opacity"><TwitterLogo /></Link>
@@ -85,16 +96,27 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                         <div className="flex items-start gap-2 mt-1">
                             <input type="checkbox" className="mt-1 accent-white" aria-label="Privacy Policy" />
                             <span className="text-[13px] text-gray-400">
-                                I&apos;ve read and accept the <Link href="#" className="text-white hover:underline">Privacy Policy</Link>.
+                                I&apos;ve read and accept the <Link href="/privacy" className="text-white hover:underline">Privacy Policy</Link>.
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Bottom Bar */}
-            <div className="border-t border-gray-600 mt-12 pt-8 flex justify-center items-center text-gray-400 text-xs font-light">
-                <span>© {new Date().getFullYear()} The Music Bugle. All rights reserved.</span>
+            {/* Legal Links */}
+            <div className="border-t border-gray-600 mt-12 pt-8">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="flex flex-wrap gap-4 text-xs text-gray-400">
+                        <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+                        <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                        <Link href="/refund" className="hover:text-white transition-colors">Refund Policy</Link>
+                        <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                        <p className="mb-1">© {new Date().getFullYear()} The Music Bugle. All rights reserved.</p>
+                        <p className="text-[11px]">Email: <a href="mailto:info@themusicbugle.com" className="hover:text-white transition-colors">info@themusicbugle.com</a></p>
+                    </div>
+                </div>
             </div>
         </footer>
     );

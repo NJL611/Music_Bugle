@@ -32,6 +32,7 @@
     "@stripe/react-stripe-js": "^3.6.0",
     "@stripe/stripe-js": "^7.0.0",
     "@types/styled-components": "^5.1.36",
+    "anchor-pki": "^0.3.2",
     "disqus-react": "^1.1.5",
     "next": "^16.0.10",
     "next-sanity": "^11.6.10",
