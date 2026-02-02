@@ -37,7 +37,7 @@ export default function ContactForm() {
         message: '',
         inquiryType: 'general'
       });
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitStatus('idle');
@@ -47,10 +47,10 @@ export default function ContactForm() {
 
   return (
     <div>
-      <h2 className="text-[32px] md:text-[40px] font-prata text-gray-900 mb-6 border-b border-gray-200 pb-4">
+      <h2 className="text-[32px] font-prata text-gray-900 mb-6 border-b border-gray-200 pb-4">
         Send Us a Message
       </h2>
-      
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label htmlFor="inquiryType" className="block text-sm font-graphiknormal text-gray-700 mb-2">
@@ -151,7 +151,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-theme-red text-white text-sm uppercase py-3 rounded-sm hover:bg-[#a03b3c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-graphiknormal"
+          className="w-full bg-theme-red text-white text-sm py-3 rounded-sm hover:bg-[#a03b3c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-graphiknormal"
         >
           {isSubmitting ? 'Sending...' : 'Send Message'}
         </button>
