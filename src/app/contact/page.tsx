@@ -78,7 +78,7 @@ export default function ContactPage() {
 
             {/* Contact Information */}
             <div>
-              <h2 className="text-[32px] md:text-[40px] font-prata text-gray-900 mb-6 border-b border-gray-200 pb-4">
+              <h2 className="text-[32px] font-prata text-gray-900 mb-6 border-b border-gray-200 pb-4">
                 Get In Touch
               </h2>
 
@@ -122,30 +122,30 @@ export default function ContactPage() {
                 <div className="border-t border-gray-200 pt-6">
                   <h3 className="text-[20px] font-prata text-gray-900 mb-4">Follow Us</h3>
                   <div className="flex gap-4">
-                    <a 
-                      href="#" 
-                      aria-label="Facebook" 
+                    <a
+                      href="#"
+                      aria-label="Facebook"
                       className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
                     >
                       <FacebookLogo />
                     </a>
-                    <a 
-                      href="#" 
-                      aria-label="Twitter" 
+                    <a
+                      href="#"
+                      aria-label="Twitter"
                       className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
                     >
                       <TwitterLogo />
                     </a>
-                    <a 
-                      href="#" 
-                      aria-label="Instagram" 
+                    <a
+                      href="#"
+                      aria-label="Instagram"
                       className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
                     >
                       <InstagramLogo />
                     </a>
-                    <a 
-                      href="#" 
-                      aria-label="Pinterest" 
+                    <a
+                      href="#"
+                      aria-label="Pinterest"
                       className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
                     >
                       <PinterestLogo />
