@@ -4,6 +4,8 @@ import { LogoFooter, FacebookLogo, TwitterLogo, InstagramLogo, PinterestLogo } f
 import { formatDate } from '@/lib/utils';
 import { NAV_ITEMS, FOOTER_COMPANY_ITEMS } from '@/lib/constants';
 import { resolvePostPath } from '@/lib/utils';
+import NewsletterForm from '@/components/NewsletterForm';
+
 
 export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
     const latestPosts = posts.slice(0, 3);
@@ -83,22 +85,7 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                 <div className="flex flex-col">
                     <h3 className="text-[18px]   font-prata mb-4">Subscribe</h3>
                     <div className="flex flex-col gap-4">
-                        <div className="flex w-full">
-                            <input
-                                type="email"
-                                placeholder="Email address"
-                                className="w-full px-4 py-3 bg-white text-black text-sm rounded-sm focus:outline-none placeholder-gray-500"
-                            />
-                        </div>
-                        <button className="w-full bg-black text-white px-4 py-3 text-sm   rounded-sm hover:bg-gray-900 transition-colors border border-white/20 flex justify-center items-center gap-2">
-                            I want in <span className="text-lg">→</span>
-                        </button>
-                        <div className="flex items-start gap-2 mt-1">
-                            <input type="checkbox" className="mt-1 accent-white" aria-label="Privacy Policy" />
-                            <span className="text-[13px] text-gray-400">
-                                I&apos;ve read and accept the <Link href="/privacy" className="text-white hover:underline">Privacy Policy</Link>.
-                            </span>
-                        </div>
+                        <NewsletterForm />
                     </div>
                 </div>
             </div>
