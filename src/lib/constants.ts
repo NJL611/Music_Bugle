@@ -1,6 +1,8 @@
 export const SITE_URL = process.env.SITE_URL || 'https://themusicbugle.com';
 export const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || '';
 export const GOOGLE_TAG_MANAGER_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || '';
+export const TERMLY_WEBSITE_UUID = process.env.NEXT_PUBLIC_TERMLY_WEBSITE_UUID || ''; // User to fill this
+
 
 export const NAV_ITEMS = [
     { label: 'News', link: '/category/news' },
@@ -24,7 +26,7 @@ export const FOOTER_COMPANY_ITEMS = [
     { label: 'About', link: '/about' },
     { label: 'Contact us', link: '/contact' },
     { label: 'Support Us', link: '/support' },
-    { label: 'My account', link: '#' }
+    { label: 'Cookie Preferences', link: '/consent-preferences' },
 ];
 
 // --- Image Sizes ---
