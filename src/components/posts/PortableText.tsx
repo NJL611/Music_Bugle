@@ -33,7 +33,7 @@ export const portableText: PortableTextComponents = {
                     );
                 } else {
                     return (
-                        <p className="text-[15px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto font-prata">
+                        <p className="text-[15px] leading-[34px] text-gray-800 mb-4 max-w-[750px] mx-auto font-prata">
                             {children}
                         </p>
                     );
@@ -41,7 +41,7 @@ export const portableText: PortableTextComponents = {
             }
 
             return (
-                <p className="text-[15px] leading-[34px] text-gray-700 mb-4 max-w-[750px] mx-auto font-prata">
+                <p className="text-[15px] leading-[34px] text-gray-800 mb-4 max-w-[750px] mx-auto font-prata">
                     {children}
                 </p>
             );
@@ -52,6 +52,25 @@ export const portableText: PortableTextComponents = {
         h2: ({ children }) => (
             <h2 className="text-2xl font-semibold my-3">{children}</h2>
         ),
+    },
+    marks: {
+        link: ({ children, value }) => {
+            const href = value?.href || '';
+            const isExternal = href.startsWith('http');
+            return (
+                <a
+                    href={href}
+                    className="portable-text-link"
+                    style={{
+                        color: '#B94445',
+                        fontFamily: "'Prata', serif",
+                    }}
+                    {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                    {children}
+                </a>
+            );
+        },
     },
     types: {
         image: ({ value }) => {
