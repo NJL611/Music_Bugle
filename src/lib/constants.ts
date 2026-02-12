@@ -1,7 +1,7 @@
 export const SITE_URL = process.env.SITE_URL || 'https://themusicbugle.com';
 export const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || '';
 export const GOOGLE_TAG_MANAGER_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || '';
-export const TERMLY_WEBSITE_UUID = process.env.TERMLY_WEBSITE_UUID || '';
+export const TERMLY_WEBSITE_UUID = process.env.NEXT_PUBLIC_TERMLY_WEBSITE_UUID || '';
 
 
 export const NAV_ITEMS = [
