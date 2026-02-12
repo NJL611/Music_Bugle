@@ -53,6 +53,21 @@ export const portableText: PortableTextComponents = {
             <h2 className="text-2xl font-semibold my-3">{children}</h2>
         ),
     },
+    marks: {
+        link: ({ children, value }) => {
+            const href = value?.href || '';
+            const isExternal = href.startsWith('http');
+            return (
+                <a
+                    href={href}
+                    className="text-theme-red font-prata underline decoration-theme-red/30 underline-offset-2 hover:decoration-theme-red hover:text-[#8f3536] transition-colors duration-200"
+                    {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                    {children}
+                </a>
+            );
+        },
+    },
     types: {
         image: ({ value }) => {
             if (!value?.asset?._ref) {
