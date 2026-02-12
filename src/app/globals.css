@@ -124,3 +124,15 @@
   font-family: var(--font-abril), serif;
   font-weight: 400;
 }
+
+.portable-text-link {
+  text-decoration: underline;
+  text-decoration-color: rgba(185, 68, 69, 0.3);
+  text-underline-offset: 2px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.portable-text-link:hover {
+  color: #8f3536 !important;
+  text-decoration-color: #B94445;
+}
