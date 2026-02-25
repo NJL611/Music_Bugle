@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
-import { Suspense } from 'react';
 import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID } from '@/lib/constants';
 import TermlyCMP from '@/components/TermlyCMP';
 
@@ -15,15 +14,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
+        <TermlyCMP websiteUUID={TERMLY_WEBSITE_UUID} />
         <link rel="preload" href="/fonts/Graphik-300-Light.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Graphik-400-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/AbrilFatface-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Prata-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
       </head>
       <body className="font-graphiknormal">
-        <Suspense fallback={null}>
-          <TermlyCMP websiteUUID={TERMLY_WEBSITE_UUID} />
-        </Suspense>
         {children}
       </body>
       {GOOGLE_ANALYTICS_ID && <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />}
