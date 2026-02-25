@@ -17,7 +17,7 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <Script
-          src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`}
+          src={`https://app.termly.io/resource-blocker/9934334b-8278-458c-8dc9-fbdbb6d8a75d?autoBlock=on`}
           strategy="beforeInteractive"
           data-name="termly-embed-banner"
         />
