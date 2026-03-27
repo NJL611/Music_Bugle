@@ -34,8 +34,10 @@ export default function Post({ post, posts }: Props) {
 
   return (
     <main className="mx-auto">
+      <div className="py-8 md:pt-10 md:pb-6">
+        <AdUnit variant="responsive-leaderboard" />
+      </div>
 
-      <AdUnit width={AD_SIZES.RESPONSIVE_LEADERBOARD.width} height={AD_SIZES.RESPONSIVE_LEADERBOARD.height} />
 
       <div className="lg:pl-24 px-6 lg:pr-6 mx-auto mt-5 grid grid-cols-1 lg:grid-cols-8 border-b border-t border-gray-200">
         <div className="lg:col-span-6 lg:border-r border-gray-200 lg:pr-6">

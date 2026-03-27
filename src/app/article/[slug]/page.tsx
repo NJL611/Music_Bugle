@@ -54,8 +54,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
         <Disqus post={post} />
       </div>
-      <AdUnit width={AD_SIZES.LEADERBOARD.width} height={AD_SIZES.LEADERBOARD.height} />
+      <div className="py-12">
+        <AdUnit variant="responsive-leaderboard" />
+      </div>
       <Footer />
+
     </>
   );
 }
