@@ -3,9 +3,9 @@
 import Link from "next/link";
 import type { SanityDocument } from "next-sanity";
 import PostFeed from "@/components/posts/PostFeed";
-import { AdUnit } from "@/components/ui/Primitives";
+import { SidebarAdWidget } from "@/components/ui/Primitives";
 import { formatDate, resolvePostPath } from "@/lib/utils";
-import { AD_SIZES } from "@/lib/constants";
+
 
 // --- Sidebar Component ---
 
@@ -25,7 +25,8 @@ export default function Sidebar({ posts }: SidebarProps) {
         <aside className="w-full sticky top-2">
             <div className="w-full lg:px-6 py-2 border-t lg:border-0">
                 {/* Ad Section */}
-                <AdUnit className="mx-auto mt-5 z-10 mb-8" />
+                <SidebarAdWidget className="mx-auto mt-5 z-10 mb-8" />
+
 
                 {/* Related Articles */}
                 <div className="mb-8">
@@ -115,10 +116,3 @@ export function PopularPostsWidget({ posts }: { posts: SanityDocument[] }) {
     );
 }
 
-export function SidebarAdWidget() {
-    return (
-        <div className="mb-10">
-            <AdUnit width={AD_SIZES.SIDEBAR.width} height={AD_SIZES.SIDEBAR.height} />
-        </div>
-    )
-}
