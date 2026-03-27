@@ -3,7 +3,9 @@
 import dynamic from "next/dynamic";
 import type { SanityDocument } from "next-sanity";
 import { FeedPostRow } from "@/components/posts/PostFeed";
-import { PopularPostsWidget, SidebarAdWidget } from "@/components/layout/Sidebar";
+import { PopularPostsWidget } from "@/components/layout/Sidebar";
+import { SidebarAdWidget } from "@/components/ui/Primitives";
+
 import Nav from "@/components/layout/Nav";
 import { CategoryFeatureGrid } from "@/components/sections/PostSections";
 

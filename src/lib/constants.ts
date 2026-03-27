@@ -80,9 +80,10 @@ export const AD_SIZES = {
         height: "h-[90px]"
     },
     MOBILE_BANNER: {
-        width: "w-[300px]",
+        width: "w-[320px]",
         height: "h-[50px]"
     },
+
     MOBILE_LEADERBOARD: {
         width: "w-[320px]",
         height: "h-[50px]"
@@ -143,11 +144,13 @@ export const AD_SIZES = {
     },
     // Custom UI sizes
     SIDEBAR: {
-        width: "w-full",
-        height: "h-[250px]"
+        width: "w-[300px] md:w-[336px]",
+        height: "h-[250px] md:h-[280px]"
     },
     LARGE_VERTICAL: {
-        width: "w-full",
+        width: "w-[300px]",
         height: "h-[600px]"
     },
+
+
 };
