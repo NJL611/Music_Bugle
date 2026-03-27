@@ -1,3 +1,5 @@
+
+
 import dynamic from "next/dynamic";
 import type { SanityDocument } from "next-sanity";
 import { client } from "@sanity/lib/client";
@@ -31,7 +33,8 @@ export default async function Home() {
           </div>
 
           <div className="w-full lg:w-[31%] flex flex-col">
-            <AdUnit width={AD_SIZES.SIDEBAR.width} height={AD_SIZES.SIDEBAR.height} className="mb-6 rounded-sm" />
+            <AdUnit variant="sidebar" className="mb-6 rounded-sm" />
+
             <div className="mt-2">
               <h4 className="text-lg   font-prata mb-4 border-b border-gray-200 pb-2">Latest News</h4>
               <SidebarArticles posts={content.sidebar} />
@@ -63,8 +66,9 @@ export default async function Home() {
 
             <div className="w-full lg:w-1/4">
               <div className="sticky top-4">
-                <AdUnit width={AD_SIZES.LARGE_VERTICAL.width} height={AD_SIZES.LARGE_VERTICAL.height} />
+                <AdUnit variant="vertical" />
               </div>
+
             </div>
           </div>
         </div>
