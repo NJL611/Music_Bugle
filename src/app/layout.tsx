@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import Script from 'next/script';
-import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, SHOW_ADS, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
+import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
 
 import './globals.css';
 
@@ -18,10 +18,10 @@ export default async function RootLayout({
         <link rel="preload" href="/fonts/Graphik-400-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/AbrilFatface-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Prata-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
-        {SHOW_ADS && ADSENSE_PUBLISHER_ID && (
-          <Script
+        {ADSENSE_PUBLISHER_ID && (
+          <script
+            async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}
-            strategy="beforeInteractive"
             crossOrigin="anonymous"
           />
         )}
@@ -41,6 +41,9 @@ export default async function RootLayout({
 }
 
 export const metadata: Metadata = {
+  ...(ADSENSE_PUBLISHER_ID
+    ? { other: { 'google-adsense-account': ADSENSE_PUBLISHER_ID } }
+    : {}),
   metadataBase: new URL(SITE_URL),
   title: {
     template: '%s - The Music Bugle',
