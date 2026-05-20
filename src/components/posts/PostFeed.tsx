@@ -138,27 +138,28 @@ export default function PostFeed({
           if (isHorizontal) {
             // Horizontal Layout (replacing renderThumbList)
             return (
-              <div key={post._id} className="flex gap-4 items-start group cursor-pointer">
+              <Link key={post._id} href={resolvePostPath(post)} className="flex gap-4 items-start group cursor-pointer">
                 {imageUrl && (
-                  <div className="relative shrink-0 overflow-hidden rounded-sm" style={{ width: imgW, height: imgH }}>
-                    <Image
-                      src={imageUrl}
-                      alt={post.title || "Post Image"}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
-                      quality={65}
-                      sizes={SIDEBAR_IMAGE_SIZES}
-                    />
+                  <div className="shrink-0">
+                    <div className="relative overflow-hidden rounded-sm" style={{ width: imgW, height: imgH }}>
+                      <Image
+                        src={imageUrl}
+                        alt={post.title || "Post Image"}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                        quality={65}
+                        sizes={SIDEBAR_IMAGE_SIZES}
+                      />
+                    </div>
                   </div>
                 )}
                 <div className="flex flex-col">
-                  <Link
-                    href={resolvePostPath(post)}
-                    className="font-prata text-sm text-gray-900 leading-snug hover:text-theme-red transition-colors line-clamp-3"
+                  <span
+                    className="font-prata text-sm text-gray-900 leading-snug group-hover:text-theme-red transition-colors line-clamp-3"
                   >
                     {post.title}
-                  </Link>
+                  </span>
                   {showCategory && post.categories?.length ? (
                     <span className="text-[12px] text-gray-600 mt-1">{post.categories[0].title}</span>
                   ) : null}
@@ -171,48 +172,45 @@ export default function PostFeed({
                     />
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           }
 
           // Vertical Layout (Original)
           return (
-            <div
+            <Link
               key={post._id}
+              href={resolvePostPath(post)}
               className={`flex flex-col ${!isGrid ? "border-gray-100 last:border-0" : "group cursor-pointer"
                 }`}
             >
               {/* Image Section */}
               {imageUrl && (
-                <Link href={resolvePostPath(post)} className="group">
-                  <div
-                    className={`relative w-full overflow-hidden rounded-sm ${isGrid ? "aspect-video mb-4" : "aspect-16/10 mb-3"
-                      }`}
-                  >
-                    <Image
-                      src={imageUrl}
-                      alt={post.title || "Post Image"}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
-                      sizes={GRID_IMAGE_SIZES}
-                    />
-                  </div>
-                </Link>
+                <div
+                  className={`relative w-full overflow-hidden rounded-sm ${isGrid ? "aspect-video mb-4" : "aspect-16/10 mb-3"
+                    }`}
+                >
+                  <Image
+                    src={imageUrl}
+                    alt={post.title || "Post Image"}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                    sizes={GRID_IMAGE_SIZES}
+                  />
+                </div>
               )}
 
               {/* Content Section */}
               <div className="flex flex-col">
-                <Link href={resolvePostPath(post)}>
-                  <h3
-                    className={`${isGrid
-                      ? "text-[18px] leading-[22px] line-clamp-3 mb-2"
-                      : "text-[14px] leading-[20px] line-clamp-2 mb-2"
-                      } text-black font-prata hover:text-theme-red transition-colors`}
-                  >
-                    {post.title}
-                  </h3>
-                </Link>
+                <h3
+                  className={`${isGrid
+                    ? "text-[18px] leading-[22px] line-clamp-3 mb-2"
+                    : "text-[14px] leading-[20px] line-clamp-2 mb-2"
+                    } text-black font-prata group-hover:text-theme-red transition-colors`}
+                >
+                  {post.title}
+                </h3>
 
                 <PostMeta
                   author={post.author}
@@ -221,7 +219,7 @@ export default function PostFeed({
                   showAuthor={displayAuthor}
                 />
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
