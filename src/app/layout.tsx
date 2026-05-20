@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import Script from 'next/script';
-import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID } from '@/lib/constants';
+import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, SHOW_ADS, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
 
 import './globals.css';
 
@@ -26,11 +26,14 @@ export default async function RootLayout({
           strategy="afterInteractive"
           data-name="termly-embed-banner"
         />
-        {GOOGLE_ANALYTICS_ID && GOOGLE_ANALYTICS_ID.startsWith('G-') && (
-          <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />
-        )}
-        {GOOGLE_TAG_MANAGER_ID && GOOGLE_TAG_MANAGER_ID.startsWith('GTM-') && (
-          <GoogleTagManager gtmId={GOOGLE_TAG_MANAGER_ID} />
+        {GOOGLE_ANALYTICS_ID && <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />}
+        {GOOGLE_TAG_MANAGER_ID && <GoogleTagManager gtmId={GOOGLE_TAG_MANAGER_ID} />}
+        {SHOW_ADS && ADSENSE_PUBLISHER_ID && (
+          <Script
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+          />
         )}
       </body>
     </html>

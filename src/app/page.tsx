@@ -8,7 +8,7 @@ import Nav from "@/components/layout/Nav";
 import { distributePosts } from "@/lib/utils";
 import { TopStory, SidebarArticles } from "@/components/sections/HomeSections";
 import { SectionHeader } from "@/components/sections/SectionHeader";
-import { AdUnit } from "@/components/ui/Primitives";
+import { AdUnit } from "@/components/ui/AdUnit";
 import { AD_SIZES } from "@/lib/constants";
 
 export const revalidate = 600;
