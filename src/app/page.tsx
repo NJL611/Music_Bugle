@@ -91,7 +91,7 @@ export default async function Home() {
 const Carousel = dynamic(
   () => import("@/components/sections/HomeSections").then((mod) => mod.Carousel),
   {
-    loading: () => <div className="w-full h-[300px] md:h-[450px] bg-[#444444] animate-pulse" />,
+    loading: () => <div className="w-full h-[380px] md:h-[450px] bg-[#444444] animate-pulse" />,
   },
 );
 
