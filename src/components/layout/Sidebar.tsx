@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { SanityDocument } from "next-sanity";
 import PostFeed from "@/components/posts/PostFeed";
-import { SidebarAdWidget } from "@/components/ui/Primitives";
+import { SidebarAdWidget } from "@/components/ui/AdUnit";
 import { formatDate, resolvePostPath } from "@/lib/utils";
 
 
