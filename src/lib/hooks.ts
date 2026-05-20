@@ -10,16 +10,14 @@ const getBreakpoint = (width: number): Breakpoint => {
 };
 
 export function useWindowUtils() {
-    const [size, setSize] = useState<Breakpoint>(() => {
-        if (typeof window === 'undefined') return 'large';
-        return getBreakpoint(window.innerWidth);
-    });
+    const [size, setSize] = useState<Breakpoint>('large');
 
     useEffect(() => {
         const handleResize = () => {
             setSize(getBreakpoint(window.innerWidth));
         };
 
+        handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
