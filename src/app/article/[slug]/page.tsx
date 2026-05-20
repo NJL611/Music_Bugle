@@ -5,7 +5,7 @@ import type { SanityDocument } from "next-sanity";
 import { POSTS_PREVIEW_QUERY, POST_QUERY } from "@sanity/lib/queries";
 import { client } from "@sanity/lib/client";
 import Nav from "@/components/layout/Nav";
-import { AdUnit } from "@/components/ui/Primitives";
+import { AdUnit } from "@/components/ui/AdUnit";
 import { MoreLikeThis } from "@/components/sections/PostSections";
 import Post from "@/components/posts/Post";
 import { SITE_URL, METADATA, AD_SIZES } from "@/lib/constants";
