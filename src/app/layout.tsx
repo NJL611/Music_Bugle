@@ -12,23 +12,27 @@ export default async function RootLayout({
 }) {
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <Script
-          src={`https://app.termly.io/resource-blocker/9934334b-8278-458c-8dc9-fbdbb6d8a75d?autoBlock=on`}
-          strategy="beforeInteractive"
-          data-name="termly-embed-banner"
-        />
         <link rel="preload" href="/fonts/Graphik-300-Light.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Graphik-400-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/AbrilFatface-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Prata-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
       </head>
-      <body className="font-graphiknormal">
+      <body className="font-graphiknormal" suppressHydrationWarning>
         {children}
+        <Script
+          src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`}
+          strategy="afterInteractive"
+          data-name="termly-embed-banner"
+        />
+        {GOOGLE_ANALYTICS_ID && GOOGLE_ANALYTICS_ID.startsWith('G-') && (
+          <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />
+        )}
+        {GOOGLE_TAG_MANAGER_ID && GOOGLE_TAG_MANAGER_ID.startsWith('GTM-') && (
+          <GoogleTagManager gtmId={GOOGLE_TAG_MANAGER_ID} />
+        )}
       </body>
-      {GOOGLE_ANALYTICS_ID && <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />}
-      {GOOGLE_TAG_MANAGER_ID && <GoogleTagManager gtmId={GOOGLE_TAG_MANAGER_ID} />}
     </html>
   );
 }
