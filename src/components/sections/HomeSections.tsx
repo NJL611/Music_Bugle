@@ -4,7 +4,7 @@ import Image from "next/image";
 import type { SanityDocument } from "next-sanity";
 import { getPostExcerpt, resolvePostPath, getPostImage, formatDate } from "@/lib/utils";
 import { ChevronRight, ChevronLeft, CircleIcon } from "@/components/ui/Icons";
-import { AdUnit } from "@/components/ui/Primitives";
+import { AdUnit } from "@/components/ui/AdUnit";
 import { useState, useEffect, useRef } from "react";
 import { GRID_IMAGE_SIZES, HERO_IMAGE_SIZES, FEATURE_IMAGE_SIZES, AD_SIZES } from "@/lib/constants";
 import PostFeed from "@/components/posts/PostFeed";
@@ -172,11 +172,10 @@ export function BottomSection({ posts }: { posts: SanityDocument[] }) {
 
     return (
         <div className="w-full mt-12 mb-12">
-            <div className="w-full flex justify-center bg-theme-bg-light py-4 mb-8">
-                <AdUnit width={AD_SIZES.LEADERBOARD.width} height={AD_SIZES.LEADERBOARD.height} className="mx-auto" />
-            </div>
+            <AdUnit width={AD_SIZES.LEADERBOARD.width} height={AD_SIZES.LEADERBOARD.height} className="mx-auto" />
 
-            <div className="flex flex-col lg:flex-row gap-8">
+
+            <div className="flex flex-col lg:flex-row gap-8 mt-8">
                 <div className="w-full lg:w-2/3">
                     <Link href={resolvePostPath(mainPost)} className="w-full block group">
                         <div className="relative w-full aspect-video mb-4 overflow-hidden rounded-sm block">

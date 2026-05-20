@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { PortableTextComponents } from "@portabletext/react";
-import { AdUnit } from "@/components/ui/Primitives";
+import { AdUnit } from "@/components/ui/AdUnit";
 import { sanityImageBuilder } from "@/lib/utils";
 import { YOUTUBE_REGEX, YOUTUBE_ID_REGEX } from "@/lib/constants";
 
