@@ -1,24 +1,31 @@
-import sanityClient from '@sanity/client';
+const { createClient } = require('@sanity/client');
 
-const client = sanityClient({
+const client = createClient({
     projectId: 'x2bpcfxa',
     dataset: 'production',
     useCdn: false,
+    apiVersion: '2025-02-19',
     token: 'sk5T9bMoWzdyK6dsXRIOpmBYXmXmZxmcLbspeP7MJWnk4v03K9BxhQ3LtNz9aHoatIy5VeC85JtsE6PiGjKpJJAUCU95tN5PXmi0Vzwag03HVzkzUcfBc51fQRnTiQbVqLWMesVVV94p9HzIJsYOduyjLIG39uez7m6Vg5hCg7cqhirOa53k'
 });
 
 async function deletePosts() {
-    const posts = await client.fetch('*[_type == "post"]._id');
-    console.log(`Found ${posts.length} posts to delete`);
+    const query = '*[_type == "post" && !(_id in path("drafts.**"))]';
+    const count = await client.fetch(`count(${query})`);
 
-    for (const postId of posts) {
-        await client.delete(postId);
-        console.log(`Deleted post: ${postId}`);
+    if (count === 0) {
+        console.log('No published posts to delete');
+        return;
     }
 
-    console.log('Finished deleting posts');
+    console.log(`Deleting ${count} published posts`);
+
+    await client.delete({ query });
+
+    const remaining = await client.fetch(`count(${query})`);
+    console.log(`Finished deleting posts. Remaining published posts: ${remaining}`);
 }
 
 deletePosts().catch((err) => {
-    console.error(err);
+    console.error(err.message || err);
+    process.exitCode = 1;
 });

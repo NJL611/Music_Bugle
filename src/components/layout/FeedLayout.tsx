@@ -34,8 +34,9 @@ export default function FeedLayout({
     categoryLabel = "Category"
 }: FeedLayoutProps) {
 
-    const featuredGridPosts = mainPosts.slice(0, 4);
-    const feedPosts = mainPosts.slice(4);
+    const showGrid = mainPosts.length > 4;
+    const featuredGridPosts = showGrid ? mainPosts.slice(0, 4) : [];
+    const feedPosts = showGrid ? mainPosts.slice(4) : mainPosts;
     const footerPosts = allPostsForFooter && allPostsForFooter.length > 0 ? allPostsForFooter : popularPosts;
 
     return (
@@ -52,7 +53,7 @@ export default function FeedLayout({
                                 {title}
                             </h1>
                             {description && (
-                                <p className="text-gray-600 mt-3 max-w-2xl font-graphiknormal text-lg">
+                                <p className="text-gray-600 mt-3 max-w-2xl font-graphiknormal text-[15px]">
                                     {description}
                                 </p>
                             )}

@@ -16,7 +16,7 @@ export function TopStory({ post }: { post: SanityDocument }) {
     const previewText = getPostExcerpt(post);
 
     return (
-        <Link href={resolvePostPath(post)} className="w-full bg-white border-gray-200 rounded-sm overflow-hidden flex flex-col md:flex-row group cursor-pointer">
+        <Link href={resolvePostPath(post)} className="w-[92%] md:w-[90%] lg:w-full mx-auto bg-white border-gray-200 rounded-sm overflow-hidden flex flex-col md:flex-row group cursor-pointer">
             <div className="w-full md:w-1/2 relative h-[250px] md:h-auto overflow-hidden block">
                 <Image
                     src={getPostImage(post, 800, 500)}
@@ -322,7 +322,7 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
     const currentPreview = currentPost ? getPostExcerpt(currentPost) : "";
 
     return (
-        <div className="w-full h-[300px] md:h-[450px] relative bg-theme-bg-dark group">
+        <div className="w-full h-[380px] md:h-[450px] relative bg-theme-bg-dark group">
             <div className="w-full h-full relative overflow-hidden">
                 <Link className="block w-full h-full" href={currentPost ? resolvePostPath(currentPost) : "/"}>
                     <div className="w-full h-full bg-linear-to-b from-transparent via-transparent to-black/80 absolute z-1" />
@@ -353,20 +353,20 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
                 <div className="absolute top-1/2 -translate-y-1/2 left-4 z-10">
                     <button
                         onClick={prevSlide}
-                        className="text-white hover:text-theme-red transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] hidden md:block"
+                        className="text-white hover:text-theme-red transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] block"
                         aria-label="Previous slide"
                     >
-                        <ChevronLeft className="w-12 h-12" />
+                        <ChevronLeft className="w-12 h-12 md:w-16 md:h-16" strokeWidth={1.3} />
                     </button>
                 </div>
 
                 <div className="absolute top-1/2 -translate-y-1/2 right-4 z-10">
                     <button
                         onClick={nextSlide}
-                        className="text-white hover:text-theme-red transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] hidden md:block"
+                        className="text-white hover:text-theme-red transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] block"
                         aria-label="Next slide"
                     >
-                        <ChevronRight className="w-12 h-12" />
+                        <ChevronRight className="w-12 h-12 md:w-16 md:h-16" strokeWidth={1.3} />
                     </button>
                 </div>
 
@@ -380,8 +380,8 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
                         >
                             <div
                                 className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                                        ? "bg-white w-4"
-                                        : "bg-white/40 hover:bg-white/70"
+                                    ? "bg-white w-4"
+                                    : "bg-white/40 hover:bg-white/70"
                                     }`}
                             />
                         </button>
