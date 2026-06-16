@@ -54,6 +54,16 @@ export const HOMEPAGE_COUNTS = {
     MUST_WATCH: 4,
 };
 
+/** Category slugs for homepage sections that require category-filtered posts. */
+export const HOMEPAGE_CATEGORIES = {
+    SIDEBAR: 'news',
+    NEW_RELEASES: 'new-releases',
+    EDITORS_PICKS: 'upcoming-releases',
+    LATEST_NEWS: 'news',
+    BOTTOM_SECTION: 'music-videos',
+    MUST_WATCH: 'music-videos',
+} as const;
+
 // --- Metadata ---
 export const METADATA = {
     title: 'The Music Bugle',

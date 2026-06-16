@@ -2,7 +2,7 @@ import type { SanityDocument } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { dataset, projectId } from "@sanity/env";
-import { HOMEPAGE_COUNTS } from "@/lib/constants";
+import { HOMEPAGE_CATEGORIES, HOMEPAGE_COUNTS } from "@/lib/constants";
 
 // Sanity Helpers
 const builder = imageUrlBuilder({ projectId, dataset });
@@ -39,25 +39,90 @@ export function getPostImage(post: SanityDocument, width = 1200, height?: number
     return post.featured_image || null;
 }
 
-export function distributePosts(posts: SanityDocument[] = []): HomepageContent {
-    let currentIndex = 0;
+function postHasCategory(post: SanityDocument, categorySlug: string): boolean {
+    return post.categories?.some((category: { slug?: string }) => category.slug === categorySlug) ?? false;
+}
 
-    const getSlice = (count: number) => {
-        const slice = posts.slice(currentIndex, currentIndex + count);
-        currentIndex += count;
-        return slice;
-    };
+function takeUniquePosts(
+    posts: SanityDocument[],
+    count: number,
+    usedIds: Set<string>,
+): SanityDocument[] {
+    const selected: SanityDocument[] = [];
+
+    for (const post of posts) {
+        if (selected.length >= count) break;
+        if (usedIds.has(post._id)) continue;
+
+        usedIds.add(post._id);
+        selected.push(post);
+    }
+
+    return selected;
+}
+
+function takeCategoryPosts(
+    posts: SanityDocument[],
+    categorySlug: string,
+    count: number,
+    usedIds: Set<string>,
+): SanityDocument[] {
+    const categoryPosts = posts.filter((post) => postHasCategory(post, categorySlug));
+    return takeUniquePosts(categoryPosts, count, usedIds);
+}
+
+export function distributePosts(posts: SanityDocument[] = []): HomepageContent {
+    const usedIds = new Set<string>();
+
+    const carousel = takeUniquePosts(posts, HOMEPAGE_COUNTS.CAROUSEL, usedIds);
+    const topStory = takeUniquePosts(posts, HOMEPAGE_COUNTS.TOP_STORY, usedIds)[0] || null;
+    const sidebar = takeCategoryPosts(
+        posts,
+        HOMEPAGE_CATEGORIES.SIDEBAR,
+        HOMEPAGE_COUNTS.SIDEBAR,
+        usedIds,
+    );
+    const newReleases = takeCategoryPosts(
+        posts,
+        HOMEPAGE_CATEGORIES.NEW_RELEASES,
+        HOMEPAGE_COUNTS.NEW_RELEASES,
+        usedIds,
+    );
+    const editorsPicks = takeCategoryPosts(
+        posts,
+        HOMEPAGE_CATEGORIES.EDITORS_PICKS,
+        HOMEPAGE_COUNTS.EDITORS_LARGE + HOMEPAGE_COUNTS.EDITORS_SMALL,
+        usedIds,
+    );
+    const latestNews = takeCategoryPosts(
+        posts,
+        HOMEPAGE_CATEGORIES.LATEST_NEWS,
+        HOMEPAGE_COUNTS.LATEST_NEWS,
+        usedIds,
+    );
+    const bottomSection = takeCategoryPosts(
+        posts,
+        HOMEPAGE_CATEGORIES.BOTTOM_SECTION,
+        HOMEPAGE_COUNTS.BOTTOM_SECTION,
+        usedIds,
+    );
+    const mustWatch = takeCategoryPosts(
+        posts,
+        HOMEPAGE_CATEGORIES.MUST_WATCH,
+        HOMEPAGE_COUNTS.MUST_WATCH,
+        usedIds,
+    );
 
     return {
-        carousel: getSlice(HOMEPAGE_COUNTS.CAROUSEL),
-        topStory: getSlice(HOMEPAGE_COUNTS.TOP_STORY)[0] || null,
-        sidebar: getSlice(HOMEPAGE_COUNTS.SIDEBAR),
-        newReleases: getSlice(HOMEPAGE_COUNTS.NEW_RELEASES),
-        editorsPicksLarge: getSlice(HOMEPAGE_COUNTS.EDITORS_LARGE),
-        editorsPicksSmall: getSlice(HOMEPAGE_COUNTS.EDITORS_SMALL),
-        latestNews: getSlice(HOMEPAGE_COUNTS.LATEST_NEWS),
-        bottomSection: getSlice(HOMEPAGE_COUNTS.BOTTOM_SECTION),
-        mustWatch: getSlice(HOMEPAGE_COUNTS.MUST_WATCH),
+        carousel,
+        topStory,
+        sidebar,
+        newReleases,
+        editorsPicksLarge: editorsPicks.slice(0, HOMEPAGE_COUNTS.EDITORS_LARGE),
+        editorsPicksSmall: editorsPicks.slice(HOMEPAGE_COUNTS.EDITORS_LARGE),
+        latestNews,
+        bottomSection,
+        mustWatch,
     };
 }
 

@@ -55,7 +55,7 @@ export default async function Home() {
           <div className="flex flex-col lg:flex-row gap-8">
 
             <div className="w-full lg:w-3/4">
-              <SectionHeader title="Must Read" viewAllLink="/must-read" />
+              <SectionHeader title="Upcoming Releases" viewAllLink="/category/upcoming-releases" />
 
               <div className="mb-8">
                 <PostFeed posts={content.editorsPicksLarge} columns={3} variant="grid" />
@@ -79,7 +79,11 @@ export default async function Home() {
 
       <div className={"w-full mx-auto px-8 py-6 2xl:px-64"}>
         <LatestPosts posts={content.latestNews} />
-        <BottomSection posts={content.bottomSection} />
+        <BottomSection
+          posts={content.bottomSection}
+          title="Music Videos"
+          viewAllLink="/category/music-videos"
+        />
         <MustReadSection posts={content.mustWatch} />
       </div>
 
