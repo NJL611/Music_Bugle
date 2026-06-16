@@ -168,7 +168,15 @@ export function LatestPosts({ posts }: { posts: SanityDocument[] }) {
     );
 }
 
-export function BottomSection({ posts }: { posts: SanityDocument[] }) {
+export function BottomSection({
+    posts,
+    title,
+    viewAllLink,
+}: {
+    posts: SanityDocument[];
+    title: string;
+    viewAllLink: string;
+}) {
     if (!posts || posts.length === 0) return null;
 
     const mainPost = posts[0];
@@ -177,7 +185,11 @@ export function BottomSection({ posts }: { posts: SanityDocument[] }) {
     return (
         <div className="w-full mt-12 mb-12">
             <AdUnit width={AD_SIZES.LEADERBOARD.width} height={AD_SIZES.LEADERBOARD.height} className="mx-auto" />
-
+            <SectionHeader
+                title={title}
+                viewAllLink={viewAllLink}
+                className="mt-8"
+            />
 
             <div className="flex flex-col lg:flex-row gap-8 mt-8">
                 <div className="w-full lg:w-2/3">
@@ -226,7 +238,7 @@ export function MustReadSection({ posts }: { posts: SanityDocument[] }) {
     return (
         <div className="w-full py-12 mb-12">
             <div className=" mx-auto">
-                <SectionHeader title="Must Read" viewAllLink="/videos" className="border-b border-gray-200 pb-4" />
+                <SectionHeader title="Must Read" viewAllLink="/videos" />
 
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">

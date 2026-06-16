@@ -68,8 +68,9 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                                             <span className="text-white text-[13px]">{post.categories[0].title}</span>
                                         )}
                                         <span className="text-gray-400 font-normal text-[13px]">
-                                    {post.publishedAt ? formatDate(post.publishedAt) : null}
-                                </span>
+                                            {post.publishedAt ? formatDate(post.publishedAt) : null}
+                                        </span>
+
                                     </div>
                                 </div>
                             </div>
@@ -102,8 +103,8 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                         <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
                     </div>
                     <div className="text-xs text-gray-400">
-                        <p className="mb-1">© {new Date().getFullYear()} The Music Bugle. All rights reserved.</p>
-                        <p className="text-[11px]">Email: <a href="mailto:info@themusicbugle.com" className="hover:text-white transition-colors">info@themusicbugle.com</a></p>
+                        <p className="mb-1 text-[12px] font-graphiklight">© {new Date().getFullYear()} The Music Bugle. All rights reserved.</p>
+                        <p className="text-[13px] font-graphiklight">Email: <a href="mailto:info@themusicbugle.com" className="hover:text-white transition-colors text-[13px]">info@themusicbugle.com</a></p>
                     </div>
                 </div>
             </div>
