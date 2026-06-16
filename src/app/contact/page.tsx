@@ -3,7 +3,7 @@ import Nav from "@/components/layout/Nav";
 import { SITE_URL, METADATA } from "@/lib/constants";
 import type { Metadata } from "next";
 import ContactForm from "@/components/sections/ContactForm";
-import { FacebookLogo, TwitterLogo, InstagramLogo, PinterestLogo } from '@/components/ui/Icons';
+import { SocialLinks } from '@/components/ui/SocialLinks';
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -121,36 +121,9 @@ export default function ContactPage() {
 
                 <div className="border-t border-gray-200 pt-6">
                   <h3 className="text-[20px] font-prata text-gray-900 mb-4">Follow Us</h3>
-                  <div className="flex gap-4">
-                    <a
-                      href="#"
-                      aria-label="Facebook"
-                      className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
-                    >
-                      <FacebookLogo />
-                    </a>
-                    <a
-                      href="#"
-                      aria-label="Twitter"
-                      className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
-                    >
-                      <TwitterLogo />
-                    </a>
-                    <a
-                      href="#"
-                      aria-label="Instagram"
-                      className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
-                    >
-                      <InstagramLogo />
-                    </a>
-                    <a
-                      href="#"
-                      aria-label="Pinterest"
-                      className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
-                    >
-                      <PinterestLogo />
-                    </a>
-                  </div>
+                  <SocialLinks
+                    linkClassName="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-sm"
+                  />
                 </div>
               </div>
             </div>

@@ -261,3 +261,65 @@ export const ALL_CATEGORIES_QUERY = groq`
     description
   }
 `;
+
+const POST_FEED_FIELDS = groq`
+  _id,
+  title,
+  subtitle,
+  "slug": slug.current,
+  featured_image,
+  trendingPriority,
+  mainImage {
+    asset-> {
+      _id,
+      _ref,
+      url,
+      metadata
+    }
+  },
+  "author": author->{
+    name,
+    _id
+  },
+  "body": body[0...1],
+  "categories": coalesce(categories[]->{
+    title,
+    _id,
+    "slug": slug.current
+  }, []),
+  "tags": coalesce(tags[]->{
+    title,
+    _id,
+    "slug": slug.current
+  }, []),
+  publishedAt,
+  _updatedAt
+`;
+
+export const TRENDING_PAGE_QUERY = groq`
+  *[_type == "trendingPage" && _id == "trendingPage"][0]{
+    title,
+    description,
+    autoFillDays,
+    autoFillLimit,
+    "featuredPosts": featuredPosts[]-> { ${POST_FEED_FIELDS} }
+  }
+`;
+
+export const TRENDING_PRIORITY_POSTS_QUERY = groq`
+  *[_type == "post" && defined(slug) && defined(trendingPriority)] | order(trendingPriority asc) {
+    ${POST_FEED_FIELDS}
+  }
+`;
+
+export const TRENDING_AUTO_POSTS_QUERY = groq`
+  *[
+    _type == "post" &&
+    defined(slug) &&
+    defined(publishedAt) &&
+    publishedAt >= $cutoff &&
+    !(_id in $excludeIds)
+  ] | order(publishedAt desc) [0...$limit] {
+    ${POST_FEED_FIELDS}
+  }
+`;

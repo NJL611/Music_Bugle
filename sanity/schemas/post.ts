@@ -74,6 +74,14 @@ export default defineType({
       type: 'datetime',
     }),
     defineField({
+      name: 'trendingPriority',
+      title: 'Trending priority',
+      type: 'number',
+      description:
+        'Optional. Pin this post on the Trending page — lower number appears higher (1 = top). Leave empty for automatic placement only.',
+      validation: (Rule) => Rule.min(1).max(100).integer(),
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'blockContent',

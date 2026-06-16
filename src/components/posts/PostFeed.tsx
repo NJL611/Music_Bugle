@@ -78,7 +78,9 @@ export function FeedPostRow({ post }: FeedPostRowProps) {
               <span>—</span>
             </div>
           )}
-          <span>{formatDate(post.publishedAt)}</span>
+          {post.publishedAt ? (
+            <span>{formatDate(post.publishedAt)}</span>
+          ) : null}
         </div>
       </div>
     </div>

@@ -1,27 +1,57 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { fetchCategoryData, fetchCategoryPosts, fetchPopularPosts } from "@/lib/fetchers";
 import FeedLayout from "@/components/layout/FeedLayout";
+import { METADATA, SITE_URL } from "@/lib/constants";
 
-export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
+type PageProps = { params: Promise<{ slug: string }> };
 
-    const [category, posts, allPosts] = await Promise.all([
-        fetchCategoryData(slug),
-        fetchCategoryPosts(slug),
-        fetchPopularPosts()
-    ]);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const category = await fetchCategoryData(slug);
 
-    if (!category) {
-        console.error(`Category not found for slug: ${slug}`);
-        notFound();
-    }
+  if (!category) {
+    return { title: "Category Not Found" };
+  }
 
-    return (
-        <FeedLayout
-            title={category.title}
-            description={category.description}
-            mainPosts={posts || []}
-            popularPosts={allPosts || []}
-        />
-    );
+  const title = category.title;
+  const description =
+    category.description ||
+    `Browse ${title} articles on ${METADATA.title} — music news, reviews, and coverage.`;
+  const url = `${SITE_URL}/category/${slug}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: `${title} - ${METADATA.title}`,
+      description,
+      url,
+      type: "website",
+    },
+    alternates: { canonical: url },
+  };
+}
+
+export default async function CategoryPage({ params }: PageProps) {
+  const { slug } = await params;
+
+  const [category, posts, allPosts] = await Promise.all([
+    fetchCategoryData(slug),
+    fetchCategoryPosts(slug),
+    fetchPopularPosts(),
+  ]);
+
+  if (!category) {
+    notFound();
+  }
+
+  return (
+    <FeedLayout
+      title={category.title}
+      description={category.description}
+      mainPosts={posts || []}
+      popularPosts={allPosts || []}
+    />
+  );
 }
