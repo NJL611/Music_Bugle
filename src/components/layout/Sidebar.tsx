@@ -44,40 +44,6 @@ export default function Sidebar({ posts }: SidebarProps) {
     );
 }
 
-// --- Sidebar Widgets ---
-
-export function SubscribeWidget() {
-    return (
-        <div className="w-full mb-10 border border-gray-200 p-6 rounded-sm bg-white">
-            <h3 className="text-[20px]   font-prata text-gray-900 mb-4 text-center">
-                Subscribe
-            </h3>
-            <p className="text-gray-600 text-sm text-center mb-6 font-graphiknormal">
-                Get the latest news and updates directly in your inbox.
-            </p>
-            <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-                <input
-                    type="email"
-                    placeholder="Email address"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-sm text-sm focus:outline-none focus:border-gray-500 bg-gray-50"
-                />
-                <button
-                    type="submit"
-                    className="w-full bg-theme-red text-white   text-sm uppercase py-3 rounded-sm hover:bg-[#a03b3c] transition-colors"
-                >
-                    I Want In
-                </button>
-            </form>
-            <div className="mt-4 flex items-center justify-center gap-2 text-[11px] text-gray-500">
-                <input type="checkbox" id="privacy" className="rounded-sm" />
-                <label htmlFor="privacy">
-                    I&apos;ve read and accept the <Link href="/privacy" className="text-theme-red hover:underline">Privacy Policy</Link>
-                </label>
-            </div>
-        </div>
-    );
-}
-
 export function PopularPostsWidget({ posts }: { posts: SanityDocument[] }) {
     if (!posts || posts.length === 0) return null;
 
@@ -105,7 +71,7 @@ export function PopularPostsWidget({ posts }: { posts: SanityDocument[] }) {
                                     </h4>
                                 </Link>
                                 <span className="text-[11px] text-gray-500 font-graphiknormal">
-                                    {formatDate(post.publishedAt)}
+                                    {post.publishedAt ? formatDate(post.publishedAt) : null}
                                 </span>
                             </div>
                         </div>

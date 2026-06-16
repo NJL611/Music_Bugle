@@ -1,28 +1,58 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { fetchPopularPosts, fetchTagData, fetchTagPosts } from "@/lib/fetchers";
 import FeedLayout from "@/components/layout/FeedLayout";
+import { METADATA, SITE_URL } from "@/lib/constants";
 
-export default async function TagPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
+type PageProps = { params: Promise<{ slug: string }> };
 
-    const [tag, posts, allPosts] = await Promise.all([
-        fetchTagData(slug),
-        fetchTagPosts(slug),
-        fetchPopularPosts()
-    ]);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const tag = await fetchTagData(slug);
 
-    if (!tag) {
-        console.error(`Tag not found for slug: ${slug}`);
-        notFound();
-    }
+  if (!tag) {
+    return { title: "Tag Not Found" };
+  }
 
-    return (
-        <FeedLayout
-            title={tag.title}
-            description={tag.description}
-            mainPosts={posts || []}
-            popularPosts={allPosts || []}
-            categoryLabel="Tag"
-        />
-    );
+  const title = tag.title;
+  const description =
+    tag.description ||
+    `Articles tagged "${title}" on ${METADATA.title}.`;
+  const url = `${SITE_URL}/tag/${slug}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: `${title} - ${METADATA.title}`,
+      description,
+      url,
+      type: "website",
+    },
+    alternates: { canonical: url },
+  };
+}
+
+export default async function TagPage({ params }: PageProps) {
+  const { slug } = await params;
+
+  const [tag, posts, allPosts] = await Promise.all([
+    fetchTagData(slug),
+    fetchTagPosts(slug),
+    fetchPopularPosts(),
+  ]);
+
+  if (!tag) {
+    notFound();
+  }
+
+  return (
+    <FeedLayout
+      title={tag.title}
+      description={tag.description}
+      mainPosts={posts || []}
+      popularPosts={allPosts || []}
+      categoryLabel="Tag"
+    />
+  );
 }

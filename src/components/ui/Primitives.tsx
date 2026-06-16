@@ -1,6 +1,3 @@
-import { TwitterLogo, FacebookLogo, PinterestLogo, MailIcon, InstagramLogo } from './Icons';
-
-
 // --- Button ---
 export const Button = ({ text, href, className = "bg-theme-button text-white" }: { text: string; href: string; className?: string }) => (
     <a
@@ -11,33 +8,4 @@ export const Button = ({ text, href, className = "bg-theme-button text-white" }:
     </a>
 );
 
-// --- Share Buttons ---
-interface ShareButtonsProps {
-    className?: string;
-    itemClassName?: string;
-}
-
-const SHARE_BUTTONS = [
-    { label: "Twitter", Icon: TwitterLogo, scaleClass: "scale-[0.75]" },
-    { label: "Facebook", Icon: FacebookLogo, scaleClass: "scale-[0.75]" },
-    { label: "Pinterest", Icon: PinterestLogo, scaleClass: "scale-[0.75]" },
-    { label: "Mail", Icon: MailIcon, scaleClass: "scale-[0.75]" },
-    { label: "Instagram", Icon: InstagramLogo, scaleClass: "scale-[0.8]" },
-];
-
-export const ShareButtons = ({ className = "", itemClassName = "" }: ShareButtonsProps) => (
-    <div className={`flex gap-2 ${className}`}>
-        {SHARE_BUTTONS.map(({ label, Icon, scaleClass }) => (
-            <a
-                key={label}
-                href="#"
-                aria-label={label}
-                className={`flex justify-center rounded-full items-center w-8 h-8 bg-black hover:bg-gray-800 transition-colors ${itemClassName}`}
-            >
-                <div className={`transform ${scaleClass}`}>
-                    <Icon />
-                </div>
-            </a>
-        ))}
-    </div>
-);
+export { ShareButtons } from '@/components/ui/ShareButtons';
