@@ -69,6 +69,7 @@ export const HOMEPAGE_COUNTS = {
     LATEST_NEWS: 12,
     BOTTOM_SECTION: 6,
     MUST_WATCH: 4,
+    POPULAR_SIDEBAR: 5,
 };
 
 /** Category slugs for homepage sections that require category-filtered posts. */

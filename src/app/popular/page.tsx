@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import FeedLayout from "@/components/layout/FeedLayout";
-import { fetchPopularSidebarPosts, fetchTrendingPage, fetchTrendingPosts } from "@/lib/fetchers";
+import { fetchPopularPage, fetchPopularPosts, fetchPopularSidebarPosts } from "@/lib/fetchers";
 import { METADATA, SITE_URL } from "@/lib/constants";
 
 export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await fetchTrendingPage();
+  const page = await fetchPopularPage();
 
   return {
     title: page.title,
@@ -14,18 +14,19 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: `${page.title} - ${METADATA.title}`,
       description: page.description,
-      url: `${SITE_URL}/trending`,
+      url: `${SITE_URL}/popular`,
       type: "website",
     },
     alternates: {
-      canonical: `${SITE_URL}/trending`,
+      canonical: `${SITE_URL}/popular`,
     },
   };
 }
 
-export default async function TrendingPage() {
-  const [{ page, posts }, popularPosts] = await Promise.all([
-    fetchTrendingPosts(),
+export default async function PopularPage() {
+  const [page, posts, sidebarPosts] = await Promise.all([
+    fetchPopularPage(),
+    fetchPopularPosts(),
     fetchPopularSidebarPosts(),
   ]);
 
@@ -34,8 +35,8 @@ export default async function TrendingPage() {
       title={page.title}
       description={page.description}
       mainPosts={posts}
-      popularPosts={popularPosts}
-      categoryLabel="Trending"
+      popularPosts={sidebarPosts}
+      categoryLabel="Popular"
     />
   );
 }
