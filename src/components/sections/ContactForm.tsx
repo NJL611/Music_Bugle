@@ -7,10 +7,12 @@ export default function ContactForm() {
     email: '',
     subject: '',
     message: '',
-    inquiryType: 'general'
+    inquiryType: 'general',
+    website: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -24,25 +26,42 @@ export default function ContactForm() {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setErrorMessage('');
 
-    // Simulate form submission
-    // In a real application, you would send this to an API endpoint
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setSubmitStatus('error');
+        setErrorMessage(typeof data.error === 'string' ? data.error : 'Something went wrong. Please try again later.');
+        return;
+      }
+
       setSubmitStatus('success');
       setFormData({
         name: '',
         email: '',
         subject: '',
         message: '',
-        inquiryType: 'general'
+        inquiryType: 'general',
+        website: '',
       });
 
-      // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitStatus('idle');
       }, 5000);
-    }, 1000);
+    } catch {
+      setSubmitStatus('error');
+      setErrorMessage('Something went wrong. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -52,6 +71,17 @@ export default function ContactForm() {
       </h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input
+          type="text"
+          name="website"
+          value={formData.website}
+          onChange={handleChange}
+          tabIndex={-1}
+          autoComplete="off"
+          className="hidden"
+          aria-hidden="true"
+        />
+
         <div>
           <label htmlFor="inquiryType" className="block text-sm font-graphiknormal text-gray-700 mb-2">
             Inquiry Type
@@ -144,7 +174,7 @@ export default function ContactForm() {
 
         {submitStatus === 'error' && (
           <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-sm text-sm">
-            Something went wrong. Please try again later.
+            {errorMessage || 'Something went wrong. Please try again later.'}
           </div>
         )}
 
@@ -159,6 +189,3 @@ export default function ContactForm() {
     </div>
   );
 }
-
-
-

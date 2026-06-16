@@ -100,7 +100,7 @@ export function LatestPosts({ posts }: { posts: SanityDocument[] }) {
                 <h3 className="text-[24px]   font-prata text-black leading-none">
                     Latest News
                 </h3>
-                <Link href="/latest" className="flex items-center gap-2 group">
+                <Link href="/category/news" className="flex items-center gap-2 group">
                     <span className="text-[13px] font-semibold font-graphiknormal text-theme-red group-hover:text-[#8f3536] transition-colors">
                         View All
                     </span>
@@ -142,7 +142,11 @@ export function LatestPosts({ posts }: { posts: SanityDocument[] }) {
                                         <span>-</span>
                                     </>
                                 )}
-                                <span className="text-gray-600 text-[12px] font-graphiklight">{formatDate(post.publishedAt)}</span>
+                                {post.publishedAt ? (
+                                    <time dateTime={post.publishedAt} className="text-gray-600 text-[12px] font-graphiklight">
+                                        {formatDate(post.publishedAt)}
+                                    </time>
+                                ) : null}
                             </div>
                         </div>
                     </Link>

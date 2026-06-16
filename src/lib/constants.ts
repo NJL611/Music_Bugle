@@ -13,16 +13,23 @@ export const NAV_ITEMS = [
     { label: 'Music Videos', link: '/category/music-videos' },
     { label: 'Upcoming Releases', link: '/category/upcoming-releases' },
     { label: 'Tours', link: '/category/tours' },
-    { label: 'Books', link: '/category/books' },
 ];
 
 export const TRENDING_ITEMS = [
-    { label: 'Trending', link: '/category/trending' },
-    { label: 'Latest', link: '/category/latest' },
+    { label: 'Trending', link: '/trending' },
+    { label: 'Latest', link: '/category/news' },
     { label: 'Notable Releases', link: '/category/notable-releases' },
     { label: 'Album Reviews', link: '/category/album-reviews' },
-    { label: 'New Songs', link: '/category/new-songs' }
+    { label: 'New Songs', link: '/category/new-songs' },
 ];
+
+/** Static date shown on legal pages — update when policy text changes. */
+export const LEGAL_LAST_UPDATED = 'May 22, 2026';
+
+export const STRIPE_PUBLISHABLE_KEY =
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY ||
+    '';
 
 export const FOOTER_COMPANY_ITEMS = [
     { label: 'About', link: '/about' },
@@ -30,6 +37,16 @@ export const FOOTER_COMPANY_ITEMS = [
     { label: 'Support Us', link: '/support' },
     { label: 'Cookie Preferences', link: '/consent-preferences' },
 ];
+
+/** Profile links for footer/contact. Omit env vars for networks you do not use. */
+export const SOCIAL_LINKS = [
+    { label: 'Facebook', href: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK ?? '' },
+    { label: 'Twitter', href: process.env.NEXT_PUBLIC_SOCIAL_TWITTER ?? 'https://twitter.com/TheMusicBugle' },
+    { label: 'Instagram', href: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM ?? '' },
+    { label: 'Pinterest', href: process.env.NEXT_PUBLIC_SOCIAL_PINTEREST ?? '' },
+].filter((link) => link.href.length > 0);
+
+export const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'info@themusicbugle.com';
 
 // --- Image Sizes ---
 export const GRID_IMAGE_SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 25vw, 300px";

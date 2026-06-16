@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { SanityDocument } from 'next-sanity';
-import { LogoFooter, FacebookLogo, TwitterLogo, InstagramLogo, PinterestLogo } from '@/components/ui/Icons';
+import { LogoFooter } from '@/components/ui/Icons';
+import { SocialLinks } from '@/components/ui/SocialLinks';
 import { formatDate } from '@/lib/utils';
 import { NAV_ITEMS, FOOTER_COMPANY_ITEMS } from '@/lib/constants';
 import { resolvePostPath } from '@/lib/utils';
@@ -21,12 +22,12 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
             </div>
 
             {/* Main Content Grid */}
-            <div className="w-full mx-auto grid grid-cols-1 lg:grid-cols-[2fr_1.5fr_2.5fr_2.5fr] gap-8">
+            <div className="w-full mx-auto grid grid-cols-1 lg:grid-cols-[2fr_1.5fr_2.5fr_1.5fr] gap-8">
                 {/* Column 1: About Us */}
                 <div className="flex flex-col">
                     <h3 className="text-[18px]   font-prata mb-4">About us</h3>
                     <p className="text-gray-400 text-sm font-lightleading-relaxed mb-4 font-graphik">
-                        The Music Bugle is committed to delivering quality music coverage without paywalls. Your support helps us remain independent and ad-light.
+                        The Music Bugle is committed to independent, reader-supported music journalism. Your support helps us keep covering the stories that matter.
                     </p>
                     <div className="mb-4">
                         <p className="text-gray-400 text-sm font-graphiklight mb-2">
@@ -39,12 +40,7 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                             <a href="/contact" className="hover:text-white transition-colors">Contact Form</a>
                         </p>
                     </div>
-                    <div className="flex gap-4">
-                        <Link href="#" aria-label="Facebook" className="hover:opacity-80 transition-opacity"><FacebookLogo /></Link>
-                        <Link href="#" aria-label="Twitter" className="hover:opacity-80 transition-opacity"><TwitterLogo /></Link>
-                        <Link href="#" aria-label="Instagram" className="hover:opacity-80 transition-opacity"><InstagramLogo /></Link>
-                        <Link href="#" aria-label="Pinterest" className="hover:opacity-80 transition-opacity"><PinterestLogo /></Link>
-                    </div>
+                    <SocialLinks />
                 </div>
 
                 {/* Column 2: Company */}
@@ -74,6 +70,7 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                                         <span className="text-gray-400 font-normal text-[13px]">
                                             {post.publishedAt ? formatDate(post.publishedAt) : null}
                                         </span>
+
                                     </div>
                                 </div>
                             </div>
@@ -81,27 +78,18 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                     </div>
                 </div>
 
-                {/* Column 4: Subscribe */}
+                {/* Column 4: Stay in touch */}
                 <div className="flex flex-col">
-                    <h3 className="text-[18px]   font-prata mb-4">Subscribe</h3>
-                    <div className="flex flex-col gap-4">
-                        <div className="flex w-full">
-                            <input
-                                type="email"
-                                placeholder="Email address"
-                                className="w-full px-4 py-3 bg-white text-black text-sm rounded-sm focus:outline-none placeholder-gray-500"
-                            />
-                        </div>
-                        <button className="w-full bg-black text-white px-4 py-3 text-sm   rounded-sm hover:bg-gray-900 transition-colors border border-white/20 flex justify-center items-center gap-2">
-                            I want in <span className="text-lg">→</span>
-                        </button>
-                        <div className="flex items-start gap-2 mt-1">
-                            <input type="checkbox" className="mt-1 accent-white" aria-label="Privacy Policy" />
-                            <span className="text-[13px] text-gray-400">
-                                I&apos;ve read and accept the <Link href="/privacy" className="text-white hover:underline">Privacy Policy</Link>.
-                            </span>
-                        </div>
-                    </div>
+                    <h3 className="text-[18px]   font-prata mb-4">Stay in touch</h3>
+                    <p className="text-gray-400 text-sm font-graphiklight mb-4">
+                        Have a story tip, press inquiry, or feedback? We read every message.
+                    </p>
+                    <Link
+                        href="/contact"
+                        className="inline-flex justify-center items-center w-full bg-black text-white px-4 py-3 text-sm rounded-sm hover:bg-gray-900 transition-colors border border-white/20"
+                    >
+                        Contact us <span className="text-lg ml-1">→</span>
+                    </Link>
                 </div>
             </div>
 

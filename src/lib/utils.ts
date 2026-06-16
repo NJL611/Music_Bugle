@@ -140,11 +140,16 @@ export type HomepageContent = {
 };
 
 // --- Format Date ---
-export const formatDate = (dateString: string): string => {
+/** Publication dates from Sanity are UTC; format in UTC so the calendar day matches the CMS value. */
+export const formatDate = (dateString: string | undefined | null): string => {
+    if (!dateString) return '';
+
     const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = date.toLocaleString('en-US', { month: 'short' });
-    const year = date.getFullYear().toString().slice(-2);
+    if (Number.isNaN(date.getTime())) return '';
+
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+    const year = date.getUTCFullYear();
     return `${day} ${month} ${year}`;
 };
 

@@ -46,7 +46,7 @@ export default async function Home() {
         <PostFeed
           posts={content.newReleases}
           title="New Releases"
-          viewAllLink="/new-releases"
+          viewAllLink="/category/new-releases"
           columns={4}
           variant="grid"
         />
@@ -56,6 +56,7 @@ export default async function Home() {
 
             <div className="w-full lg:w-3/4">
               <SectionHeader title="Upcoming Releases" viewAllLink="/category/upcoming-releases" />
+
 
               <div className="mb-8">
                 <PostFeed posts={content.editorsPicksLarge} columns={3} variant="grid" />
