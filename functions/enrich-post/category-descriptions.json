@@ -1,0 +1,12 @@
+{
+  "q-and-a": "Interview or Q&A format with an artist, band, or industry figure. Includes podcast excerpts framed as Q&A.",
+  "album-reviews": "Critical review of a specific album where the writer evaluates the music and gives an opinion or rating. Not a press release or release announcement.",
+  "music-videos": "Primary focus is a music video: premiere, debut, visual analysis, or reaction. Wins over single/album release categories when a video is the main subject.",
+  "tours": "Tour-related coverage: tour announcements, dates, on-the-road news, festival appearances, or tour reviews.",
+  "upcoming-releases": "A release not yet available at publish time. Signals: pre-orders open, release date after PUBLISHED_AT, \"out on [future date]\". Do NOT use when a single is already out on DSPs — use new-songs instead even if a full album is still upcoming. Use when the headline is pre-order or future album/EP date, or a teaser track ahead of a future album (not a standalone single launch).",
+  "notable-releases": "A newly released album, EP, or single by a mainstream or widely-known artist (charting acts, major labels, household names). Examples: Macklemore, Tegan and Sara, Taylor Swift, Drake. Takes precedence over new-releases and new-songs when those artists appear in the title with \"out now\" or \"available today\". Genre-internal popularity alone does not qualify.",
+  "new-releases": "A just-released album or EP from a non-mainstream artist when the article is a heads-up or announcement, not a critical review. Signals: \"out now\", \"available today\", full-length or EP release. Use for a digital EP already out as a preview when the EP release is the headline (even if a full album is still upcoming).",
+  "new-songs": "A just-released single or track from a non-mainstream artist when the article is a heads-up, not a deep analysis. Signals: \"new single\", \"single out now\", \"available on all DSPs\", one song focus. Use even when a full album is announced for a later date — the single being live now wins over upcoming-releases.",
+  "songs": "Deep dive on a song that is not a fresh release: throwbacks, lyrical analysis, retrospectives, or historical context. Not for release announcements or press releases.",
+  "news": "Catch-all for music news that does not fit above: signings, lineup changes, label moves, lawsuits, awards, controversies, and general industry updates."
+}

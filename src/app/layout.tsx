@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import Script from 'next/script';
 import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
+import { OrganizationJsonLd } from '@/components/seo/JsonLd';
 
 import './globals.css';
 
@@ -27,6 +28,7 @@ export default async function RootLayout({
         )}
       </head>
       <body className="font-graphiknormal" suppressHydrationWarning>
+        <OrganizationJsonLd />
         {children}
         <Script
           src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`}

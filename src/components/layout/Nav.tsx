@@ -48,9 +48,9 @@ export default function Nav({ }) {
         }
         <div className='flex-row items-center justify-between hidden gap-[8px] w-[614px] bg-transparent lg:flex px-4'>
           {NAV_ITEMS.map(item => (
-            <a href={item.link} key={item.label} className='whitespace-nowrap font-light text-theme-text transition-all hover:text-theme-red cursor-pointer'>
+            <Link href={item.link} key={item.label} className='whitespace-nowrap font-light text-theme-text transition-all hover:text-theme-red cursor-pointer'>
               {item.label}
-            </a>
+            </Link>
           ))}
         </div>
         <div className='flex-row items-center justify-center hidden gap-4 lg:flex'>
@@ -77,14 +77,14 @@ export default function Nav({ }) {
 
           <div className="flex flex-col gap-4 items-center">
             {NAV_ITEMS.map(item => (
-              <a
+              <Link
                 href={item.link}
                 key={item.label}
                 className='text-lg font-light text-theme-text hover:text-theme-red'
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -111,7 +111,7 @@ export default function Nav({ }) {
       <div className='h-[34px] bg-theme-dark flex-row justify-center items-center px-8 2xl:px-64 flex'>
         <div className='flex flex-row items-center justify-center w-full gap-4 lg:gap-8 lg:justify-start'>
           {TRENDING_ITEMS.map(item => (
-            <a key={item.label} href={item.link} className='text-[13px] font-light hover:text-white text-[#c1c1c1] transition-all cursor-pointer whitespace-nowrap'>{item.label}</a>
+            <Link key={item.label} href={item.link} className='text-[13px] font-light hover:text-white text-[#c1c1c1] transition-all cursor-pointer whitespace-nowrap'>{item.label}</Link>
           ))}
         </div>
       </div>
