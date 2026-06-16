@@ -2,12 +2,12 @@ const { createClient } = require('@sanity/client');
 const readline = require('node:readline/promises');
 
 const client = createClient({
-    projectId: 'x2bpcfxa',
-    dataset: 'production',
+    projectId: process.env.SANITY_STUDIO_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    dataset: process.env.SANITY_STUDIO_DATASET || process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
     useCdn: false,
     apiVersion: '2025-02-19',
     perspective: 'raw',
-    token: 'sk5T9bMoWzdyK6dsXRIOpmBYXmXmZxmcLbspeP7MJWnk4v03K9BxhQ3LtNz9aHoatIy5VeC85JtsE6PiGjKpJJAUCU95tN5PXmi0Vzwag03HVzkzUcfBc51fQRnTiQbVqLWMesVVV94p9HzIJsYOduyjLIG39uez7m6Vg5hCg7cqhirOa53k'
+    token: process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_API_READ_TOKEN,
 });
 
 const DEFAULT_CONCURRENCY = 1;
@@ -192,6 +192,13 @@ async function runVerifyMode(drafts, concurrency) {
 
 async function publishAllPosts() {
     try {
+        if (!client.config().projectId) {
+            throw new Error('Set NEXT_PUBLIC_SANITY_PROJECT_ID.');
+        }
+        if (!client.config().token) {
+            throw new Error('Set SANITY_API_WRITE_TOKEN for publish actions.');
+        }
+
         const args = parseArgs(process.argv.slice(2));
 
         console.log('Fetching drafts...');

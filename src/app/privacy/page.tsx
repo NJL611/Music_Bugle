@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
-import { SITE_URL } from "@/lib/constants";
+import { SITE_URL, LEGAL_LAST_UPDATED } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="text-sm text-gray-500 font-graphiklight mb-8">
-            Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            Last updated: {LEGAL_LAST_UPDATED}
           </p>
 
           <div className="body-text space-y-8">
@@ -49,11 +49,10 @@ export default function PrivacyPage() {
                 We may collect information that you voluntarily provide to us when you:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
-                <li>Register for an account</li>
                 <li>Make a support payment</li>
-                <li>Subscribe to our newsletter</li>
                 <li>Contact us through our contact form</li>
-                <li>Post comments or interact with our content</li>
+                <li>Post comments or interact with our content (for example, via Disqus)</li>
+                <li>Manage your cookie preferences through our consent tool</li>
               </ul>
               <p className="mb-4">
                 This information may include your name, email address, payment information, and any other information you choose to provide.
@@ -78,7 +77,6 @@ export default function PrivacyPage() {
               <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
                 <li>Provide, maintain, and improve our services</li>
                 <li>Process support payments and manage memberships</li>
-                <li>Send you newsletters and updates (with your consent)</li>
                 <li>Respond to your inquiries and provide customer support</li>
                 <li>Analyze website usage and trends</li>
                 <li>Detect, prevent, and address technical issues</li>
@@ -96,34 +94,66 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-[28px] font-prata text-gray-900 mb-4">5. Cookies and Tracking Technologies</h2>
               <p className="mb-4">
-                We use cookies and similar tracking technologies to track activity on our website and store certain information. Cookies are files with a small amount of data which may include an anonymous unique identifier. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
+                We use cookies and similar technologies (such as pixels and local storage) to operate our website, remember preferences, measure traffic, and support advertising. Cookies are small files stored on your device that may include an anonymous unique identifier.
+              </p>
+              <p className="mb-4">
+                We use both first-party cookies (set by The Music Bugle) and third-party cookies (set by partners such as Google). You can instruct your browser to refuse cookies or alert you when cookies are being sent; some features may not work correctly if you disable cookies.
               </p>
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">6. Third-Party Services</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">6. Third-Party Advertising and Google AdSense</h2>
               <p className="mb-4">
-                We may use third-party services that collect, monitor, and analyze information, including:
+                We display third-party advertisements on our website through Google AdSense and its advertising partners. These services may use cookies, device identifiers, and similar technologies to serve ads, limit how often you see an ad, measure ad performance, and show ads that may be relevant to your interests.
+              </p>
+              <p className="mb-4">
+                Google and its partners may collect or receive information from your browser or device when you visit our site, including through cookies. This may include your IP address, browser type, pages viewed, and interactions with ads. For more information about how Google uses data in advertising, see{" "}
+                <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">Google&apos;s Advertising Technologies Policy</a>{" "}
+                and{" "}
+                <a href="https://www.google.com/policies/privacy/partners/" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">How Google uses data when you use our partners&apos; sites or apps</a>.
+              </p>
+              <p className="mb-4">
+                You can learn more about personalized advertising and opt out of interest-based ads from many providers at{" "}
+                <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">Google Ad Settings</a>{" "}
+                and{" "}
+                <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">aboutads.info choices</a>.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">7. Third-Party Services</h2>
+              <p className="mb-4">
+                We use third-party services that may collect, monitor, and analyze information when you use our website, including:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
-                <li><strong>Google Analytics:</strong> To analyze website traffic and usage patterns</li>
-                <li><strong>Stripe:</strong> To process payments securely</li>
-                <li><strong>Email Service Providers:</strong> To send newsletters and communications</li>
+                <li><strong>Google AdSense:</strong> To display advertisements on our site</li>
+                <li><strong>Google Analytics and Google Tag Manager:</strong> To analyze website traffic and usage patterns</li>
+                <li><strong>Termly:</strong> To provide cookie consent management and preference controls</li>
+                <li><strong>Stripe:</strong> To process support payments securely</li>
+                <li><strong>Disqus:</strong> To host and display article comments</li>
               </ul>
               <p className="mb-4">
-                These third parties have access to your information only to perform these tasks on our behalf and are obligated not to disclose or use it for any other purpose.
+                These providers process data according to their own privacy policies. They have access to information only as needed to perform services for us and are contractually or policy-bound to protect it.
               </p>
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">7. Data Security</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">8. Cookie Consent and Your Choices</h2>
+              <p className="mb-4">
+                Where required by law, we ask for your consent before placing non-essential cookies through a consent banner powered by Termly. You can review or change your preferences at any time on our{" "}
+                <a href="/consent-preferences" className="text-theme-red hover:underline">Cookie Preferences</a> page.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">9. Data Security</h2>
               <p className="mb-4">
                 We implement appropriate technical and organizational security measures to protect your personal information. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.
               </p>
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">8. Your Rights (GDPR/CCPA)</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">10. Your Rights (GDPR/CCPA)</h2>
               <p className="mb-4">Depending on your location, you may have the following rights:</p>
               <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
                 <li><strong>Right to Access:</strong> Request a copy of the personal information we hold about you</li>
@@ -140,21 +170,21 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">9. Children&apos;s Privacy</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">11. Children&apos;s Privacy</h2>
               <p className="mb-4">
                 Our website is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
               </p>
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">10. Changes to This Privacy Policy</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">12. Changes to This Privacy Policy</h2>
               <p className="mb-4">
                 We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last updated&quot; date.
               </p>
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">11. Contact Us</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">13. Contact Us</h2>
               <p className="mb-4">
                 If you have any questions about this Privacy Policy, please contact us at:
               </p>

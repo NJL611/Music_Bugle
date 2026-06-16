@@ -13,6 +13,13 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/payment-success`,
     type: "website",
   },
+  alternates: {
+    canonical: `${SITE_URL}/payment-success`,
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {
@@ -107,7 +114,7 @@ export default async function PaymentSuccess({
                 <div>
                   <h3 className="text-[20px] font-prata text-gray-900 mb-2">Stay Connected</h3>
                   <p className="body-text">
-                    Follow us on social media and subscribe to our newsletter to stay updated with the latest music news and exclusive content.
+                    Follow us on social media to stay updated with the latest music news and exclusive content.
                   </p>
                 </div>
               </div>
@@ -123,7 +130,7 @@ export default async function PaymentSuccess({
               Return to Home
             </Link>
             <Link
-              href="/article"
+              href="/"
               className="bg-white border-2 border-theme-red text-theme-red px-8 py-3 rounded-sm hover:bg-theme-red hover:text-white transition-colors font-graphiknormal text-center"
             >
               Browse Articles

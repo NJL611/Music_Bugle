@@ -19,6 +19,15 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/category/trending',
+        destination: '/trending',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     qualities: [65, 75],
     formats: ["image/avif", "image/webp"],
