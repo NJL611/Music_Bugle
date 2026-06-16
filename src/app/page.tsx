@@ -46,7 +46,7 @@ export default async function Home() {
         <PostFeed
           posts={content.newReleases}
           title="New Releases"
-          viewAllLink="/new-releases"
+          viewAllLink="/category/new-releases"
           columns={4}
           variant="grid"
         />
@@ -55,7 +55,7 @@ export default async function Home() {
           <div className="flex flex-col lg:flex-row gap-8">
 
             <div className="w-full lg:w-3/4">
-              <SectionHeader title="Must Read" viewAllLink="/must-read" />
+              <SectionHeader title="Must Read" viewAllLink="/category/notable-releases" />
 
               <div className="mb-8">
                 <PostFeed posts={content.editorsPicksLarge} columns={3} variant="grid" />

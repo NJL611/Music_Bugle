@@ -8,7 +8,8 @@ import Nav from "@/components/layout/Nav";
 import { AdUnit } from "@/components/ui/AdUnit";
 import { MoreLikeThis } from "@/components/sections/PostSections";
 import Post from "@/components/posts/Post";
-import { SITE_URL, METADATA, AD_SIZES } from "@/lib/constants";
+import { NewsArticleJsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL, METADATA } from "@/lib/constants";
 
 export const dynamic = 'force-static';
 export const revalidate = 600;
@@ -23,10 +24,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   const posts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
-  const metadata = await generateMetadata({ params });
+  const articleUrl = `${SITE_URL}/article/${slug}`;
 
   return (
     <>
+      <NewsArticleJsonLd
+        title={post.title}
+        description={post.description || post.subtitle}
+        url={articleUrl}
+        image={post.mainImage?.asset?.url || post.featured_image}
+        datePublished={post.publishedAt}
+        dateModified={post._updatedAt}
+        authorName={post.author?.name}
+      />
       <Nav />
       <Post post={post} posts={posts} />
       <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b border-gray-200">
@@ -92,6 +102,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       };
     }
 
+    const articleUrl = `${SITE_URL}/article/${slug}`;
+
     return {
       title: meta.title || 'No Title',
       description: meta.description || 'No Description',
@@ -103,9 +115,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       openGraph: {
         title: meta.title,
         description: meta.description || METADATA.description,
-        url: SITE_URL,
+        url: articleUrl,
         locale: 'en-US',
-        siteName: meta.title,
+        siteName: METADATA.title,
         type: 'article',
         images: [
           {
@@ -124,12 +136,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         site: METADATA.twitterHandle,
       },
       alternates: {
-        canonical: SITE_URL,
+        canonical: articleUrl,
       },
       robots: {
         index: true,
         follow: true,
-        nocache: true,
       },
     };
   } catch (error) {

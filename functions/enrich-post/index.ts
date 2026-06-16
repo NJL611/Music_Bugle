@@ -1,54 +1,30 @@
 import { documentEventHandler } from '@sanity/functions'
 import { createClient, type SanityClient } from '@sanity/client'
+import {
+  ALLOWED_CATEGORY_SLUGS,
+  type AllowedCategorySlug,
+  buildCategoryPromptSection,
+  isAllowedCategorySlug,
+  sortCategoryOptions,
+} from './categories'
+import {
+  BODY_TRUNCATE_CHARS,
+  CORRECTION_PROMPT,
+  DEFAULT_GEMINI_MODEL,
+  GEMINI_FETCH_BUDGET_MS,
+  MAX_EXISTING_TAGS,
+} from './constants'
+import { buildFewShotSection } from './prompt-examples'
+import { fetchTopTagsByUsage } from './tags'
+import { validateSuggestions, type Suggestions } from './validation'
 
-const DEFAULT_GEMINI_MODEL = 'gemini-2.5-flash'
 const geminiModel = process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL
 
-// Retry within a time budget to fit Sanity function timeouts. Avoid logging full URLs (API key in query string).
-const GEMINI_FETCH_BUDGET_MS = 85_000
-
-// Tags we never want, even if the model rephrases. Compared lowercased.
-const TAG_BLOCKLIST = new Set([
-  'music',
-  'music video',
-  'music industry',
-  'music career',
-  'musician profile',
-  'artist spotlight',
-  'emerging artist',
-  'new album',
-  'new release',
-  'new music',
-  'single review',
-  'album review',
-  'metal',
-  'rock',
-  'pop',
-  'rap',
-  'hip hop',
-  'country',
-  'jazz',
-])
-
-const ALLOWED_CATEGORY_SLUGS = [
-  'album-reviews',
-  'music-videos',
-  'new-releases',
-  'new-songs',
-  'news',
-  'notable-releases',
-  'q-and-a',
-  'songs',
-  'tours',
-  'upcoming-releases',
-] as const
-type AllowedCategorySlug = typeof ALLOWED_CATEGORY_SLUGS[number]
-
 interface CategoryOption {
-  _id: string;
-  slug: AllowedCategorySlug;
-  title: string;
-  description: string;
+  _id: string
+  slug: AllowedCategorySlug
+  title: string
+  description: string
 }
 
 const SYSTEM_INSTRUCTION = `You are a music journalism tagging assistant for a music blog.
@@ -60,8 +36,14 @@ OUTPUT FORMAT (strict):
 TAG RULES (strict):
 - Each tag is 1 to 4 words. No trailing punctuation. No "#" symbol.
 - Produce 5 to 8 tags total. Quality over quantity. Skip a bucket rather than pad with filler.
-- FORBIDDEN tags (never emit, even rephrased): music, music video, music industry, music career, musician profile, artist spotlight, emerging artist, new album, new release, new music, single review, album review. Generic genre roots alone are also forbidden: metal, rock, pop, rap, hip hop, country, jazz. Always pick a specific subgenre instead.
+- FORBIDDEN tags (never emit, even rephrased): music, music video, music industry, music career, musician profile, artist spotlight, emerging artist, new album, new release, new music, single review, album review, we are interview, interview, q and a, q&a. Generic genre roots alone are also forbidden: metal, rock, pop, rap, hip hop, country, jazz. Always pick a specific subgenre instead.
+- For q-and-a posts: never tag with meta labels about the format (no "interview", "we are interview", "q and a"). Tag artists, releases discussed, subgenres, and topics from the conversation instead.
 - Reuse existing tags: if any item in EXISTING_TAGS matches a tag you intend to emit (case-insensitive, including plural and hyphenation variants), reuse the EXISTING_TAGS spelling exactly. Creating a near-duplicate is a failure.
+
+PRESS RELEASE TAGGING:
+- Ignore boilerplate: "press release issued by", "photo courtesy of", PR firm names.
+- Tag artists, song/album titles, specific subgenres, locations/scenes — not PR firms.
+- Parse feat./featuring collaborators from title and body.
 
 TAG COMPOSITION (priority order, skip any bucket that does not fit the post):
 1. Primary artist, exact spelling from the title.
@@ -79,22 +61,7 @@ SUBTITLE RULES (strict):
 - Must NOT begin with: "Navigating", "Exploring", "Unveiling", "Delving", "A Look At", "Diving Into".
 - No word may appear twice within the subtitle.
 
-CATEGORY (strict):
-- Choose exactly ONE slug from CATEGORY_OPTIONS.
-- Read each option's "description" carefully. It defines when that category applies. Match the article to the description, not just the title.
-- When more than one description fits, apply this priority order and pick the FIRST that applies:
-  1. q-and-a — any interview / Q&A format always wins.
-  2. album-reviews — any post that critically reviews or rates a specific album.
-  3. music-videos — any post whose primary focus is a music video.
-  4. tours — any post centered on touring: announcements, dates, on-the-road coverage, tour reviews.
-  5. upcoming-releases — an album or song that has been announced but is not yet released.
-  6. notable-releases — a new release, but ONLY when the artist is mainstream / widely known to the general public (charting acts, major labels, household names). Genre-internal popularity does not count.
-  7. new-releases — a just-released album or EP from a non-mainstream artist, when the post is a heads-up rather than a critical review.
-  8. new-songs — a just-released single or track, when the post is a heads-up rather than a deep analysis.
-  9. songs — a deep dive on a song that is not a fresh release (throwbacks, lyrical analyses, retrospectives).
-  10. news — catch-all for music news that does not fit any of the above (signings, lineup changes, label moves, lawsuits, awards, controversies).
-- "news" is the fallback. If nothing else applies, choose "news". Never return an empty string.
-- Return the slug exactly as listed (lowercase, hyphens). Never invent a category outside CATEGORY_OPTIONS.`
+${buildCategoryPromptSection()}`
 
 async function fetchGeminiWithRetryBudget(url: string, init: RequestInit): Promise<Response> {
   const deadline = Date.now() + GEMINI_FETCH_BUDGET_MS
@@ -126,28 +93,13 @@ async function fetchGeminiWithRetryBudget(url: string, init: RequestInit): Promi
   throw new Error('Failed to reach Gemini in time: repeated 429/5xx (rate limit or model overload).')
 }
 
-interface Suggestions {
-  subtitle: string;
-  tags: string[];
-  category: AllowedCategorySlug | '';
-}
-
-async function fetchExistingTagTitles(client: SanityClient): Promise<string[]> {
-  const titles = await client.fetch<string[]>('*[_type == "tag" && defined(title)].title')
-  return titles.map((title) => String(title).toLowerCase())
-}
-
-function isAllowedCategorySlug(value: unknown): value is AllowedCategorySlug {
-  return typeof value === 'string' && (ALLOWED_CATEGORY_SLUGS as readonly string[]).includes(value)
-}
-
 async function fetchAllowedCategories(client: SanityClient): Promise<CategoryOption[]> {
   const categories = await client.fetch<Array<{ _id: string; slug?: string; title?: string; description?: string }>>(
-    '*[_type == "category" && slug.current in $slugs]{_id, "slug": slug.current, title, description} | order(title asc)',
+    '*[_type == "category" && slug.current in $slugs]{_id, "slug": slug.current, title, description}',
     { slugs: ALLOWED_CATEGORY_SLUGS },
   )
 
-  return categories
+  const options = categories
     .filter(
       (category): category is { _id: string; slug: AllowedCategorySlug; title: string; description?: string } =>
         isAllowedCategorySlug(category.slug) && typeof category.title === 'string',
@@ -158,35 +110,8 @@ async function fetchAllowedCategories(client: SanityClient): Promise<CategoryOpt
       title: category.title,
       description: typeof category.description === 'string' ? category.description : '',
     }))
-}
 
-// Belt-and-suspenders: clean up tags client-side so a model slip can't reach Sanity.
-function normalizeTags(rawTags: unknown): string[] {
-  if (!Array.isArray(rawTags)) return []
-
-  const seen = new Set<string>()
-  const cleaned: string[] = []
-
-  for (const raw of rawTags) {
-    if (typeof raw !== 'string') continue
-
-    const tag = raw
-      .replace(/^#+/, '')
-      .replace(/^["']|["']$/g, '')
-      .replace(/[.,;:!?]+$/, '')
-      .trim()
-      .toLowerCase()
-
-    if (!tag) continue
-    if (TAG_BLOCKLIST.has(tag)) continue
-    if (tag.split(/\s+/).length > 4) continue
-    if (seen.has(tag)) continue
-
-    seen.add(tag)
-    cleaned.push(tag)
-  }
-
-  return cleaned
+  return sortCategoryOptions(options)
 }
 
 function portableTextToPlainText(value: unknown): string {
@@ -211,26 +136,40 @@ function portableTextToPlainText(value: unknown): string {
     .join('\n\n')
 }
 
-async function getSuggestions(
-  title: string,
-  body: unknown = '',
-  existingTags: string[] = [],
-  categoryOptions: CategoryOption[] = [],
-): Promise<Suggestions> {
+function buildUserPrompt(params: {
+  title: string
+  body: unknown
+  publishedAt?: string
+  existingTags: string[]
+  totalTagCount: number
+  categoryOptions: CategoryOption[]
+  includeExamples: boolean
+  correction?: string
+}): string {
+  const bodyText = portableTextToPlainText(params.body)
+  const sortedCategories = sortCategoryOptions(params.categoryOptions)
+  const tagsNote =
+    params.totalTagCount > params.existingTags.length
+      ? `\n(Showing top ${params.existingTags.length} of ${params.totalTagCount} tags by usage; prefer reusing these when applicable.)`
+      : ''
+
+  const sections = [
+    params.includeExamples ? buildFewShotSection() : null,
+    `EXISTING_TAGS:${tagsNote}\n${JSON.stringify(params.existingTags)}`,
+    `CATEGORY_OPTIONS:\n${JSON.stringify(sortedCategories.map(({ slug, title, description }) => ({ slug, title, description })))}`,
+    params.publishedAt
+      ? `PUBLISHED_AT: ${params.publishedAt}\nCompare release dates in the body to this date to decide upcoming vs already released.`
+      : null,
+    `TITLE:\n${params.title}`,
+    `BODY (truncated):\n${bodyText.slice(0, BODY_TRUNCATE_CHARS)}`,
+    params.correction ?? null,
+  ].filter(Boolean)
+
+  return sections.join('\n\n')
+}
+
+async function callGemini(userPrompt: string, categoryOptions: CategoryOption[]): Promise<unknown> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${process.env.GEMINI_API_KEY}`
-  const bodyText = portableTextToPlainText(body)
-
-  const userPrompt = `EXISTING_TAGS:
-${JSON.stringify(existingTags)}
-
-CATEGORY_OPTIONS:
-${JSON.stringify(categoryOptions.map(({ slug, title, description }) => ({ slug, title, description })))}
-
-TITLE:
-${title}
-
-BODY (truncated):
-${bodyText.slice(0, 4000)}`
 
   const res = await fetchGeminiWithRetryBudget(url, {
     method: 'POST',
@@ -246,9 +185,9 @@ ${bodyText.slice(0, 4000)}`
           properties: {
             subtitle: { type: 'string' },
             tags: { type: 'array', items: { type: 'string' } },
-            category: { 
+            category: {
               type: 'string',
-              ...(categoryOptions.length > 0 ? { enum: categoryOptions.map((option) => option.slug) } : {})
+              ...(categoryOptions.length > 0 ? { enum: categoryOptions.map((option) => option.slug) } : {}),
             },
           },
         },
@@ -265,20 +204,59 @@ ${bodyText.slice(0, 4000)}`
   const jsonText = completion.candidates?.[0]?.content?.parts?.[0]?.text ?? '{}'
 
   try {
-    const parsed = JSON.parse(jsonText)
-    const subtitle = typeof parsed.subtitle === 'string' ? parsed.subtitle.trim() : ''
-    const tags = normalizeTags(parsed.tags)
-    const category = isAllowedCategorySlug(parsed.category) ? parsed.category : ''
-
-    if (!subtitle || tags.length === 0) {
-      throw new Error('Invalid JSON structure in response.')
-    }
-
-    return { subtitle, tags, category }
+    return JSON.parse(jsonText)
   } catch (err) {
     console.error('Failed to parse Gemini JSON response.', { jsonText, err })
     throw new Error('Failed to parse Gemini JSON response.')
   }
+}
+
+async function getSuggestionsWithRetry(
+  title: string,
+  body: unknown,
+  publishedAt: string | undefined,
+  existingTags: string[],
+  totalTagCount: number,
+  categoryOptions: CategoryOption[],
+): Promise<Suggestions> {
+  const baseParams = {
+    title,
+    body,
+    publishedAt,
+    existingTags,
+    totalTagCount,
+    categoryOptions,
+  }
+
+  const firstPrompt = buildUserPrompt({ ...baseParams, includeExamples: true })
+  const firstParsed = await callGemini(firstPrompt, categoryOptions)
+  const firstResult = validateSuggestions(
+    firstParsed as { subtitle: unknown; tags: unknown; category: unknown },
+  )
+
+  if (firstResult.valid && firstResult.suggestions) {
+    return firstResult.suggestions
+  }
+
+  console.warn('Validation failed on first attempt:', firstResult.errors.join('; '))
+
+  const retryPrompt = buildUserPrompt({
+    ...baseParams,
+    includeExamples: false,
+    correction: CORRECTION_PROMPT,
+  })
+  const retryParsed = await callGemini(retryPrompt, categoryOptions)
+  const retryResult = validateSuggestions(
+    retryParsed as { subtitle: unknown; tags: unknown; category: unknown },
+  )
+
+  if (retryResult.valid && retryResult.suggestions) {
+    console.warn('Validation passed on retry.')
+    return retryResult.suggestions
+  }
+
+  console.error('Validation failed on retry:', retryResult.errors.join('; '))
+  throw new Error(`Enrichment validation failed: ${retryResult.errors.join('; ')}`)
 }
 
 function slugify(text: string) {
@@ -286,9 +264,9 @@ function slugify(text: string) {
     .toString()
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-')     // Replace spaces with -
-    .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-    .replace(/\-\-+/g, '-');  // Replace multiple - with single -
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
 }
 
 async function ensureTags(client: SanityClient, labels: string[]) {
@@ -298,9 +276,10 @@ async function ensureTags(client: SanityClient, labels: string[]) {
       .filter(Boolean)
       .map(async (label) => {
         const slug = slugify(label)
-        const existingTag = await client.fetch<{ _id: string } | null>('*[_type == "tag" && slug.current == $slug][0]{_id}', {
-          slug,
-        })
+        const existingTag = await client.fetch<{ _id: string } | null>(
+          '*[_type == "tag" && slug.current == $slug][0]{_id}',
+          { slug },
+        )
 
         if (existingTag?._id) {
           return { _key: existingTag._id, _type: 'reference', _ref: existingTag._id }
@@ -319,13 +298,12 @@ async function ensureTags(client: SanityClient, labels: string[]) {
 }
 
 export const handler = documentEventHandler(async ({ context, event }) => {
-  const { _id, title, body, subtitle: existingSubtitle, tagCount, categoryCount } = event.data
+  const { _id, title, body, subtitle: existingSubtitle, publishedAt, tagCount, categoryCount } = event.data
   if (!title) {
     console.log(`Document ${_id} has no title, skipping enrichment.`)
     return
   }
 
-  // Skip if already enriched. Prevents the function from firing on its own follow-up patches.
   if (
     existingSubtitle &&
     typeof tagCount === 'number' &&
@@ -339,11 +317,22 @@ export const handler = documentEventHandler(async ({ context, event }) => {
 
   const client = createClient({ ...context.clientOptions, apiVersion: '2024-05-01', useCdn: false })
 
-  const [existingTags, categoryOptions] = await Promise.all([
-    fetchExistingTagTitles(client),
+  const [topTags, categoryOptions] = await Promise.all([
+    fetchTopTagsByUsage(client, MAX_EXISTING_TAGS),
     fetchAllowedCategories(client),
   ])
-  const { subtitle, tags, category } = await getSuggestions(title, body, existingTags, categoryOptions)
+
+  const publishedAtStr = typeof publishedAt === 'string' ? publishedAt : undefined
+
+  const { subtitle, tags, category } = await getSuggestionsWithRetry(
+    title,
+    body,
+    publishedAtStr,
+    topTags.tags,
+    topTags.totalTagCount,
+    categoryOptions,
+  )
+
   let categoryDoc = categoryOptions.find((option) => option.slug === category)
 
   if (!categoryDoc) {
@@ -352,7 +341,9 @@ export const handler = documentEventHandler(async ({ context, event }) => {
   }
 
   if (!categoryDoc && categoryOptions.length > 0) {
-    console.warn(`Fallback "news" category not found. Falling back to first available category option: "${categoryOptions[0].slug}".`)
+    console.warn(
+      `Fallback "news" category not found. Falling back to first available category option: "${categoryOptions[0].slug}".`,
+    )
     categoryDoc = categoryOptions[0]
   }
 

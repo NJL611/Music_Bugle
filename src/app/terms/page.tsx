@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
-import { SITE_URL } from "@/lib/constants";
+import { SITE_URL, LEGAL_LAST_UPDATED } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function TermsPage() {
             Terms of Service
           </h1>
           <p className="text-sm text-gray-500 font-graphiklight mb-8">
-            Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            Last updated: {LEGAL_LAST_UPDATED}
           </p>
 
           <div className="body-text space-y-8">
