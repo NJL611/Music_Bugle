@@ -29,8 +29,15 @@ export default defineConfig({
                   .schemaType('trendingPage')
                   .documentId('trendingPage'),
               ),
+            S.listItem()
+              .title('Popular Page')
+              .child(
+                S.document()
+                  .schemaType('popularPage')
+                  .documentId('popularPage'),
+              ),
             ...S.documentTypeListItems().filter(
-              (listItem) => listItem.getId() !== 'trendingPage',
+              (listItem) => !['trendingPage', 'popularPage'].includes(listItem.getId() ?? ''),
             ),
           ]),
     }),
