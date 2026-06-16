@@ -3,7 +3,7 @@ import { ChevronRight } from "@/components/ui/Icons";
 
 export function SectionHeader({ title, viewAllLink, className = "" }: { title: string; viewAllLink?: string; className?: string }) {
     return (
-        <div className={`flex justify-between items-center mb-6 ${className}`}>
+        <div className={`flex justify-between items-center mb-6 border-b border-gray-200 pb-4 ${className}`}>
             <h2 className="text-[26px] font-medium font-prata text-black">{title}</h2>
             {viewAllLink && (
                 <Link href={viewAllLink} className="flex items-center gap-2 text-theme-red hover:text-theme-red/80 transition-colors">
