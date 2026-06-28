@@ -6,7 +6,8 @@ import category from './schemas/category'
 import tag from './schemas/tag'
 import blockContent from './schemas/blockContent'
 import trendingPage from './schemas/trendingPage'
+import popularPage from './schemas/popularPage'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [post, author, category, tag, blockContent, trendingPage],
+  types: [post, author, category, tag, blockContent, trendingPage, popularPage],
 }

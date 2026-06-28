@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { fetchPopularPosts, fetchTagData, fetchTagPosts } from "@/lib/fetchers";
+import { fetchPopularSidebarPosts, fetchTagData, fetchTagPosts } from "@/lib/fetchers";
 import FeedLayout from "@/components/layout/FeedLayout";
 import { METADATA, SITE_URL } from "@/lib/constants";
 
@@ -33,13 +33,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+export const revalidate = 600;
+
 export default async function TagPage({ params }: PageProps) {
   const { slug } = await params;
 
-  const [tag, posts, allPosts] = await Promise.all([
+  const [tag, posts, popularPosts] = await Promise.all([
     fetchTagData(slug),
     fetchTagPosts(slug),
-    fetchPopularPosts(),
+    fetchPopularSidebarPosts(),
   ]);
 
   if (!tag) {
@@ -51,7 +53,7 @@ export default async function TagPage({ params }: PageProps) {
       title={tag.title}
       description={tag.description}
       mainPosts={posts || []}
-      popularPosts={allPosts || []}
+      popularPosts={popularPosts}
       categoryLabel="Tag"
     />
   );

@@ -43,3 +43,12 @@ next-env.d.ts
 functions/**/.env*
 functions/**/.build/
 functions/**/node_modules/
+
+# generated Studio runtime
+.sanity/runtime/
+
+# dev cert cache (anchor-pki)
+/tmp/
+
+# internal audit, kept local
+ADSENSE_AUDIT.md

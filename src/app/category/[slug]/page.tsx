@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { fetchCategoryData, fetchCategoryPosts, fetchPopularPosts } from "@/lib/fetchers";
+import { fetchCategoryData, fetchCategoryPosts, fetchPopularSidebarPosts } from "@/lib/fetchers";
 import FeedLayout from "@/components/layout/FeedLayout";
 import { METADATA, SITE_URL } from "@/lib/constants";
 
@@ -33,13 +33,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+export const revalidate = 600;
+
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
 
-  const [category, posts, allPosts] = await Promise.all([
+  const [category, posts, popularPosts] = await Promise.all([
     fetchCategoryData(slug),
     fetchCategoryPosts(slug),
-    fetchPopularPosts(),
+    fetchPopularSidebarPosts(),
   ]);
 
   if (!category) {
@@ -51,7 +53,7 @@ export default async function CategoryPage({ params }: PageProps) {
       title={category.title}
       description={category.description}
       mainPosts={posts || []}
-      popularPosts={allPosts || []}
+      popularPosts={popularPosts}
     />
   );
 }

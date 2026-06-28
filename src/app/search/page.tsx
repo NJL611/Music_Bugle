@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import type { SanityDocument } from "next-sanity";
-import { POSTS_PREVIEW_QUERY, SEARCH_QUERY } from "@sanity/lib/queries";
 import { client } from "@sanity/lib/client";
+import { SEARCH_QUERY } from "@sanity/lib/queries";
 import FeedLayout from "@/components/layout/FeedLayout";
+import { fetchPopularSidebarPosts } from "@/lib/fetchers";
 import { METADATA, SITE_URL } from "@/lib/constants";
 
 type PageProps = {
@@ -38,9 +39,9 @@ export default async function Page({ searchParams }: PageProps) {
   const { search } = await searchParams;
   const searchValue = typeof search === "string" ? search : "";
 
-  const [searchResults, allPosts] = await Promise.all([
+  const [searchResults, popularPosts] = await Promise.all([
     client.fetch<SanityDocument[]>(SEARCH_QUERY, { search: searchValue }),
-    client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY),
+    fetchPopularSidebarPosts(),
   ]);
 
   return (
@@ -55,7 +56,7 @@ export default async function Page({ searchParams }: PageProps) {
       }
       categoryLabel="Search Results"
       mainPosts={searchResults}
-      popularPosts={allPosts}
+      popularPosts={popularPosts}
     />
   );
 }
