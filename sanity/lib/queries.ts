@@ -323,3 +323,13 @@ export const TRENDING_AUTO_POSTS_QUERY = groq`
     ${POST_FEED_FIELDS}
   }
 `;
+
+export const POPULAR_PAGE_QUERY = groq`
+  *[_type == "popularPage" && _id == "popularPage"][0]{
+    title,
+    description,
+    autoFillDays,
+    autoFillLimit,
+    "featuredPosts": featuredPosts[]-> { ${POST_FEED_FIELDS} }
+  }
+`;
