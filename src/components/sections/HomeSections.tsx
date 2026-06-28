@@ -238,7 +238,7 @@ export function MustReadSection({ posts }: { posts: SanityDocument[] }) {
     return (
         <div className="w-full py-12 mb-12">
             <div className=" mx-auto">
-                <SectionHeader title="Must Read" viewAllLink="/videos" />
+                <SectionHeader title="Must Read" viewAllLink="/category/music-videos" />
 
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">

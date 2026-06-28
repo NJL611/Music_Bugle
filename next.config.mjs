@@ -26,6 +26,12 @@ const nextConfig = {
         destination: '/trending',
         permanent: true,
       },
+      // Alias known dead paths so they don't become soft-404s.
+      {
+        source: '/videos',
+        destination: '/category/music-videos',
+        permanent: true,
+      },
     ];
   },
   images: {
