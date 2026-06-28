@@ -106,7 +106,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     return {
       title: meta.title || 'No Title',
-      description: meta.description || 'No Description',
+      description: meta.description || meta.subtitle || METADATA.description,
       image: meta.mainImage?.asset.url || METADATA.image,
       keywords: meta.keywords || 'music, news, latest updates',
       author: meta.author.name || METADATA.title,
@@ -114,7 +114,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       modifiedTime: meta._updatedAt || '',
       openGraph: {
         title: meta.title,
-        description: meta.description || METADATA.description,
+        description: meta.description || meta.subtitle || METADATA.description,
         url: articleUrl,
         locale: 'en-US',
         siteName: METADATA.title,
@@ -130,7 +130,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       },
       twitter: {
         title: meta.title,
-        description: meta.description || METADATA.description,
+        description: meta.description || meta.subtitle || METADATA.description,
         images: meta.mainImage?.asset.url || METADATA.image,
         card: 'summary_large_image',
         site: METADATA.twitterHandle,
