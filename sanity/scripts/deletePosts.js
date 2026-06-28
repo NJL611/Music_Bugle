@@ -5,7 +5,7 @@ const client = createClient({
     dataset: 'production',
     useCdn: false,
     apiVersion: '2025-02-19',
-    token: 'sk5T9bMoWzdyK6dsXRIOpmBYXmXmZxmcLbspeP7MJWnk4v03K9BxhQ3LtNz9aHoatIy5VeC85JtsE6PiGjKpJJAUCU95tN5PXmi0Vzwag03HVzkzUcfBc51fQRnTiQbVqLWMesVVV94p9HzIJsYOduyjLIG39uez7m6Vg5hCg7cqhirOa53k'
+    token: process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_API_READ_TOKEN
 });
 
 async function deletePosts() {
