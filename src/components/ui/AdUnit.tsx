@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { AD_SIZES, SHOW_ADS, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
+import { AD_SIZES, SHOW_ADS, ADSENSE_PUBLISHER_ID, ADSENSE_AD_SLOT } from '@/lib/constants';
 
 // --- Ad Unit ---
 interface AdUnitProps {
@@ -23,6 +23,7 @@ export function AdUnit({
     const adRef = useRef<HTMLDivElement>(null);
     const pathname = usePathname();
     const isInitialized = useRef(false);
+    const effectiveSlot = adSlot || ADSENSE_AD_SLOT;
 
     // Resolve dimensions based on variant
     let finalWidth = width;
@@ -83,6 +84,11 @@ export function AdUnit({
         );
     }
 
+    // Without a client + slot the <ins> can never fill — don't render an empty labeled box
+    if (!ADSENSE_PUBLISHER_ID || !effectiveSlot) {
+        return null;
+    }
+
     // Production: render real AdSense <ins> element
     return (
         <div ref={adRef} className={`mx-auto ${finalWidth} ${className}`}>
@@ -93,7 +99,7 @@ export function AdUnit({
                 className="adsbygoogle"
                 style={{ display: 'block' }}
                 data-ad-client={ADSENSE_PUBLISHER_ID}
-                data-ad-slot={adSlot || ''}
+                data-ad-slot={effectiveSlot}
                 data-ad-format="auto"
                 data-full-width-responsive="true"
             />
