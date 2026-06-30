@@ -96,7 +96,7 @@ export default function Post({ post, posts }: Props) {
 
           {publishedAt ? (
             <div className="flex justify-center mb-6">
-              <PostMeta author={author} publishedAt={publishedAt} className="text-gray-600" />
+              <PostMeta author={author} publishedAt={publishedAt} className="text-gray-600" linkAuthor />
             </div>
           ) : null}
 

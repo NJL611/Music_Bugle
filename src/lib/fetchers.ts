@@ -1,7 +1,9 @@
 import type { SanityDocument } from "next-sanity";
 import { client } from "@sanity/lib/client";
 import {
+    AUTHOR_QUERY,
     CATEGORY_QUERY,
+    POSTS_BY_AUTHOR_QUERY,
     POSTS_BY_CATEGORY_QUERY,
     POSTS_BY_TAG_QUERY,
     POSTS_PREVIEW_QUERY,
@@ -56,6 +58,14 @@ export function fetchCategoryData(slug: string) {
 
 export function fetchCategoryPosts(slug: string) {
     return client.fetch<SanityDocument[]>(POSTS_BY_CATEGORY_QUERY, { slug });
+}
+
+export function fetchAuthorData(slug: string) {
+    return client.fetch<SanityDocument | null>(AUTHOR_QUERY, { slug });
+}
+
+export function fetchAuthorPosts(slug: string) {
+    return client.fetch<SanityDocument[]>(POSTS_BY_AUTHOR_QUERY, { slug });
 }
 
 export function fetchTagData(slug: string) {
