@@ -32,6 +32,12 @@ const nextConfig = {
         destination: '/category/music-videos',
         permanent: true,
       },
+      // Old WordPress dated permalinks -> new article path; slugs are identical.
+      {
+        source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug',
+        destination: '/article/:slug',
+        permanent: true,
+      },
     ];
   },
   images: {
