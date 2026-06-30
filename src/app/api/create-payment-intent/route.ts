@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(request: NextRequest) {
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  // Init at request time, not module load: a missing key must 503, not crash the build.
+  if (!secretKey) {
+    return NextResponse.json(
+      { error: "Payments are not configured." },
+      { status: 503 }
+    );
+  }
+  const stripe = require("stripe")(secretKey);
+
   try {
     const { amount } = await request.json();
 
