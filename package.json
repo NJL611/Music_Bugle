@@ -21,7 +21,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/check-build-env.mjs && next build",
     "start": "next start",
     "lint": "next lint"
   },
