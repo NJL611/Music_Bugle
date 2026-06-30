@@ -12,10 +12,8 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import { STRIPE_PUBLISHABLE_KEY } from "@/lib/constants";
 
-if (!STRIPE_PUBLISHABLE_KEY) {
-    throw new Error("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined");
-}
-const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
+// No key (unconfigured build/preview) must not crash prerender — degrade the payment UI instead.
+const stripePromise = STRIPE_PUBLISHABLE_KEY ? loadStripe(STRIPE_PUBLISHABLE_KEY) : null;
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {
     ssr: false,
@@ -172,23 +170,29 @@ export default function SupportPage() {
                                     <p className="text-xs text-gray-500 mb-4 font-graphiklight">
                                         By proceeding, you agree to our <a href="/terms" className="text-theme-red hover:underline">Terms of Service</a> and <a href="/privacy" className="text-theme-red hover:underline">Privacy Policy</a>. See our <a href="/refund" className="text-theme-red hover:underline">Refund Policy</a> for cancellation details.
                                     </p>
-                                    <Elements
-                                        stripe={stripePromise}
-                                        options={{
-                                            mode: selectedTier === 'monthly' ? "subscription" : "payment",
-                                            amount: convertToSubcurrency(supportAmount),
-                                            currency: "usd",
-                                            appearance: {
-                                                theme: 'flat',
-                                                variables: { colorPrimaryText: '#262626' }
-                                            },
-                                        }}
-                                    >
-                                        <CheckoutForm
-                                            amount={supportAmount}
-                                            isSubscription={selectedTier === 'monthly'}
-                                        />
-                                    </Elements>
+                                    {stripePromise ? (
+                                        <Elements
+                                            stripe={stripePromise}
+                                            options={{
+                                                mode: selectedTier === 'monthly' ? "subscription" : "payment",
+                                                amount: convertToSubcurrency(supportAmount),
+                                                currency: "usd",
+                                                appearance: {
+                                                    theme: 'flat',
+                                                    variables: { colorPrimaryText: '#262626' }
+                                                },
+                                            }}
+                                        >
+                                            <CheckoutForm
+                                                amount={supportAmount}
+                                                isSubscription={selectedTier === 'monthly'}
+                                            />
+                                        </Elements>
+                                    ) : (
+                                        <p className="text-sm text-gray-500 font-graphiklight">
+                                            Online support payments are temporarily unavailable. Please check back soon.
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         </div>
