@@ -1,4 +1,12 @@
-import bundleAnalyzer from "@next/bundle-analyzer";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+
+// Dev-only — Vercel production installs omit devDependencies, so don't import at load time.
+const withBundleAnalyzer =
+  process.env.ANALYZE === "true"
+    ? require("@next/bundle-analyzer")({ enabled: true })
+    : (config) => config;
 
 // autoCert is disabled by default to avoid URL errors
 // To enable: uncomment the import and wrapper below, and ensure you have proper environment variables set
@@ -12,10 +20,6 @@ const withAutoCert = autoCert({
 
 // Identity function (no-op) - replace with withAutoCert above when ready
 // const withAutoCert = (config) => config;
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
