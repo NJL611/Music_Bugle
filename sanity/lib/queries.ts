@@ -20,7 +20,8 @@ export const POSTS_QUERY = groq`
     },
     "author": author->{
       name,
-      _id
+      _id,
+      "slug": slug.current
     },
     body,
     "categories": coalesce(categories[]->{
@@ -57,7 +58,8 @@ export const POSTS_PREVIEW_QUERY = groq`
     },
     "author": author->{
       name,
-      _id
+      _id,
+      "slug": slug.current
     },
     "body": body[0...1], 
     "categories": coalesce(categories[]->{
@@ -93,7 +95,8 @@ export const POST_QUERY = groq`
     },
     "author": author->{
       name,
-      _id
+      _id,
+      "slug": slug.current
     },
     body,
     "categories": coalesce(categories[]->{
@@ -136,7 +139,8 @@ export const SEARCH_QUERY = groq`
     },
     "author": author->{
       name,
-      _id
+      _id,
+      "slug": slug.current
     },
     "body": body[0...1],
     "categories": coalesce(categories[]->{
@@ -181,7 +185,8 @@ export const POSTS_BY_TAG_QUERY = groq`
     },
     "author": author->{
       name,
-      _id
+      _id,
+      "slug": slug.current
     },
     "body": body[0...1],
     "categories": coalesce(categories[]->{
@@ -235,7 +240,8 @@ export const POSTS_BY_CATEGORY_QUERY = groq`
     },
     "author": author->{
       name,
-      _id
+      _id,
+      "slug": slug.current
     },
     "body": body[0...1],
     "categories": coalesce(categories[]->{
@@ -279,7 +285,8 @@ const POST_FEED_FIELDS = groq`
   },
   "author": author->{
     name,
-    _id
+    _id,
+    "slug": slug.current
   },
   "body": body[0...1],
   "categories": coalesce(categories[]->{
@@ -331,5 +338,29 @@ export const POPULAR_PAGE_QUERY = groq`
     autoFillDays,
     autoFillLimit,
     "featuredPosts": featuredPosts[]-> { ${POST_FEED_FIELDS} }
+  }
+`;
+
+export const AUTHOR_QUERY = groq`
+  *[_type == "author" && slug.current == $slug][0]{
+    _id,
+    name,
+    "slug": slug.current,
+    bio,
+    image
+  }
+`;
+
+export const ALL_AUTHORS_QUERY = groq`
+  *[_type == "author" && defined(slug)] | order(name asc) {
+    _id,
+    name,
+    "slug": slug.current
+  }
+`;
+
+export const POSTS_BY_AUTHOR_QUERY = groq`
+  *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(publishedAt desc) {
+    ${POST_FEED_FIELDS}
   }
 `;
