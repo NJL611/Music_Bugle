@@ -333,37 +333,53 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
 
     if (!posts.length) return null;
 
-    const currentPost = posts[currentIndex];
-    const currentPreview = currentPost ? getPostExcerpt(currentPost) : "";
-
     return (
         <div className="w-full h-[380px] md:h-[450px] relative bg-theme-bg-dark group">
             <div className="w-full h-full relative overflow-hidden">
-                <Link className="block w-full h-full" href={currentPost ? resolvePostPath(currentPost) : "/"}>
-                    <div className="w-full h-full bg-linear-to-b from-transparent via-transparent to-black/80 absolute z-1" />
-                    <Image
-                        className="w-full h-full object-cover duration-500 absolute"
-                        width={1200}
-                        height={675}
-                        quality={65}
-                        src={getPostImage(currentPost, 1200)}
-                        alt={currentPost?.title || "Post Image"}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-                        priority
-                        fetchPriority="high"
-                    />
+                {posts.map((post, index) => {
+                    const isActive = index === currentIndex;
+                    const preview = getPostExcerpt(post);
 
-                    <div className="absolute bottom-[30px] left-0 w-full z-2 px-6 md:px-10 flex justify-center">
-                        <div className="max-w-full md:max-w-[90%] text-center">
-                            <h2 className="text-white text-[24px] md:text-[28px]   leading-tight mb-2 drop-shadow-lg">
-                                {currentPost?.title}
-                            </h2>
-                            <p className="text-white text-[14px] md:text-[16px] leading-relaxed opacity-90 line-clamp-2 drop-shadow-md hidden md:block mx-auto">
-                                {currentPreview}
-                            </p>
+                    return (
+                        <div
+                            key={post._id}
+                            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                                isActive ? "opacity-100 z-1" : "opacity-0 z-0 pointer-events-none"
+                            }`}
+                            aria-hidden={!isActive}
+                        >
+                            <Link
+                                className="block w-full h-full"
+                                href={resolvePostPath(post)}
+                                tabIndex={isActive ? 0 : -1}
+                            >
+                                <div className="w-full h-full bg-linear-to-b from-transparent via-transparent to-black/80 absolute z-1" />
+                                <Image
+                                    className="w-full h-full object-cover absolute"
+                                    width={1200}
+                                    height={675}
+                                    quality={65}
+                                    src={getPostImage(post, 1200)}
+                                    alt={post.title || "Post Image"}
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                                    priority={index === 0}
+                                    fetchPriority={index === 0 ? "high" : "auto"}
+                                />
+
+                                <div className="absolute bottom-[30px] left-0 w-full z-2 px-6 md:px-10 flex justify-center">
+                                    <div className="max-w-full md:max-w-[90%] text-center">
+                                        <h2 className="text-white text-[24px] md:text-[28px]   leading-tight mb-2 drop-shadow-lg">
+                                            {post.title}
+                                        </h2>
+                                        <p className="text-white text-[14px] md:text-[16px] leading-relaxed opacity-90 line-clamp-2 drop-shadow-md hidden md:block mx-auto">
+                                            {preview}
+                                        </p>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
-                    </div>
-                </Link>
+                    );
+                })}
 
                 <div className="absolute top-1/2 -translate-y-1/2 left-4 z-10">
                     <button

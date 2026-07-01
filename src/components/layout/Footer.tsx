@@ -95,16 +95,21 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
 
             {/* Legal Links */}
             <div className="border-t border-gray-600 mt-12 pt-8">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div className="flex flex-wrap gap-4 text-xs text-gray-400">
+                <div className="flex flex-col lg:flex-row lg:justify-between items-center gap-4 text-xs text-gray-400 font-graphiklight">
+                    <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                         <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
                         <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
                         <Link href="/refund" className="hover:text-white transition-colors">Refund Policy</Link>
                         <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
                     </div>
-                    <div className="text-xs text-gray-400">
-                        <p className="mb-1 text-[12px] font-graphiklight">© {new Date().getFullYear()} The Music Bugle. All rights reserved.</p>
-                        <p className="text-[13px] font-graphiklight">Email: <a href="mailto:info@themusicbugle.com" className="hover:text-white transition-colors text-[13px]">info@themusicbugle.com</a></p>
+                    <div className="text-center lg:text-right">
+                        <p className="mb-1">© {new Date().getFullYear()} The Music Bugle. All rights reserved.</p>
+                        <p>
+                            Email:{" "}
+                            <a href="mailto:info@themusicbugle.com" className="hover:text-white transition-colors">
+                                info@themusicbugle.com
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>
