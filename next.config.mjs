@@ -23,6 +23,18 @@ const withAutoCert = autoCert({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Next 16 blocks cross-origin dev assets; needed for on-device testing via LAN IP.
+  allowedDevOrigins: ["192.168.1.160", "192.168.1.*"],
+  // Brave iOS reuses dev CSS/JS across edits (stable chunk URLs); forbid storing in dev.
+  async headers() {
+    if (process.env.NODE_ENV !== "development") return [];
+    return [
+      {
+        source: "/_next/static/:path*",
+        headers: [{ key: "Cache-Control", value: "no-store" }],
+      },
+    ];
+  },
   async redirects() {
     return [
       {

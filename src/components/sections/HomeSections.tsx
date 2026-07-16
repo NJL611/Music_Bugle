@@ -16,7 +16,7 @@ export function TopStory({ post }: { post: SanityDocument }) {
     const previewText = getPostExcerpt(post);
 
     return (
-        <Link href={resolvePostPath(post)} className="w-[92%] md:w-[90%] lg:w-full mx-auto bg-white border-gray-200 rounded-sm overflow-hidden flex flex-col md:flex-row group cursor-pointer">
+        <Link href={resolvePostPath(post)} className="w-full mx-auto bg-white border-gray-200 rounded-sm overflow-hidden flex flex-col md:flex-row group cursor-pointer">
             <div className="w-full md:w-1/2 relative h-[250px] md:h-auto overflow-hidden block">
                 <Image
                     src={getPostImage(post, 800, 500)}
@@ -319,13 +319,15 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
         startTimer();
     };
 
-    const prevSlide = (e?: React.MouseEvent) => {
+    const prevSlide = (e?: React.SyntheticEvent) => {
+        e?.preventDefault();
         e?.stopPropagation();
         setCurrentIndex((prevIndex) => (prevIndex - 1 + posts.length) % posts.length);
         startTimer();
     };
 
-    const nextSlide = (e?: React.MouseEvent) => {
+    const nextSlide = (e?: React.SyntheticEvent) => {
+        e?.preventDefault();
         e?.stopPropagation();
         setCurrentIndex((prevIndex) => (prevIndex + 1) % posts.length);
         startTimer();
@@ -333,19 +335,19 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
 
     if (!posts.length) return null;
 
+    const showControls = posts.length > 1;
+
     return (
-        <div className="w-full h-[380px] md:h-[450px] relative bg-theme-bg-dark group">
-            <div className="w-full h-full relative overflow-hidden">
-                {posts.map((post, index) => {
+        <div className="w-full aspect-video md:aspect-auto md:h-[450px] relative overflow-hidden bg-theme-bg-dark group">
+            {posts.map((post, index) => {
                     const isActive = index === currentIndex;
                     const preview = getPostExcerpt(post);
 
                     return (
                         <div
                             key={post._id}
-                            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                                isActive ? "opacity-100 z-1" : "opacity-0 z-0 pointer-events-none"
-                            }`}
+                            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"
+                                }`}
                             aria-hidden={!isActive}
                         >
                             <Link
@@ -353,7 +355,7 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
                                 href={resolvePostPath(post)}
                                 tabIndex={isActive ? 0 : -1}
                             >
-                                <div className="w-full h-full bg-linear-to-b from-transparent via-transparent to-black/80 absolute z-1" />
+                                <div className="w-full h-full bg-linear-to-b from-transparent via-transparent to-black/80 absolute" />
                                 <Image
                                     className="w-full h-full object-cover absolute"
                                     width={1200}
@@ -366,9 +368,9 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
                                     fetchPriority={index === 0 ? "high" : "auto"}
                                 />
 
-                                <div className="absolute bottom-[30px] left-0 w-full z-2 px-6 md:px-10 flex justify-center">
+                                <div className="absolute bottom-[30px] left-0 w-full px-6 md:px-10 flex justify-center">
                                     <div className="max-w-full md:max-w-[90%] text-center">
-                                        <h2 className="text-white text-[24px] md:text-[28px]   leading-tight mb-2 drop-shadow-lg">
+                                        <h2 className="text-white text-[22px] md:text-[28px] leading-tight mb-2 drop-shadow-lg">
                                             {post.title}
                                         </h2>
                                         <p className="text-white text-[14px] md:text-[16px] leading-relaxed opacity-90 line-clamp-2 drop-shadow-md hidden md:block mx-auto">
@@ -381,44 +383,55 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
                     );
                 })}
 
-                <div className="absolute top-1/2 -translate-y-1/2 left-4 z-10">
+            {showControls && (
+                <>
                     <button
+                        type="button"
                         onClick={prevSlide}
-                        className="text-white hover:text-theme-red transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] block"
+                        className="absolute left-1 md:left-4 top-1/2 z-20 flex h-11 w-11 md:h-16 md:w-16 items-center justify-center text-white hover:text-theme-red transition-colors"
+                        style={{ transform: "translateY(-50%)", touchAction: "manipulation" }}
                         aria-label="Previous slide"
                     >
-                        <ChevronLeft className="w-12 h-12 md:w-16 md:h-16" strokeWidth={1.3} />
+                        <ChevronLeft width={28} height={28} strokeWidth={1.3} className="md:h-16 md:w-16 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]" />
                     </button>
-                </div>
 
-                <div className="absolute top-1/2 -translate-y-1/2 right-4 z-10">
                     <button
+                        type="button"
                         onClick={nextSlide}
-                        className="text-white hover:text-theme-red transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] block"
+                        className="absolute right-1 md:right-4 top-1/2 z-20 flex h-11 w-11 md:h-16 md:w-16 items-center justify-center text-white hover:text-theme-red transition-colors"
+                        style={{ transform: "translateY(-50%)", touchAction: "manipulation" }}
                         aria-label="Next slide"
                     >
-                        <ChevronRight className="w-12 h-12 md:w-16 md:h-16" strokeWidth={1.3} />
+                        <ChevronRight width={28} height={28} strokeWidth={1.3} className="md:h-16 md:w-16 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]" />
                     </button>
-                </div>
 
-                <div className="absolute bottom-6 right-6 md:right-10 z-10 flex items-center gap-2">
-                    {posts.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => goToSlide(index)}
-                            className="p-1 focus:outline-none"
-                            aria-label={`Go to slide ${index + 1}`}
-                        >
-                            <div
-                                className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                                    ? "bg-white w-4"
-                                    : "bg-white/40 hover:bg-white/70"
-                                    }`}
-                            />
-                        </button>
-                    ))}
-                </div>
-            </div>
+                    <div className="absolute bottom-4 right-4 md:bottom-6 md:right-10 z-20 flex items-center gap-2">
+                        {posts.map((_, index) => (
+                            <button
+                                key={index}
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    goToSlide(index);
+                                }}
+                                className="flex items-center justify-center w-6 h-6"
+                                style={{ touchAction: "manipulation" }}
+                                aria-label={`Go to slide ${index + 1}`}
+                                aria-current={index === currentIndex}
+                            >
+                                {/* opacity-50 over bg-white/50: color-mix is dropped by pre-16.2 mobile WebKit */}
+                                <span
+                                    className={`block h-2 rounded-full bg-white transition-all duration-300 ${index === currentIndex
+                                        ? "w-4"
+                                        : "w-2 opacity-50"
+                                        }`}
+                                />
+                            </button>
+                        ))}
+                    </div>
+                </>
+            )}
         </div>
     );
 }
