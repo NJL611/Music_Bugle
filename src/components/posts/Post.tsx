@@ -84,7 +84,7 @@ export default function Post({ post, posts }: Props) {
             )}
           </nav>
           {title ? (
-            <h1 className="mx-auto text-[36px] md:w-[90%] text-center md:leading-[1.1] lg:leading-[1.1] tracking-tight pt-8 pb-4 font-abril text-gray-900">
+            <h1 className="mx-auto text-[26px] md:text-[36px] md:w-[90%] text-center leading-[1.15] md:leading-[1.1] tracking-tight pt-4 pb-3 md:pt-8 md:pb-4 font-abril text-gray-900">
               {title}
             </h1>
           ) : null}
