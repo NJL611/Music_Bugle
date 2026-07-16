@@ -35,7 +35,7 @@ export default function Nav({ }) {
 
   return (
     <div className='flex flex-col w-full relative'>
-      <div className='relative px-8 2xl:px-64 w-full h-[68px] flex flex-row justify-center lg:justify-between items-center z-20 bg-white'>
+      <div className='relative px-4 md:px-8 2xl:px-64 w-full h-[68px] flex flex-row justify-center lg:justify-between items-center z-20 bg-white'>
         <div className={`${isCompact ? 'absolute transform -translate-x-1/2 left-1/2' : 'w-fit'}`}>
           <Link href='/' aria-label='Home'>
             <LogoIcon />
@@ -108,7 +108,7 @@ export default function Nav({ }) {
           </form>
         </div>
       )}
-      <div className='h-[34px] bg-theme-dark flex-row justify-center items-center px-8 2xl:px-64 flex'>
+      <div className='h-[34px] bg-theme-dark flex-row justify-center items-center px-4 md:px-8 2xl:px-64 flex'>
         <div className='flex flex-row items-center justify-center w-full gap-4 lg:gap-8 lg:justify-start'>
           {TRENDING_ITEMS.map(item => (
             <Link key={item.label} href={item.link} className='text-[13px] font-light hover:text-white text-[#c1c1c1] transition-all cursor-pointer whitespace-nowrap'>{item.label}</Link>
