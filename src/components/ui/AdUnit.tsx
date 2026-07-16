@@ -74,7 +74,7 @@ export function AdUnit({
     // In development, show a styled placeholder instead of hitting real AdSense
     if (process.env.NODE_ENV === 'development') {
         return (
-            <div className={`bg-gray-200 border border-gray-200 mx-auto ${finalWidth} ${className}`}>
+            <div className={`bg-gray-200 border border-gray-200 mx-auto max-w-full ${finalWidth} ${className}`}>
                 <div className="h-[22px] bg-gray-200 flex items-center">
                     <span className="px-2 text-[10px] tracking-wider text-gray-400 font-medium">Advertisement</span>
                 </div>
@@ -91,7 +91,7 @@ export function AdUnit({
 
     // Production: render real AdSense <ins> element
     return (
-        <div ref={adRef} className={`mx-auto ${finalWidth} ${className}`}>
+        <div ref={adRef} className={`mx-auto max-w-full ${finalWidth} ${className}`}>
             <div className="h-[22px] flex items-center">
                 <span className="px-2 text-[10px] tracking-wider text-gray-400 font-medium">Advertisement</span>
             </div>
