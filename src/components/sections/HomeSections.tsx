@@ -184,7 +184,7 @@ export function BottomSection({
 
     return (
         <div className="w-full mt-12 mb-12">
-            <AdUnit width={AD_SIZES.LEADERBOARD.width} height={AD_SIZES.LEADERBOARD.height} className="mx-auto" />
+            <AdUnit width="w-[320px] md:w-[728px]" height="h-[50px] md:h-[90px]" className="mx-auto" />
             <SectionHeader
                 title={title}
                 viewAllLink={viewAllLink}
