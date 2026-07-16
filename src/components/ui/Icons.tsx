@@ -1,38 +1,54 @@
 import * as React from "react";
 
-export const ChevronLeft = ({ width = 24, height = 24, color = "currentColor", className = "", ...props }: React.SVGProps<SVGSVGElement>) => (
+export const ChevronLeft = ({
+    width = 24,
+    height = 24,
+    color = "currentColor",
+    className = "",
+    strokeWidth = 2,
+    ...props
+}: React.SVGProps<SVGSVGElement>) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        width={width}
-        height={height}
         viewBox="0 0 24 24"
         fill="none"
         stroke={color}
-        strokeWidth="1"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={`feather feather-chevron-left ${className}`}
+        className={className}
+        aria-hidden="true"
         {...props}
+        width={width}
+        height={height}
     >
-        <polyline points="15 18 9 12 15 6"></polyline>
+        <polyline points="15 18 9 12 15 6" />
     </svg>
 );
 
-export const ChevronRight = ({ width = 24, height = 24, color = "currentColor", className = "", ...props }: React.SVGProps<SVGSVGElement>) => (
+export const ChevronRight = ({
+    width = 24,
+    height = 24,
+    color = "currentColor",
+    className = "",
+    strokeWidth = 2,
+    ...props
+}: React.SVGProps<SVGSVGElement>) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        width={width}
-        height={height}
         viewBox="0 0 24 24"
         fill="none"
         stroke={color}
-        strokeWidth="1"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={`feather feather-chevron-right ${className}`}
+        className={className}
+        aria-hidden="true"
         {...props}
+        width={width}
+        height={height}
     >
-        <polyline points="9 18 15 12 9 6"></polyline>
+        <polyline points="9 18 15 12 9 6" />
     </svg>
 );
 
