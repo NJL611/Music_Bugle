@@ -4,7 +4,7 @@ import Script from 'next/script';
 import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
 
-import './globals.css';
+import './styles.css';
 
 export default async function RootLayout({
   children,
