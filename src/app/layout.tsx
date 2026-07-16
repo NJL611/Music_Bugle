@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
-import Script from 'next/script';
 import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
 
@@ -15,6 +14,13 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Termly must be the first script so autoBlock can gate the trackers below it. */}
+        {TERMLY_WEBSITE_UUID && (
+          <script
+            src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`}
+            data-name="termly-embed-banner"
+          />
+        )}
         <link rel="preload" href="/fonts/Graphik-300-Light.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Graphik-400-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/AbrilFatface-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
@@ -30,11 +36,6 @@ export default async function RootLayout({
       <body className="font-graphiknormal" suppressHydrationWarning>
         <OrganizationJsonLd />
         {children}
-        <Script
-          src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`}
-          strategy="afterInteractive"
-          data-name="termly-embed-banner"
-        />
         {GOOGLE_ANALYTICS_ID && <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />}
         {GOOGLE_TAG_MANAGER_ID && <GoogleTagManager gtmId={GOOGLE_TAG_MANAGER_ID} />}
       </body>
