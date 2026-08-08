@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { SanityDocument } from "next-sanity";
-import { getPostExcerpt, resolvePostPath, getPostImage, formatDate } from "@/lib/utils";
+import { getPostExcerpt, resolvePostPath, getPostImage, getPostImageOrFallback, formatDate } from "@/lib/utils";
 import { ChevronRight, ChevronLeft, CircleIcon } from "@/components/ui/Icons";
 import { AdUnit } from "@/components/ui/AdUnit";
 import { useState, useEffect, useRef } from "react";
@@ -19,7 +19,7 @@ export function TopStory({ post }: { post: SanityDocument }) {
         <Link href={resolvePostPath(post)} className="w-full mx-auto bg-white border-gray-200 rounded-sm overflow-hidden flex flex-col md:flex-row group cursor-pointer">
             <div className="w-full md:w-1/2 relative h-[250px] md:h-auto overflow-hidden block">
                 <Image
-                    src={getPostImage(post, 800, 500)}
+                    src={getPostImageOrFallback(post, 800, 500)}
                     alt={post.title || "Featured Story"}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -115,7 +115,7 @@ export function LatestPosts({ posts }: { posts: SanityDocument[] }) {
                     <Link key={post._id} href={resolvePostPath(post)} className="flex flex-col group cursor-pointer">
                         <div className="relative w-full aspect-3/2 mb-4 overflow-hidden rounded-sm block">
                             <Image
-                                src={getPostImage(post, 400, 260)}
+                                src={getPostImageOrFallback(post, 400, 260)}
                                 alt={post.title}
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -196,7 +196,7 @@ export function BottomSection({
                     <Link href={resolvePostPath(mainPost)} className="w-full block group">
                         <div className="relative w-full aspect-video mb-4 overflow-hidden rounded-sm block">
                             <Image
-                                src={getPostImage(mainPost, 800, 500)}
+                                src={getPostImageOrFallback(mainPost, 800, 500)}
                                 alt={mainPost.title}
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -243,7 +243,7 @@ export function MustReadSection({ posts }: { posts: SanityDocument[] }) {
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
                         {posts.slice(0, 2).map((post) => {
-                            const imageUrl = getPostImage(post, 400, 260);
+                            const imageUrl = getPostImageOrFallback(post, 400, 260);
                             return (
                                 <Link key={post._id} href={resolvePostPath(post)} className="flex flex-col group cursor-pointer">
                                     <div className="relative w-full aspect-3/2 mb-4 overflow-hidden rounded-sm block">
@@ -361,7 +361,7 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
                                     width={1200}
                                     height={675}
                                     quality={65}
-                                    src={getPostImage(post, 1200)}
+                                    src={getPostImageOrFallback(post, 1200)}
                                     alt={post.title || "Post Image"}
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                                     priority={index === 0}

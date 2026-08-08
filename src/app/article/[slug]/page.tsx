@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import nextDynamic from "next/dynamic";
 import type { SanityDocument } from "next-sanity";
-import { POSTS_PREVIEW_QUERY, POST_QUERY } from "@sanity/lib/queries";
+import { POSTS_PREVIEW_LIMITED_QUERY, POST_QUERY, POST_SLUGS_QUERY } from "@sanity/lib/queries";
 import { client } from "@sanity/lib/client";
 import Nav from "@/components/layout/Nav";
 import { AdUnit } from "@/components/ui/AdUnit";
@@ -10,6 +10,7 @@ import { MoreLikeThis } from "@/components/sections/PostSections";
 import Post from "@/components/posts/Post";
 import { NewsArticleJsonLd } from "@/components/seo/JsonLd";
 import { SITE_URL, METADATA } from "@/lib/constants";
+import { bioToText } from "@/lib/utils";
 
 export const dynamic = 'force-static';
 export const revalidate = 600;
@@ -23,8 +24,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
-  const posts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
+  const posts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_LIMITED_QUERY, { limit: 13 });
   const articleUrl = `${SITE_URL}/article/${slug}`;
+  const authorBio = bioToText(post.author?.bio);
 
   return (
     <>
@@ -36,6 +38,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         datePublished={post.publishedAt}
         dateModified={post._updatedAt}
         authorName={post.author?.name}
+        authorSlug={post.author?.slug}
+        authorBio={authorBio}
       />
       <Nav />
       <Post post={post} posts={posts} />
@@ -58,6 +62,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           })}
         </div>
       </div>
+      {authorBio && post.author?.name && (
+        <div className="w-full lg:px-24 px-6 py-8 border-b border-gray-200">
+          <div className="max-w-3xl">
+            <span className="block text-sm uppercase tracking-wide text-gray-500 mb-2 font-graphiknormal">
+              About the author
+            </span>
+            <Link
+              href={`/author/${post.author.slug}`}
+              className="text-lg font-prata hover:text-theme-red transition-colors"
+            >
+              {post.author.name}
+            </Link>
+            <p className="mt-2 text-gray-700 font-graphiknormal whitespace-pre-line">{authorBio}</p>
+          </div>
+        </div>
+      )}
       <div className="lg:px-24 mx-auto pb-10 px-6">
         <MoreLikeThis posts={posts} currentPostId={post._id} />
       </div>
@@ -75,10 +95,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
 
 export async function generateStaticParams() {
-  const posts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
+  const posts = await client.fetch<Array<{ slug: string }>>(POST_SLUGS_QUERY);
 
   return posts
-    .map((post) => post?.slug?.current)
+    .map((post) => post?.slug)
     .filter((slug): slug is string => typeof slug === "string" && slug.length > 0)
     .map((slug) => ({ slug }));
 }

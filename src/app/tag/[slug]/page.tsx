@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { fetchPopularSidebarPosts, fetchTagData, fetchTagPosts } from "@/lib/fetchers";
 import FeedLayout from "@/components/layout/FeedLayout";
 import { METADATA, SITE_URL } from "@/lib/constants";
+import { listingRobots } from "@/lib/utils";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -30,6 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "website",
     },
     alternates: { canonical: url },
+    robots: listingRobots(tag.postCount),
   };
 }
 

@@ -3,17 +3,9 @@ import type { Metadata } from "next";
 import { fetchAuthorData, fetchAuthorPosts, fetchPopularSidebarPosts } from "@/lib/fetchers";
 import FeedLayout from "@/components/layout/FeedLayout";
 import { METADATA, SITE_URL } from "@/lib/constants";
+import { bioToText, listingRobots } from "@/lib/utils";
 
 type PageProps = { params: Promise<{ slug: string }> };
-
-// Bios are short Portable Text; flatten to a string for the header + meta description.
-function bioToText(bio?: Array<{ children?: Array<{ text?: string }> }>): string {
-  if (!Array.isArray(bio)) return "";
-  return bio
-    .map((block) => (Array.isArray(block?.children) ? block.children.map((c) => c?.text ?? "").join("") : ""))
-    .join("\n\n")
-    .trim();
-}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -36,6 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "profile",
     },
     alternates: { canonical: url },
+    robots: listingRobots(author.postCount),
   };
 }
 

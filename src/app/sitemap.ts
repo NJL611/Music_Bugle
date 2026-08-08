@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import type { SanityDocument } from 'next-sanity';
 import { client } from '@sanity/lib/client';
-import { POSTS_QUERY, ALL_CATEGORIES_QUERY, ALL_AUTHORS_QUERY } from '@sanity/lib/queries';
+import { SITEMAP_POSTS_QUERY, ALL_CATEGORIES_QUERY, ALL_AUTHORS_QUERY } from '@sanity/lib/queries';
 import { SITE_URL } from '@/lib/constants';
 
 type ChangeFrequency =
@@ -20,7 +20,7 @@ function toLastModified(value: string | undefined): string {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [articles, categories, authors] = await Promise.all([
-    client.fetch<SanityDocument[]>(POSTS_QUERY),
+    client.fetch<SanityDocument[]>(SITEMAP_POSTS_QUERY),
     client.fetch<Array<{ slug: string }>>(ALL_CATEGORIES_QUERY),
     client.fetch<Array<{ slug: string }>>(ALL_AUTHORS_QUERY),
   ]);
@@ -40,7 +40,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/refund',
     '/consent-preferences',
     '/support',
-    '/search',
     '/trending',
     '/popular',
   ].map((route) => ({

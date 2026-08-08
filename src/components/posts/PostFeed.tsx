@@ -6,7 +6,7 @@ import type { SanityDocument } from "next-sanity";
 import { SectionHeader } from "@/components/sections/SectionHeader";
 import { PostMeta } from "@/components/posts/PostMeta";
 import { GRID_IMAGE_SIZES, SIDEBAR_IMAGE_SIZES } from "@/lib/constants";
-import { getPostImage, formatDate, resolvePostPath } from "@/lib/utils";
+import { getPostImage, getPostImageOrFallback, formatDate, resolvePostPath } from "@/lib/utils";
 
 const GRID_CLASS_MAP: Record<NonNullable<PostFeedProps["columns"]>, string> = {
   1: "grid-cols-1",
@@ -23,7 +23,7 @@ interface FeedPostRowProps {
 export function FeedPostRow({ post }: FeedPostRowProps) {
   if (!post) return null;
 
-  const imageUrl = getPostImage(post, 400, 270);
+  const imageUrl = getPostImageOrFallback(post, 400, 270);
   const category = post.categories?.[0];
   const author = post.author;
 
