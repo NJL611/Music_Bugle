@@ -16,7 +16,10 @@ export const POSTS_QUERY = groq`
         _ref,
         url,
         metadata
-      }
+      },
+      hotspot,
+      crop,
+      alt
     },
     "author": author->{
       name,
@@ -54,7 +57,10 @@ export const POSTS_PREVIEW_QUERY = groq`
         _ref,
         url,
         metadata
-      }
+      },
+      hotspot,
+      crop,
+      alt
     },
     "author": author->{
       name,
@@ -91,12 +97,17 @@ export const POST_QUERY = groq`
         _ref,
         url,
         metadata
-      }
+      },
+      hotspot,
+      crop,
+      alt
     },
     "author": author->{
       name,
       _id,
-      "slug": slug.current
+      "slug": slug.current,
+      bio,
+      image
     },
     body,
     "categories": coalesce(categories[]->{
@@ -135,7 +146,10 @@ export const SEARCH_QUERY = groq`
         _ref,
         url,
         metadata
-      }
+      },
+      hotspot,
+      crop,
+      alt
     },
     "author": author->{
       name,
@@ -164,7 +178,8 @@ export const TAG_QUERY = groq`
     _id,
     title,
     "slug": slug.current,
-    description
+    description,
+    "postCount": count(*[_type == "post" && defined(slug) && references(^._id)])
   }
 `;
 
@@ -181,7 +196,10 @@ export const POSTS_BY_TAG_QUERY = groq`
         _ref,
         url,
         metadata
-      }
+      },
+      hotspot,
+      crop,
+      alt
     },
     "author": author->{
       name,
@@ -236,7 +254,10 @@ export const POSTS_BY_CATEGORY_QUERY = groq`
         _ref,
         url,
         metadata
-      }
+      },
+      hotspot,
+      crop,
+      alt
     },
     "author": author->{
       name,
@@ -281,7 +302,10 @@ const POST_FEED_FIELDS = groq`
       _ref,
       url,
       metadata
-    }
+    },
+    hotspot,
+    crop,
+    alt
   },
   "author": author->{
     name,
@@ -347,7 +371,8 @@ export const AUTHOR_QUERY = groq`
     name,
     "slug": slug.current,
     bio,
-    image
+    image,
+    "postCount": count(*[_type == "post" && defined(slug) && references(^._id)])
   }
 `;
 
@@ -362,5 +387,22 @@ export const ALL_AUTHORS_QUERY = groq`
 export const POSTS_BY_AUTHOR_QUERY = groq`
   *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(publishedAt desc) {
     ${POST_FEED_FIELDS}
+  }
+`;
+
+// Article pages need ~12 previews (sidebar 4, popular 5, related 4). Without the slice every
+// article ships all ~800 preview docs — with image metadata — in its RSC payload (~3.4 MB/page).
+export const POSTS_PREVIEW_LIMITED_QUERY = groq`${POSTS_PREVIEW_QUERY}[0...$limit]`;
+
+// Slug-only projections for build/SEO surfaces that need every post but none of its content.
+export const POST_SLUGS_QUERY = groq`
+  *[_type == "post" && defined(slug)]{ "slug": slug.current }
+`;
+
+export const SITEMAP_POSTS_QUERY = groq`
+  *[_type == "post" && defined(slug)] | order(publishedAt desc) {
+    "slug": slug.current,
+    publishedAt,
+    _updatedAt
   }
 `;

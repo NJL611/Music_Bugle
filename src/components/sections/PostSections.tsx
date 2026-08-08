@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { SanityDocument } from "next-sanity";
 import { DiscussionEmbed } from 'disqus-react';
-import { getPostImage, formatDate, resolvePostPath } from "@/lib/utils";
+import { getPostImage, getPostImageOrFallback, formatDate, resolvePostPath } from "@/lib/utils";
 
 export function CategoryFeatureGrid({ posts }: { posts: SanityDocument[] }) {
     if (!posts || posts.length === 0) return null;
@@ -11,7 +11,7 @@ export function CategoryFeatureGrid({ posts }: { posts: SanityDocument[] }) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 w-[85%] mx-auto">
             {posts.map((post) => {
-                const imageUrl = getPostImage(post, 400, 500);
+                const imageUrl = getPostImageOrFallback(post, 400, 500);
                 const category = post.categories?.[0];
                 const isExclusive = post.tags?.some((t: any) => t.title?.toLowerCase() === "exclusive");
 

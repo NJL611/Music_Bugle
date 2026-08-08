@@ -31,7 +31,8 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
       type: "website",
     },
     alternates: { canonical: url },
-    robots: searchValue ? { index: false, follow: true } : { index: true, follow: true },
+    // Indexed internal search results are an AdSense/Google policy violation.
+    robots: { index: false, follow: true },
   };
 }
 
@@ -55,6 +56,7 @@ export default async function Page({ searchParams }: PageProps) {
             : "Enter a search term using the navigation bar."
       }
       categoryLabel="Search Results"
+      showAds={false}
       mainPosts={searchResults}
       popularPosts={popularPosts}
     />

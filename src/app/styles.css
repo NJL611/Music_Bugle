@@ -136,3 +136,93 @@
   color: #8f3536 !important;
   text-decoration-color: #B94445;
 }
+
+/* --- Article body rhythm ---
+   Deliberately unlayered so it beats the `* { font-size: 15px }` reset above without !important.
+   The old paragraph gap (16px) was half the line-height (34px), so paragraphs ran together into a
+   wall — every preset below keeps gap close to or above one line so paragraphs read as blocks.
+   Switch presets live with /preview/<slug>?spacing=tight|standard|airy. */
+/* px, not rem: the `* { font-size: 15px }` reset above also lands on <html>, so 1rem is 15px here
+   and every rem-based size would silently shrink by ~6%. */
+.node-content-body {
+  --article-size: 17px;
+  --article-leading: 1.7;
+  --article-gap: 1.45em;
+}
+
+.node-content-body[data-spacing='tight'] {
+  --article-size: 16px;
+  --article-leading: 1.55;
+  --article-gap: 1.05em;
+}
+
+.node-content-body[data-spacing='airy'] {
+  --article-size: 18px;
+  --article-leading: 1.85;
+  --article-gap: 1.9em;
+}
+
+.node-content-body > p,
+.node-content-body > ul,
+.node-content-body > ol,
+.node-content-body > blockquote {
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--font-prata), serif;
+  font-size: var(--article-size);
+  line-height: var(--article-leading);
+  color: #1f2937;
+}
+
+.node-content-body > p {
+  margin-bottom: var(--article-gap);
+}
+
+.node-content-body > ul,
+.node-content-body > ol {
+  margin-block: var(--article-gap);
+  padding-left: 1.5em;
+}
+
+.node-content-body > ul {
+  list-style: disc;
+}
+
+.node-content-body > ol {
+  list-style: decimal;
+}
+
+.node-content-body li + li {
+  margin-top: calc(var(--article-gap) * 0.4);
+}
+
+.node-content-body > blockquote {
+  margin-block: calc(var(--article-gap) * 1.3);
+  padding-left: 1em;
+  border-left: 4px solid #B94445;
+  font-style: italic;
+  color: #4b5563;
+}
+
+/* Headings hang off the same variable so switching preset keeps the whole page in proportion. */
+.node-content-body > h1,
+.node-content-body > h2,
+.node-content-body > h3,
+.node-content-body > h4 {
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: calc(var(--article-gap) * 1.6);
+  margin-bottom: calc(var(--article-gap) * 0.55);
+  line-height: 1.25;
+}
+
+.node-content-body > h1 { font-size: calc(var(--article-size) * 1.9); }
+.node-content-body > h2 { font-size: calc(var(--article-size) * 1.55); }
+.node-content-body > h3 { font-size: calc(var(--article-size) * 1.3); }
+.node-content-body > h4 { font-size: calc(var(--article-size) * 1.1); }
+
+.node-content-body > *:first-child {
+  margin-top: 0;
+}

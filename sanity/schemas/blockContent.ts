@@ -1,4 +1,5 @@
 import {defineType, defineArrayMember} from 'sanity'
+import {ImageIcon, PlayIcon} from '@sanity/icons'
 
 /**
  * This is the schema type for block content used in the post document type
@@ -60,16 +61,40 @@ export default defineType({
     // You can add additional types here. Note that you can't use
     // primitive types such as 'string' and 'number' in the same array
     // as a block type.
+    // icon + title turn this into a labelled button in the editor toolbar; without them it hides
+    // in the "insert" overflow menu, which is why nobody could find where to add press shots.
     defineArrayMember({
       type: 'image',
+      title: 'Image',
+      icon: ImageIcon,
       options: {hotspot: true},
       fields: [
         {
           name: 'alt',
           type: 'string',
-          title: 'Alternative Text',
+          title: 'Caption / alt text',
+          description: 'Shown under the image and read by screen readers. Credit the photographer here.',
         }
       ]
+    }),
+    defineArrayMember({
+      type: 'object',
+      name: 'youtube',
+      title: 'YouTube video',
+      icon: PlayIcon,
+      fields: [
+        {
+          name: 'url',
+          type: 'url',
+          title: 'YouTube URL',
+          description: 'Paste any watch, youtu.be, or Shorts link.',
+          validation: (Rule) => Rule.required(),
+        },
+      ],
+      preview: {
+        select: {url: 'url'},
+        prepare: ({url}: {url?: string}) => ({title: 'YouTube video', subtitle: url}),
+      },
     }),
   ],
 })

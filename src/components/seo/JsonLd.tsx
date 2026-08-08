@@ -33,6 +33,8 @@ interface NewsArticleJsonLdProps {
   datePublished?: string;
   dateModified?: string;
   authorName?: string;
+  authorSlug?: string;
+  authorBio?: string;
 }
 
 export function NewsArticleJsonLd({
@@ -43,6 +45,8 @@ export function NewsArticleJsonLd({
   datePublished,
   dateModified,
   authorName,
+  authorSlug,
+  authorBio,
 }: NewsArticleJsonLdProps) {
   const json = {
     '@context': 'https://schema.org',
@@ -54,8 +58,15 @@ export function NewsArticleJsonLd({
     image: image ? [image] : [METADATA.image],
     datePublished: datePublished || undefined,
     dateModified: dateModified || datePublished || undefined,
+    // A bare Person name is a weak authorship signal; url + description let Google tie the byline
+    // to the author archive, which is what E-E-A-T actually reads.
     author: authorName
-      ? { '@type': 'Person', name: authorName }
+      ? {
+          '@type': 'Person',
+          name: authorName,
+          url: authorSlug ? `${SITE_URL}/author/${authorSlug}` : undefined,
+          description: authorBio || undefined,
+        }
       : { '@type': 'Organization', name: METADATA.title },
     publisher: {
       '@type': 'Organization',

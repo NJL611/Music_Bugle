@@ -10,6 +10,7 @@ export const client = createClient({
   perspective: "published",
   stega: {
     enabled: false,
-    studioUrl: "/studio",
+    // Must match `basePath` in sanity.config.ts — /studio has never existed in this app.
+    studioUrl: "/admin-content",
   },
 })

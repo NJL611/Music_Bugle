@@ -5,16 +5,19 @@ import type { SanityDocument } from "next-sanity";
 import { client } from "@sanity/lib/client";
 import { POSTS_PREVIEW_QUERY } from "@sanity/lib/queries";
 import Nav from "@/components/layout/Nav";
-import { distributePosts } from "@/lib/utils";
+import { distributePosts, distributePostsShowcase } from "@/lib/utils";
 import { TopStory, SidebarArticles } from "@/components/sections/HomeSections";
 import { SectionHeader } from "@/components/sections/SectionHeader";
 import { AdUnit } from "@/components/ui/AdUnit";
-import { AD_SIZES } from "@/lib/constants";
+import { AD_SIZES, SHOWCASE_MODE } from "@/lib/constants";
 
 export const revalidate = 600;
 
 export default async function Home() {
   const allPosts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
+
+  if (SHOWCASE_MODE) return <ShowcaseHome allPosts={allPosts} />;
+
   const content = distributePosts(allPosts);
 
   return (
@@ -90,6 +93,75 @@ export default async function Home() {
           viewAllLink="/category/music-videos"
         />
         <MustReadSection posts={content.mustWatch} />
+      </div>
+
+      <Footer posts={allPosts} />
+    </main>
+  );
+}
+
+// Every section here is date-driven so it always fills; the full layout's
+// category sections (news / releases / music-videos) are empty in this corpus.
+function ShowcaseHome({ allPosts }: { allPosts: SanityDocument[] }) {
+  const content = distributePostsShowcase(allPosts);
+
+  return (
+    <main className="bg-white min-h-screen">
+      <Nav />
+
+      <div className="w-full mx-auto md:px-8 md:pt-6 pb-6 2xl:px-64">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="w-full lg:w-2/3 flex flex-col gap-8">
+            <div className="w-full md:overflow-hidden md:rounded-sm">
+              <Carousel posts={content.carousel} />
+            </div>
+
+            <div className="px-4 md:px-0">
+              {content.topStory && <TopStory post={content.topStory} />}
+            </div>
+          </div>
+
+          <div className="w-full lg:w-[31%] flex flex-col px-4 md:px-0">
+            <AdUnit variant="sidebar" className="mb-6 rounded-sm" />
+
+            <div className="mt-2">
+              <h4 className="text-lg font-prata mb-4 border-b border-gray-200 pb-2">Recent Stories</h4>
+              <SidebarArticles posts={content.sidebar} />
+            </div>
+          </div>
+        </div>
+
+        <div className="px-4 md:px-0">
+          <PostFeed
+            posts={content.featured}
+            title="Q&A Interviews"
+            viewAllLink="/category/q-and-a"
+            columns={4}
+            variant="grid"
+          />
+        </div>
+      </div>
+
+      <SupportBanner />
+
+      <div className="w-full mx-auto px-4 md:px-8 py-6 2xl:px-64">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="w-full lg:w-3/4">
+            <PostFeed
+              posts={content.more}
+              title="More Interviews & Features"
+              viewAllLink="/category/q-and-a"
+              columns={3}
+              variant="grid"
+            />
+          </div>
+
+          <div className="w-full lg:w-1/4">
+            <div className="sticky top-4">
+              <AdUnit variant="vertical" />
+            </div>
+          </div>
+        </div>
       </div>
 
       <Footer posts={allPosts} />

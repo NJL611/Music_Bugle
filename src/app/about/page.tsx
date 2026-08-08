@@ -5,10 +5,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "Learn about The Music Bugle - your source for the latest music news, reviews, and insights.",
+  description: "Learn about The Music Bugle - music interviews, artist profiles, reviews, and insights.",
   openGraph: {
     title: "About Us - The Music Bugle",
-    description: "Learn about The Music Bugle - your source for the latest music news, reviews, and insights.",
+    description: "Learn about The Music Bugle - music interviews, artist profiles, reviews, and insights.",
     url: `${SITE_URL}/about`,
     type: "website",
   },
@@ -32,7 +32,7 @@ export default function AboutPage() {
             About The Music Bugle
           </h1>
           <p className="text-lg md:text-xl text-gray-600 font-graphiklight max-w-3xl mx-auto leading-relaxed">
-            Your trusted source for the latest music news, reviews, interviews, and insights from the world of music.
+            In-depth interviews, artist profiles, reviews, and insights from the world of music.
           </p>
         </div>
 

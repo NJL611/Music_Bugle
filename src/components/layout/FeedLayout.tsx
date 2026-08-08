@@ -8,6 +8,7 @@ import { SidebarAdWidget } from "@/components/ui/AdUnit";
 
 import Nav from "@/components/layout/Nav";
 import { CategoryFeatureGrid } from "@/components/sections/PostSections";
+import { MIN_INDEXABLE_LISTING_POSTS } from "@/lib/utils";
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {
     ssr: false,
@@ -23,6 +24,7 @@ interface FeedLayoutProps {
     popularPosts: SanityDocument[];
     allPostsForFooter?: SanityDocument[];
     categoryLabel?: string; // Added to customize the small label above title
+    showAds?: boolean;
 }
 
 export default function FeedLayout({
@@ -31,9 +33,13 @@ export default function FeedLayout({
     mainPosts,
     popularPosts,
     allPostsForFooter,
-    categoryLabel = "Category"
+    categoryLabel = "Category",
+    showAds = true
 }: FeedLayoutProps) {
 
+    // AdSense "minimum content requirements": no ads on screens with little or no
+    // publisher content — thin listings are noindexed AND ad-free (noindex alone isn't enough).
+    const renderAds = showAds && mainPosts.length >= MIN_INDEXABLE_LISTING_POSTS;
     const showGrid = mainPosts.length > 4;
     const featuredGridPosts = showGrid ? mainPosts.slice(0, 4) : [];
     const feedPosts = showGrid ? mainPosts.slice(4) : mainPosts;
@@ -86,7 +92,7 @@ export default function FeedLayout({
                     <div className="w-full lg:w-[31%] flex flex-col gap-8">
 
                         {/* Advertisement */}
-                        <SidebarAdWidget />
+                        {renderAds && <SidebarAdWidget />}
 
                         {/* Popular Posts */}
                         <PopularPostsWidget posts={popularPosts} />
