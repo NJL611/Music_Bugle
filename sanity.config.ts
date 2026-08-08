@@ -10,6 +10,13 @@ import { defineDocuments, defineLocations, presentationTool } from 'sanity/prese
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { apiVersion, dataset, projectId } from './sanity/env'
 import { schema } from './sanity/schema'
+import { SITE_URL } from './src/lib/constants'
+
+// The Studio runs from two origins: embedded at /admin-content (same origin as the site) and the
+// hosted mb-prod.sanity.studio bundle. Relative preview URLs only resolve correctly when embedded;
+// the hosted studio must aim at the production site explicitly.
+const isHostedStudio =
+  typeof window !== 'undefined' && window.location.hostname.endsWith('.sanity.studio')
 
 export default defineConfig({
   basePath: '/admin-content',
@@ -46,7 +53,9 @@ export default defineConfig({
     // article route stays force-static for the 800+ published posts and so ignores draft mode.
     presentationTool({
       title: 'Preview',
+      ...(isHostedStudio ? { allowOrigins: [SITE_URL] } : {}),
       previewUrl: {
+        ...(isHostedStudio ? { initial: SITE_URL } : {}),
         previewMode: { enable: '/api/draft-mode/enable' },
       },
       resolve: {
