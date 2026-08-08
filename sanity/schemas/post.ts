@@ -39,8 +39,10 @@ export default defineType({
 
     defineField({
       name: 'mainImage',
-      title: 'Main image',
+      title: 'Featured image',
       type: 'image',
+      description:
+        'The press shot at the top of the article. Drag the hotspot onto the artist so crops keep them in frame.',
       options: {
         hotspot: true,
       },
@@ -52,10 +54,14 @@ export default defineType({
         }
       ]
     }),
+    // Legacy WordPress URL string. Hidden because editors kept typing press-shot uploads into it —
+    // it is a text box, and the origin it points at is gone. Existing values still render.
     defineField({
       name: 'featured_image',
-      title: 'Featured Image',
+      title: 'Featured Image (legacy WordPress URL)',
       type: 'string',
+      readOnly: true,
+      hidden: ({ value }) => !value,
     }),
     defineField({
       name: 'description',

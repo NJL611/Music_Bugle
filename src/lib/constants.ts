@@ -8,22 +8,39 @@ export const ADSENSE_PUBLISHER_ID = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID
 export const ADSENSE_AD_SLOT = process.env.NEXT_PUBLIC_ADSENSE_AD_SLOT || '';
 
 
-export const NAV_ITEMS = [
-    { label: 'News', link: '/category/news' },
-    { label: 'Q&A', link: '/category/q-and-a' },
-    { label: 'Songs', link: '/category/songs' },
-    { label: 'Music Videos', link: '/category/music-videos' },
-    { label: 'Upcoming Releases', link: '/category/upcoming-releases' },
-    { label: 'Tours', link: '/category/tours' },
-];
+// 'showcase' fits the current all-originals corpus (~750 Q&As, news categories empty).
+// Set NEXT_PUBLIC_SITE_MODE=full once the archive returns and category sections can fill again.
+export const SHOWCASE_MODE = process.env.NEXT_PUBLIC_SITE_MODE !== 'full';
 
-export const TRENDING_ITEMS = [
-    { label: 'Trending', link: '/trending' },
-    { label: 'Latest', link: '/category/news' },
-    { label: 'Notable Releases', link: '/category/notable-releases' },
-    { label: 'Album Reviews', link: '/category/album-reviews' },
-    { label: 'New Songs', link: '/category/new-songs' },
-];
+export const NAV_ITEMS = SHOWCASE_MODE
+    ? [
+          { label: 'Q&A', link: '/category/q-and-a' },
+          { label: 'Trending', link: '/trending' },
+          { label: 'Popular', link: '/popular' },
+          { label: 'About', link: '/about' },
+      ]
+    : [
+          { label: 'News', link: '/category/news' },
+          { label: 'Q&A', link: '/category/q-and-a' },
+          { label: 'Songs', link: '/category/songs' },
+          { label: 'Music Videos', link: '/category/music-videos' },
+          { label: 'Upcoming Releases', link: '/category/upcoming-releases' },
+          { label: 'Tours', link: '/category/tours' },
+      ];
+
+export const TRENDING_ITEMS = SHOWCASE_MODE
+    ? [
+          { label: 'Trending', link: '/trending' },
+          { label: 'Popular', link: '/popular' },
+          { label: 'Album Reviews', link: '/category/album-reviews' },
+      ]
+    : [
+          { label: 'Trending', link: '/trending' },
+          { label: 'Latest', link: '/category/news' },
+          { label: 'Notable Releases', link: '/category/notable-releases' },
+          { label: 'Album Reviews', link: '/category/album-reviews' },
+          { label: 'New Songs', link: '/category/new-songs' },
+      ];
 
 /** Static date shown on legal pages — update when policy text changes. */
 export const LEGAL_LAST_UPDATED = 'May 22, 2026';
@@ -57,8 +74,9 @@ export const SIDEBAR_IMAGE_SIZES = "(max-width: 640px) 45vw, 124px";
 export const FEATURE_IMAGE_SIZES = "(max-width: 768px) 100vw, 800px";
 
 // --- Regex ---
-export const YOUTUBE_REGEX = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
-export const YOUTUBE_ID_REGEX = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&]+)/;
+export const YOUTUBE_REGEX = /^(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be)\/.+$/;
+// ?si= tracking params on YouTube "Share" links used to be swallowed into the captured id.
+export const YOUTUBE_ID_REGEX = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
 
 // --- Homepage Counts ---
 export const HOMEPAGE_COUNTS = {
@@ -87,7 +105,7 @@ export const HOMEPAGE_CATEGORIES = {
 // --- Metadata ---
 export const METADATA = {
     title: 'The Music Bugle',
-    description: 'Your source for the latest music news.',
+    description: 'Music interviews, artist profiles, and features.',
     image: `${SITE_URL}/og-preview.jpg`,
     twitterHandle: '@TheMusicBugle',
 };
