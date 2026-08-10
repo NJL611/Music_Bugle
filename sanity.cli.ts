@@ -7,5 +7,9 @@ import { defineCliConfig } from 'sanity/cli'
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
 
-// studioHost pins `sanity deploy` to mb-prod.sanity.studio (renamed from mb-dev).
-export default defineCliConfig({ api: { projectId, dataset }, studioHost: 'mb-prod' })
+// studioHost + appId pin `sanity deploy` to mb-prod.sanity.studio (renamed from mb-dev).
+export default defineCliConfig({
+  api: { projectId, dataset },
+  studioHost: 'mb-prod',
+  deployment: { appId: 'bjrpsvbbpfebik3yss34zqa3' },
+})
