@@ -116,7 +116,9 @@ export default function Post({ post, posts, spacing }: Props) {
           </div>
 
           {mainImageUrl ? (
-            <div className="h-[300px] md:h-[549px] w-full m-auto relative group mb-10">
+            // aspect-video matches the 16:9 server crop exactly — a fixed height re-crops with
+            // object-cover, ignoring the editor's hotspot and cutting heads off press photos.
+            <div className="aspect-video w-full m-auto relative group mb-10">
               <Image
                 className="w-full h-full object-cover duration-500 my-auto absolute"
                 width={1600}

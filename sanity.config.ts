@@ -12,11 +12,13 @@ import { apiVersion, dataset, projectId } from './sanity/env'
 import { schema } from './sanity/schema'
 import { SITE_URL } from './src/lib/constants'
 
-// The Studio runs from two origins: embedded at /admin-content (same origin as the site) and the
-// hosted mb-prod.sanity.studio bundle. Relative preview URLs only resolve correctly when embedded;
-// the hosted studio must aim at the production site explicitly.
-const isHostedStudio =
-  typeof window !== 'undefined' && window.location.hostname.endsWith('.sanity.studio')
+// The Studio runs from several origins: embedded at /admin-content, the hosted
+// mb-prod.sanity.studio bundle, AND Sanity's dashboard at sanity.io. Relative preview URLs only
+// resolve when the studio origin IS the site — anywhere else they route into the studio's own
+// router ("Workspace not found"), so every non-embedded origin gets absolute URLs.
+const isEmbeddedStudio =
+  typeof window !== 'undefined' &&
+  (window.location.origin === SITE_URL || window.location.hostname === 'localhost')
 
 export default defineConfig({
   basePath: '/admin-content',
@@ -53,9 +55,9 @@ export default defineConfig({
     // article route stays force-static for the 800+ published posts and so ignores draft mode.
     presentationTool({
       title: 'Preview',
-      ...(isHostedStudio ? { allowOrigins: [SITE_URL] } : {}),
+      ...(isEmbeddedStudio ? {} : { allowOrigins: [SITE_URL] }),
       previewUrl: {
-        ...(isHostedStudio ? { initial: SITE_URL } : {}),
+        ...(isEmbeddedStudio ? {} : { initial: SITE_URL }),
         previewMode: { enable: '/api/draft-mode/enable' },
       },
       resolve: {
@@ -74,7 +76,12 @@ export default defineConfig({
               message: doc?.slug ? 'Preview this article' : 'Add a slug to enable preview',
               tone: doc?.slug ? 'positive' : 'caution',
               locations: doc?.slug
-                ? [{ title: doc.title || 'Untitled', href: `/preview/${doc.slug}` }]
+                ? [
+                    {
+                      title: doc.title || 'Untitled',
+                      href: `${isEmbeddedStudio ? '' : SITE_URL}/preview/${doc.slug}`,
+                    },
+                  ]
                 : [],
             }),
           }),
