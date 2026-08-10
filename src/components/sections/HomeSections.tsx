@@ -361,7 +361,7 @@ export function Carousel({ posts }: { posts: SanityDocument[] }) {
                                     width={1200}
                                     height={675}
                                     quality={65}
-                                    src={getPostImageOrFallback(post, 1200)}
+                                    src={getPostImageOrFallback(post, 1200, 675)}
                                     alt={post.title || "Post Image"}
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                                     priority={index === 0}
