@@ -52,3 +52,4 @@ functions/**/node_modules/
 
 # internal audit, kept local
 ADSENSE_AUDIT.md
+.claude/

@@ -23,6 +23,10 @@ const withAutoCert = autoCert({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // A stray package-lock.json in ~/Documents/GitHub makes Next infer the wrong workspace root.
+  turbopack: {
+    root: import.meta.dirname,
+  },
   // Next 16 blocks cross-origin dev assets; needed for on-device testing via LAN IP.
   allowedDevOrigins: ["192.168.1.160", "192.168.1.*"],
   // Brave iOS reuses dev CSS/JS across edits (stable chunk URLs); forbid storing in dev.
