@@ -44,7 +44,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/popular',
   ].map((route) => ({
     url: `${SITE_URL}${route}`,
-    lastModified: new Date().toISOString(),
     changeFrequency: 'monthly' as ChangeFrequency,
   }));
 
@@ -52,7 +51,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((category) => category.slug)
     .map(({ slug }) => ({
       url: `${SITE_URL}/category/${slug}`,
-      lastModified: new Date().toISOString(),
       changeFrequency: 'weekly' as ChangeFrequency,
     }));
 
@@ -60,7 +58,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((author) => author.slug)
     .map(({ slug }) => ({
       url: `${SITE_URL}/author/${slug}`,
-      lastModified: new Date().toISOString(),
       changeFrequency: 'weekly' as ChangeFrequency,
     }));
 
