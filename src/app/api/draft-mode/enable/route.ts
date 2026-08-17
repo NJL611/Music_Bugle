@@ -4,7 +4,7 @@ import { defineEnableDraftMode } from "next-sanity/draft-mode";
 import { client } from "@sanity/lib/client";
 
 const { GET: enableDraftMode } = defineEnableDraftMode({
-  client: client.withConfig({ token: process.env.SANITY_API_READ_TOKEN }),
+  client: client.withConfig({ token: process.env.SANITY_API_READ_TOKEN, useCdn: false }),
 });
 
 // Validating the secret requires an authenticated read, so a missing or expired token surfaces as

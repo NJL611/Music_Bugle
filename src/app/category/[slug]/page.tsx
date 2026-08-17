@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export const revalidate = 600;
+export const revalidate = 3600;
 
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
