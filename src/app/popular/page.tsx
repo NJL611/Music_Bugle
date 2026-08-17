@@ -3,7 +3,7 @@ import FeedLayout from "@/components/layout/FeedLayout";
 import { fetchPopularPage, fetchPopularPosts, fetchPopularSidebarPosts } from "@/lib/fetchers";
 import { METADATA, SITE_URL } from "@/lib/constants";
 
-export const revalidate = 600;
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await fetchPopularPage();

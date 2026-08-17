@@ -13,7 +13,7 @@ import { SITE_URL, METADATA } from "@/lib/constants";
 import { bioToText } from "@/lib/utils";
 
 export const dynamic = 'force-static';
-export const revalidate = 600;
+export const revalidate = 86400;
 
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
