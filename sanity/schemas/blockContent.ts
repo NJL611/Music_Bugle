@@ -1,5 +1,5 @@
 import {defineType, defineArrayMember} from 'sanity'
-import {ImageIcon, PlayIcon} from '@sanity/icons'
+import {ImageIcon, PlayIcon, ExpandIcon} from '@sanity/icons'
 
 /**
  * This is the schema type for block content used in the post document type
@@ -94,6 +94,25 @@ export default defineType({
       preview: {
         select: {url: 'url'},
         prepare: ({url}: {url?: string}) => ({title: 'YouTube video', subtitle: url}),
+      },
+    }),
+    defineArrayMember({
+      type: 'object',
+      name: 'spacer',
+      title: 'Spacer',
+      icon: ExpandIcon,
+      fields: [
+        {
+          name: 'size',
+          type: 'string',
+          title: 'Size',
+          initialValue: 'medium',
+          options: {list: ['small', 'medium', 'large'], layout: 'radio', direction: 'horizontal'},
+        },
+      ],
+      preview: {
+        select: {size: 'size'},
+        prepare: ({size}: {size?: string}) => ({title: `Spacer (${size || 'medium'})`}),
       },
     }),
   ],

@@ -121,6 +121,10 @@ export const portableText: PortableTextComponents = {
             return videoId ? <YouTubeEmbed videoId={videoId} /> : null;
         },
         ad: () => <AdUnit />,
+        spacer: ({ value }) => {
+            const heights: Record<string, string> = { small: 'h-6', medium: 'h-12', large: 'h-24' };
+            return <div aria-hidden className={heights[value?.size] ?? 'h-12'} />;
+        },
     },
 };
 
