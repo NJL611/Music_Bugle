@@ -1,5 +1,25 @@
-import {defineType, defineArrayMember} from 'sanity'
+// Portable Text schema for post bodies (blocks, image, youtube, spacer).
+// Also owns BlockContentInput, the custom editor wrapper that pins a YouTube insert button.
+import {defineType, defineArrayMember, type InputProps, type PortableTextInputProps} from 'sanity'
 import {ImageIcon, PlayIcon, ExpandIcon} from '@sanity/icons'
+import {Button, Stack} from '@sanity/ui'
+
+// The condensed editor collapses insert buttons into the "..." overflow, so editors had to go
+// fullscreen to find YouTube. This pins a button under the editor that appends + opens the block.
+function BlockContentInput(inputProps: InputProps) {
+  const props = inputProps as PortableTextInputProps
+  const addYouTube = () => {
+    const _key = Math.random().toString(36).slice(2, 14)
+    props.onItemAppend({_type: 'youtube', _key} as never)
+    props.onItemOpen([...props.path, {_key}])
+  }
+  return (
+    <Stack space={2}>
+      {props.renderDefault(props)}
+      <Button icon={PlayIcon} text="YouTube video" mode="ghost" onClick={addYouTube} />
+    </Stack>
+  )
+}
 
 /**
  * This is the schema type for block content used in the post document type
@@ -16,6 +36,7 @@ export default defineType({
   title: 'Block Content',
   name: 'blockContent',
   type: 'array',
+  components: {input: BlockContentInput},
   of: [
     defineArrayMember({
       title: 'Block',
