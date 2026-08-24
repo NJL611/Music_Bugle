@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { draftMode } from 'next/headers';
 import { VisualEditing } from 'next-sanity/visual-editing';
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import { GoogleTagManager } from '@next/third-parties/google';
 import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
+import { Analytics } from '@/components/layout/Analytics';
 
 import './styles.css';
 
@@ -13,6 +14,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isDraft = (await draftMode()).isEnabled;
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -43,8 +45,9 @@ export default async function RootLayout({
         {/* Presentation's iframe can land on any route (its initial URL is the homepage), and every
             page it shows must answer the handshake or the Studio reports "Unable to connect".
             draftMode() here does not opt static pages into dynamic rendering — readers never get this. */}
-        {(await draftMode()).isEnabled && <VisualEditing />}
-        {GOOGLE_ANALYTICS_ID && <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />}
+        {isDraft && <VisualEditing />}
+        {/* Draft mode means Presentation's iframe or /preview — authoring, not readers. */}
+        {GOOGLE_ANALYTICS_ID && !isDraft && <Analytics gaId={GOOGLE_ANALYTICS_ID} />}
         {GOOGLE_TAG_MANAGER_ID && <GoogleTagManager gtmId={GOOGLE_TAG_MANAGER_ID} />}
       </body>
     </html>
