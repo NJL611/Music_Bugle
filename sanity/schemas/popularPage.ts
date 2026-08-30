@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { TrendUpwardIcon } from '@sanity/icons'
+import { TrendUpwardIcon } from '@sanity/icons/TrendUpward'
 
 export default defineType({
   name: 'popularPage',

@@ -1,7 +1,10 @@
 // Portable Text schema for post bodies (blocks, image, youtube, spacer).
 // Also owns BlockContentInput, the custom editor wrapper that pins a YouTube insert button.
 import {defineType, defineArrayMember, type InputProps, type PortableTextInputProps} from 'sanity'
-import {ImageIcon, PlayIcon, ExpandIcon} from '@sanity/icons'
+// @sanity/icons v5: named icons moved to per-icon subpaths; the barrel only exports the lazy map
+import {ImageIcon} from '@sanity/icons/Image'
+import {PlayIcon} from '@sanity/icons/Play'
+import {ExpandIcon} from '@sanity/icons/Expand'
 import {Button, Stack} from '@sanity/ui'
 
 // The condensed editor collapses insert buttons into the "..." overflow, so editors had to go
@@ -14,7 +17,7 @@ function BlockContentInput(inputProps: InputProps) {
     props.onItemOpen([...props.path, {_key}])
   }
   return (
-    <Stack space={2}>
+    <Stack gap={2}>
       {props.renderDefault(props)}
       <Button icon={PlayIcon} text="YouTube video" mode="ghost" onClick={addYouTube} />
     </Stack>
