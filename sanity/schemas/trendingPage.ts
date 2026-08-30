@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { StarIcon } from '@sanity/icons'
+import { StarIcon } from '@sanity/icons/Star'
 
 export default defineType({
   name: 'trendingPage',
