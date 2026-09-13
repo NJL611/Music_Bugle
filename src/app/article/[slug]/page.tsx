@@ -129,7 +129,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: meta.description || meta.subtitle || METADATA.description,
       image: meta.mainImage?.asset.url || METADATA.image,
       keywords: meta.keywords || 'music, news, latest updates',
-      author: meta.author.name || METADATA.title,
+      author: meta.author?.name || METADATA.title,
       publishedTime: meta.publishedAt || '',
       modifiedTime: meta._updatedAt || '',
       openGraph: {
@@ -144,7 +144,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             url: meta.mainImage?.asset.url || METADATA.image,
           },
         ],
-        author: meta.author.name || METADATA.title,
+        author: meta.author?.name || METADATA.title,
         published_time: meta.publishedAt || '',
         modified_time: meta._updatedAt || '',
       },
