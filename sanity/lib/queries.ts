@@ -109,7 +109,14 @@ export const POST_QUERY = groq`
       bio,
       image
     },
-    body,
+    "body": body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        "alt": coalesce(alt, asset->altText, asset->description),
+        "credit": asset->creditLine
+      }
+    },
     "categories": coalesce(categories[]->{
       title,
       _id,
