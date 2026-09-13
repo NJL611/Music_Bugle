@@ -1,22 +1,56 @@
 // Portable Text schema for post bodies (blocks, image, youtube, spacer).
 // Also owns BlockContentInput, the custom editor wrapper that pins a YouTube insert button.
-import {defineType, defineArrayMember, type InputProps, type PortableTextInputProps} from 'sanity'
-import {ImageIcon, PlayIcon, ExpandIcon} from '@sanity/icons'
+import {useEffect, useRef} from 'react'
+import {
+  defineType,
+  defineArrayMember,
+  isKeySegment,
+  type InputProps,
+  type KeyedSegment,
+  type PortableTextInputProps,
+} from 'sanity'
+// @sanity/icons v5: named icons moved to per-icon subpaths; the barrel only exports the lazy map
+import {ImageIcon} from '@sanity/icons/Image'
+import {PlayIcon} from '@sanity/icons/Play'
+import {ExpandIcon} from '@sanity/icons/Expand'
 import {Button, Stack} from '@sanity/ui'
 
 // The condensed editor collapses insert buttons into the "..." overflow, so editors had to go
-// fullscreen to find YouTube. This pins a button under the editor that appends + opens the block.
+// fullscreen to find YouTube. This pins buttons under the editor that insert after the block the
+// cursor was last in (clicking the button blurs the editor, so we remember it), else append.
 function BlockContentInput(inputProps: InputProps) {
   const props = inputProps as PortableTextInputProps
-  const addYouTube = () => {
+  const lastBlock = useRef<KeyedSegment | null>(null)
+  const focusedBlock = props.focusPath[0]
+  useEffect(() => {
+    if (isKeySegment(focusedBlock)) lastBlock.current = focusedBlock
+  }, [focusedBlock])
+  const append = (value: Record<string, unknown>, open: boolean) => {
     const _key = Math.random().toString(36).slice(2, 14)
-    props.onItemAppend({_type: 'youtube', _key} as never)
-    props.onItemOpen([...props.path, {_key}])
+    const item = {...value, _key} as never
+    if (lastBlock.current) {
+      props.onInsert({items: [item], position: 'after', referenceItem: lastBlock.current})
+    } else {
+      props.onItemAppend(item)
+    }
+    if (open) props.onItemOpen([...props.path, {_key}])
   }
   return (
-    <Stack space={2}>
+    <Stack gap={2}>
       {props.renderDefault(props)}
-      <Button icon={PlayIcon} text="YouTube video" mode="ghost" onClick={addYouTube} />
+      <Button
+        icon={PlayIcon}
+        text="YouTube video"
+        mode="ghost"
+        onClick={() => append({_type: 'youtube'}, true)}
+      />
+      {/* No dialog: size has a sane default, and initialValue is skipped on append */}
+      <Button
+        icon={ExpandIcon}
+        text="Spacer"
+        mode="ghost"
+        onClick={() => append({_type: 'spacer', size: 'medium'}, false)}
+      />
     </Stack>
   )
 }
@@ -94,7 +128,8 @@ export default defineType({
           name: 'alt',
           type: 'string',
           title: 'Caption / alt text',
-          description: 'Shown under the image and read by screen readers. Credit the photographer here.',
+          description:
+            'Shown under the image and read by screen readers. Leave empty to use the alt text and credit line saved on the image in the Media library.',
         }
       ]
     }),

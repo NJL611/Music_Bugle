@@ -74,6 +74,11 @@ export const portableText: PortableTextComponents = {
             if (!value?.asset?._ref) {
                 return null;
             }
+            // alt/credit fall back to the Media library asset fields (see POST_QUERY)
+            const caption = [
+                value.alt,
+                value.credit && !value.alt?.includes(value.credit) && `Photo credit - ${value.credit}`,
+            ].filter(Boolean).join(' · ');
 
             return (
                 <>
@@ -95,8 +100,8 @@ export const portableText: PortableTextComponents = {
                             height={675}
                         />
                     </div>
-                    {value?.alt && (
-                        <span className="block mb-6 text-center md:text-left text-[10px] text-gray-500 mt-1">{value.alt}</span>
+                    {caption && (
+                        <span className="block mb-6 text-center md:text-left text-[10px] text-gray-500 mt-1">{caption}</span>
                     )}
                 </>
             );
