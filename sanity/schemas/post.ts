@@ -78,6 +78,8 @@ export default defineType({
       name: 'publishedAt',
       title: 'Published at',
       type: 'datetime',
+      // unset dates dropped new posts' JSON-LD datePublished and made the site look inactive
+      initialValue: () => new Date().toISOString(),
     }),
     defineField({
       name: 'trendingPriority',
