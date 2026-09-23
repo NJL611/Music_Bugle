@@ -54,3 +54,4 @@ functions/**/node_modules/
 ADSENSE_AUDIT.md
 .claude/
 .sanity/
+.playwright-mcp/

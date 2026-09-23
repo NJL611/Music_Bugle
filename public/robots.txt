@@ -1,6 +1,0 @@
-User-agent: *
-Disallow: /api/
-Disallow: /admin-content/
-Allow: /
-
-Sitemap: https://themusicbugle.com/sitemap.xml
