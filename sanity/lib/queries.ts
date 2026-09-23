@@ -290,7 +290,8 @@ export const POSTS_BY_CATEGORY_QUERY = groq`
 `;
 
 export const ALL_CATEGORIES_QUERY = groq`
-  *[_type == "category" && defined(slug)] | order(title asc) {
+  *[_type == "category" && defined(slug) && slug.current != "trending"
+    && count(*[_type == "post" && !(_id in path("drafts.**")) && references(^._id)]) > 0] | order(title asc) {
     _id,
     title,
     "slug": slug.current,
