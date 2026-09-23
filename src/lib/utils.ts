@@ -23,9 +23,14 @@ export function resolvePostPath(source: SlugLike, prefix = "/article/"): string 
     return slug ? `${prefix}${slug}` : "/";
 }
 
+const BYLINE_REGEX = /^\s*by\s+\S/i;
+
+// Subtitle first: it's the written dek. Body fallback skips WordPress-migrated "By <author>" opening lines.
 export function getPostExcerpt(post: SanityDocument): string | undefined {
-    const firstBlock = post.body?.[0]?.children?.[0]?.text;
-    return firstBlock || post.subtitle || post.description;
+    const bodyText = post.body
+        ?.map((block: any) => block?.children?.[0]?.text)
+        .find((text: string | undefined) => text && !(text.length < 60 && BYLINE_REGEX.test(text)));
+    return post.subtitle || bodyText || post.description;
 }
 
 export function getPostImage(post: SanityDocument, width = 1200, height?: number) {
@@ -91,8 +96,9 @@ export function distributePostsShowcase(posts: SanityDocument[] = []) {
     const usedIds = new Set<string>();
     const imaged = posts.filter((post) => post.mainImage?.asset);
     return {
-        carousel: takeUniquePosts(imaged, HOMEPAGE_COUNTS.CAROUSEL, usedIds),
-        topStory: takeUniquePosts(imaged, HOMEPAGE_COUNTS.TOP_STORY, usedIds)[0] || null,
+        lead: takeUniquePosts(imaged, HOMEPAGE_COUNTS.LEAD, usedIds)[0] || null,
+        secondary: takeUniquePosts(imaged, HOMEPAGE_COUNTS.SECONDARY, usedIds),
+        headlines: takeUniquePosts(imaged, HOMEPAGE_COUNTS.HEADLINES, usedIds),
         featured: takeUniquePosts(imaged, 12, usedIds),
         sidebar: takeUniquePosts(posts, HOMEPAGE_COUNTS.SIDEBAR, usedIds),
         more: takeUniquePosts(imaged, 12, usedIds),
@@ -102,8 +108,9 @@ export function distributePostsShowcase(posts: SanityDocument[] = []) {
 export function distributePosts(posts: SanityDocument[] = []): HomepageContent {
     const usedIds = new Set<string>();
 
-    const carousel = takeUniquePosts(posts, HOMEPAGE_COUNTS.CAROUSEL, usedIds);
-    const topStory = takeUniquePosts(posts, HOMEPAGE_COUNTS.TOP_STORY, usedIds)[0] || null;
+    const lead = takeUniquePosts(posts, HOMEPAGE_COUNTS.LEAD, usedIds)[0] || null;
+    const secondary = takeUniquePosts(posts, HOMEPAGE_COUNTS.SECONDARY, usedIds);
+    const headlines = takeUniquePosts(posts, HOMEPAGE_COUNTS.HEADLINES, usedIds);
     const sidebar = takeCategoryPosts(
         posts,
         HOMEPAGE_CATEGORIES.SIDEBAR,
@@ -142,8 +149,9 @@ export function distributePosts(posts: SanityDocument[] = []): HomepageContent {
     );
 
     return {
-        carousel,
-        topStory,
+        lead,
+        secondary,
+        headlines,
         sidebar,
         newReleases,
         editorsPicksLarge: editorsPicks.slice(0, HOMEPAGE_COUNTS.EDITORS_LARGE),
@@ -156,8 +164,9 @@ export function distributePosts(posts: SanityDocument[] = []): HomepageContent {
 
 // --- Post Helpers ---
 export type HomepageContent = {
-    carousel: SanityDocument[];
-    topStory: SanityDocument | null;
+    lead: SanityDocument | null;
+    secondary: SanityDocument[];
+    headlines: SanityDocument[];
     sidebar: SanityDocument[];
     newReleases: SanityDocument[];
     editorsPicksLarge: SanityDocument[];
