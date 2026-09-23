@@ -385,14 +385,6 @@ export const AUTHOR_QUERY = groq`
   }
 `;
 
-export const ALL_AUTHORS_QUERY = groq`
-  *[_type == "author" && defined(slug)] | order(name asc) {
-    _id,
-    name,
-    "slug": slug.current
-  }
-`;
-
 export const POSTS_BY_AUTHOR_QUERY = groq`
   *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
     ${POST_FEED_FIELDS}
