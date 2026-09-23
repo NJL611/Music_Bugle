@@ -56,13 +56,17 @@
     font-family: var(--font-graphiklight), sans-serif;
   }
 
-  h1,
+  /* Abril is the signature face — article titles and page h1s only; every other heading is Prata. */
+  h1 {
+    font-family: var(--font-abril), serif;
+  }
+
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: var(--font-abril), serif;
+    font-family: var(--font-prata), serif;
   }
 
   h2 {
@@ -79,7 +83,6 @@
     max-width: 900px;
     margin-left: 0;
     margin-right: 0;
-    padding-top: 2.5rem;
   }
 
   @media (min-width: 768px) {

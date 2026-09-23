@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 
-// linkAuthor is opt-in: only the article page links the byline. In feed cards PostMeta renders
-// inside the card <Link>, where a nested <a> would be invalid HTML.
-export function PostMeta({ author, publishedAt, className = "text-gray-800", showAuthor = true, linkAuthor = false }: { author?: { name: string, slug?: string }, publishedAt?: string | null, className?: string, showAuthor?: boolean, linkAuthor?: boolean }) {
+// Feed-card byline only — it renders inside the card <Link>, so it must never contain an <a>.
+// The article page has its own linked byline in Post.tsx.
+export function PostMeta({ author, publishedAt, className = "text-gray-800", showAuthor = true }: { author?: { name: string }, publishedAt?: string | null, className?: string, showAuthor?: boolean }) {
     const authorName = showAuthor ? author?.name : undefined;
     const formattedDate = publishedAt ? formatDate(publishedAt) : '';
 
@@ -14,13 +13,7 @@ export function PostMeta({ author, publishedAt, className = "text-gray-800", sho
             {authorName && (
                 <>
                     By{" "}
-                    {linkAuthor && author?.slug ? (
-                        <Link href={`/author/${author.slug}`} className="text-gray-900 text-[14px] hover:text-theme-red transition-colors">
-                            {authorName}
-                        </Link>
-                    ) : (
-                        <span className="text-gray-900 text-[14px]">{authorName}</span>
-                    )}
+                    <span className="text-gray-900 text-[14px]">{authorName}</span>
                     {formattedDate ? " | " : null}
                 </>
             )}

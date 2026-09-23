@@ -35,7 +35,7 @@ export default function Nav({ }) {
 
   return (
     <div className='flex flex-col w-full relative'>
-      <div className='relative px-4 md:px-8 2xl:px-64 w-full h-[68px] flex flex-row justify-center lg:justify-between items-center z-20 bg-white'>
+      <div className='relative px-4 md:px-8 2xl:px-64 w-full h-[48px] flex flex-row justify-center lg:justify-between items-center z-20 bg-white'>
         <div className={`${isCompact ? 'absolute transform -translate-x-1/2 left-1/2' : 'w-fit'}`}>
           <Link href='/' aria-label='Home'>
             <LogoIcon />
@@ -46,7 +46,7 @@ export default function Nav({ }) {
             <HamburgerIcon />
           </div>
         }
-        <div className='flex-row items-center justify-between hidden gap-[8px] w-[614px] bg-transparent lg:flex px-4'>
+        <div className='flex-row items-center hidden gap-8 bg-transparent lg:flex px-4'>
           {NAV_ITEMS.map(item => (
             <Link href={item.link} key={item.label} className='whitespace-nowrap font-light text-theme-text transition-all hover:text-theme-red cursor-pointer'>
               {item.label}
@@ -57,14 +57,14 @@ export default function Nav({ }) {
           <div onClick={toggleSearch} className="cursor-pointer">
             <SearchIcon />
           </div>
-          <Button text='Support' href='/support' />
-          <Button text='Contact' href='/contact' />
+          <Button text='Support' href='/support' className='bg-theme-button text-white py-1.5! px-4!' />
+          <Button text='Contact' href='/contact' className='bg-theme-button text-white py-1.5! px-4!' />
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isCompact && (
-        <div className={`absolute top-[68px] left-0 w-full bg-white z-50 shadow-md flex flex-col items-center py-6 gap-6 border-t border-gray-100 transition-all duration-300 ease-in-out origin-top ${isMenuOpen ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-4 invisible pointer-events-none'}`}>
+        <div className={`absolute top-[48px] left-0 w-full bg-white z-50 shadow-md flex flex-col items-center py-6 gap-6 border-t border-gray-100 transition-all duration-300 ease-in-out origin-top ${isMenuOpen ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-4 invisible pointer-events-none'}`}>
           <form onSubmit={handleSearchSubmit} className="flex flex-row items-center relative w-3/4">
             <input
               type="text"

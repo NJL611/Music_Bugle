@@ -80,9 +80,10 @@ export const YOUTUBE_ID_REGEX = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/
 
 // --- Homepage Counts ---
 export const HOMEPAGE_COUNTS = {
-    CAROUSEL: 3,
-    TOP_STORY: 1,
-    SIDEBAR: 4,
+    LEAD: 1,
+    SECONDARY: 3,
+    HEADLINES: 3,
+    SIDEBAR: 3,
     NEW_RELEASES: 4,
     EDITORS_LARGE: 3,
     EDITORS_SMALL: 9,
