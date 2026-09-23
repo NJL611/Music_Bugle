@@ -83,7 +83,7 @@ export default function SupportPage() {
 
                             <div className="mt-8 p-6 bg-gray-50 rounded-sm border border-gray-200">
                                 <p className="text-sm text-gray-600 font-graphiklight leading-relaxed">
-                                    <strong className="font-graphiknormal text-gray-900">Note:</strong> Your support payment helps us maintain our independent music journalism platform. By supporting us, you're helping to keep quality music news accessible and ad-light. This is a support payment for content and services, not a charitable donation.
+                                    <strong className="font-graphiknormal text-gray-900">Note:</strong> Your support payment helps us maintain our independent music journalism platform. By supporting us, you&apos;re helping to keep quality music news accessible and ad-light. This is a support payment for content and services, not a charitable donation.
                                 </p>
                             </div>
                         </div>
