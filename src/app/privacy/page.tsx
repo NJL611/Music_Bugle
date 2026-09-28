@@ -1,3 +1,6 @@
+// Privacy policy, including the Google/AdSense cookie and opt-out disclosures AdSense requires.
+// Sets its own canonical: the root layout no longer provides one.
+
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
 import { SITE_URL, LEGAL_LAST_UPDATED } from "@/lib/constants";
@@ -12,6 +15,7 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/privacy`,
     type: "website",
   },
+  alternates: { canonical: `${SITE_URL}/privacy` },
 };
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {

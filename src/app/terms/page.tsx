@@ -1,3 +1,6 @@
+// Terms of service trust page.
+// Sets its own canonical: the root layout no longer provides one.
+
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
 import { SITE_URL, LEGAL_LAST_UPDATED } from "@/lib/constants";
@@ -12,6 +15,7 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/terms`,
     type: "website",
   },
+  alternates: { canonical: `${SITE_URL}/terms` },
 };
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {

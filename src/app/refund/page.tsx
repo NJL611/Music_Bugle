@@ -1,3 +1,6 @@
+// Refund and cancellation policy for /support contributions (Stripe).
+// Sets its own canonical: the root layout no longer provides one.
+
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
 import { SITE_URL, LEGAL_LAST_UPDATED } from "@/lib/constants";
@@ -12,6 +15,7 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/refund`,
     type: "website",
   },
+  alternates: { canonical: `${SITE_URL}/refund` },
 };
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {

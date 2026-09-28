@@ -1,3 +1,6 @@
+// Site search results, rendered through FeedLayout.
+// Always noindex and ad-free: indexed internal search pages violate Google/AdSense policy.
+
 import type { Metadata } from "next";
 import type { SanityDocument } from "next-sanity";
 import { client } from "@sanity/lib/client";
@@ -10,9 +13,15 @@ type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
+// Nav submits ?search=; ?q= is the convention people and crawlers guess, so both work.
+async function readSearch(searchParams: PageProps["searchParams"]): Promise<string> {
+  const { search, q } = await searchParams;
+  const value = search ?? q;
+  return typeof value === "string" ? value.trim() : "";
+}
+
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
-  const { search } = await searchParams;
-  const searchValue = typeof search === "string" ? search.trim() : "";
+  const searchValue = await readSearch(searchParams);
   const title = searchValue ? `Search: ${searchValue}` : "Search";
   const description = searchValue
     ? `Search results for "${searchValue}" on ${METADATA.title}.`
@@ -37,8 +46,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const { search } = await searchParams;
-  const searchValue = typeof search === "string" ? search : "";
+  const searchValue = await readSearch(searchParams);
 
   const [searchResults, popularPosts] = await Promise.all([
     client.fetch<SanityDocument[]>(SEARCH_QUERY, { search: searchValue }),

@@ -1,4 +1,5 @@
-
+// Homepage: lead stories, trending rail, and category sections (showcase or full layout by SITE_MODE).
+// Owns the only homepage canonical — the root layout no longer sets one for every page.
 
 import dynamic from "next/dynamic";
 import type { SanityDocument } from "next-sanity";
@@ -10,9 +11,14 @@ import { fetchTrendingPosts } from "@/lib/fetchers";
 import { LeadStories, SidebarArticles } from "@/components/sections/HomeSections";
 import { SectionHeader } from "@/components/sections/SectionHeader";
 import { AdUnit } from "@/components/ui/AdUnit";
-import { HOMEPAGE_COUNTS, SHOWCASE_MODE } from "@/lib/constants";
+import { HOMEPAGE_COUNTS, SHOWCASE_MODE, SITE_URL } from "@/lib/constants";
+import type { Metadata } from "next";
 
 export const revalidate = 600;
+
+export const metadata: Metadata = {
+  alternates: { canonical: SITE_URL },
+};
 
 // Trending auto-fill has a recency cutoff and can come back short, so the date-driven sidebar tops it up.
 // Imageless posts are skipped so every rail row gets a thumbnail.

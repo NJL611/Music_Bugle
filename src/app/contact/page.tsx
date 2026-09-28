@@ -1,3 +1,6 @@
+// Contact page: form (posts to /api/contact via Resend) plus direct email.
+// Only info@ is routed by Cloudflare, so every address shown here must be info@.
+
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
 import { SITE_URL, METADATA } from "@/lib/constants";
@@ -98,11 +101,11 @@ export default function ContactPage() {
                 <div className="border-t border-gray-200 pt-6">
                   <h3 className="text-[20px] font-prata text-gray-900 mb-3">Press Inquiries</h3>
                   <p className="mb-2">
-                    For press releases, media requests, or interview opportunities, please include &quot;Press Inquiry&quot; in your subject line.
+                    For media requests or interview opportunities, please include &quot;Press Inquiry&quot; in your subject line.
                   </p>
                   <p className="text-theme-red font-graphiknormal">
-                    <a href="mailto:press@themusicbugle.com" className="hover:underline">
-                      press@themusicbugle.com
+                    <a href="mailto:info@themusicbugle.com?subject=Press%20Inquiry" className="hover:underline">
+                      info@themusicbugle.com
                     </a>
                   </p>
                 </div>
@@ -110,11 +113,11 @@ export default function ContactPage() {
                 <div className="border-t border-gray-200 pt-6">
                   <h3 className="text-[20px] font-prata text-gray-900 mb-3">Partnerships</h3>
                   <p className="mb-2">
-                    Interested in collaborating or partnering with The Music Bugle? We&apos;d love to hear from you.
+                    Interested in collaborating or partnering with The Music Bugle? Include &quot;Partnership&quot; in your subject line — we&apos;d love to hear from you.
                   </p>
                   <p className="text-theme-red font-graphiknormal">
-                    <a href="mailto:partnerships@themusicbugle.com" className="hover:underline">
-                      partnerships@themusicbugle.com
+                    <a href="mailto:info@themusicbugle.com?subject=Partnership" className="hover:underline">
+                      info@themusicbugle.com
                     </a>
                   </p>
                 </div>
@@ -144,7 +147,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-[20px] font-prata text-gray-900 mb-2">Do you accept story submissions?</h3>
                 <p className="body-text">
-                  Yes! We welcome story tips and submissions. Please use the contact form and select &quot;Story Tip&quot; as your inquiry type. Include as much detail as possible about your story idea.
+                  Yes! We welcome story tips and submissions. Please use the contact form and put &quot;Story Tip&quot; in the subject line. Include as much detail as possible about your story idea.
                 </p>
               </div>
               <div>
@@ -156,7 +159,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-[20px] font-prata text-gray-900 mb-2">How can I advertise on The Music Bugle?</h3>
                 <p className="body-text">
-                  For advertising and sponsorship opportunities, please contact us at partnerships@themusicbugle.com with details about your brand and campaign.
+                  For advertising and sponsorship opportunities, please email info@themusicbugle.com with &quot;Partnership&quot; in the subject line and details about your brand and campaign.
                 </p>
               </div>
             </div>

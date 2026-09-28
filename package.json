@@ -66,5 +66,10 @@
     "postcss": "8.5.1",
     "tailwindcss": "^4.1.17",
     "typescript": "^5"
+  },
+  "overrides": {
+    "cacache": {
+      "tar": "^7.5.22"
+    }
   }
 }
