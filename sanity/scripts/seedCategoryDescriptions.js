@@ -1,8 +1,22 @@
-const path = require('path');
+// Seeds the reader-facing category descriptions shown on /category/* pages and in their meta description.
+// Deliberately separate from enrich-post's category-descriptions.json — those are classifier prompts and once leaked onto the live pages.
+// node --env-file=.env.local sanity/scripts/seedCategoryDescriptions.js [--yes]
+
 const { createClient } = require('@sanity/client');
 
-// Shared with functions/enrich-post/category-descriptions.json
-const DESCRIPTIONS = require(path.join(__dirname, '../../functions/enrich-post/category-descriptions.json'));
+const DESCRIPTIONS = {
+    'q-and-a': 'Conversations with artists, bands, and the people behind the music, in their own words.',
+    'album-reviews': 'Our take on new albums: what works, what doesn’t, and whether it deserves a spot in your rotation.',
+    news: 'Music news from around the scene: signings, lineup changes, label moves, and more.',
+    'upcoming-releases': 'Albums, EPs, and singles on the way, with release dates and first listens.',
+    'new-releases': 'Albums and EPs that just came out from independent and emerging artists.',
+    'notable-releases': 'New albums, EPs, and singles from the biggest names in music.',
+    'new-songs': 'New singles and tracks from independent and emerging artists.',
+    songs: 'A closer look at songs worth revisiting: the lyrics, the history, and the stories behind them.',
+    'music-videos': 'Music video premieres and the stories behind them.',
+    tours: 'Tour announcements, dates, and coverage from the road.',
+    books: 'Music books, from memoirs and biographies to histories of the scenes that shaped them.',
+};
 
 const client = createClient({
     projectId: process.env.SANITY_STUDIO_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
@@ -10,13 +24,14 @@ const client = createClient({
     useCdn: false,
     apiVersion: '2025-02-19',
     perspective: 'raw',
-    token: process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_API_READ_TOKEN,
+    token: process.env.SANITY_WRITE_TOKEN || process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_API_READ_TOKEN,
 });
 
 async function seedCategoryDescriptions() {
     if (!client.config().projectId) {
-        throw new Error('Set NEXT_PUBLIC_SANITY_PROJECT_ID (and SANITY_API_WRITE_TOKEN for patches).');
+        throw new Error('Set NEXT_PUBLIC_SANITY_PROJECT_ID (and SANITY_WRITE_TOKEN for patches).');
     }
+    const write = process.argv.includes('--yes');
 
     const slugs = Object.keys(DESCRIPTIONS);
     const categories = await client.fetch(
@@ -37,10 +52,10 @@ async function seedCategoryDescriptions() {
         }
         tx.patch(cat._id, (p) => p.set({ description: desired }));
         updated++;
-        console.log(`  Updating:  ${cat.slug}`);
+        console.log(`  Updating:  ${cat.slug}\n    - ${cat.description || '(empty)'}\n    + ${desired}`);
     }
 
-    if (updated > 0) {
+    if (updated > 0 && write) {
         await tx.commit();
     }
 
@@ -49,7 +64,7 @@ async function seedCategoryDescriptions() {
         console.warn(`\nMissing categories in Sanity (create them in Studio first): ${missing.join(', ')}`);
     }
 
-    console.log(`\nDone. Updated: ${updated}. Unchanged: ${categories.length - updated}.`);
+    console.log(`\n${write ? 'Done' : 'Dry run (pass --yes to write)'}. Updated: ${updated}. Unchanged: ${categories.length - updated}.`);
 }
 
 seedCategoryDescriptions().catch((err) => {
