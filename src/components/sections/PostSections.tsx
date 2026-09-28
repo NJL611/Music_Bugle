@@ -1,9 +1,13 @@
 'use client';
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { SanityDocument } from "next-sanity";
 import { DiscussionEmbed } from 'disqus-react';
 import { getPostImage, getPostImageOrFallback, formatDate, resolvePostPath } from "@/lib/utils";
+
+// Article-page sections: category feature grid, "More like this", and Disqus comments.
+// Client module because Disqus needs the browser; comments stay click-to-load for consent reasons.
 
 export function CategoryFeatureGrid({ posts }: { posts: SanityDocument[] }) {
     if (!posts || posts.length === 0) return null;
@@ -123,8 +127,27 @@ export function MoreLikeThis({ posts, currentPostId, limit = 4 }: MoreLikeThisPr
 }
 
 // --- Disqus Section ---
+// Click-to-load: Disqus's ad partners set ~56 third-party cookies on page load, before any consent choice.
 export function Disqus({ post }: { post: any }) {
+    const [open, setOpen] = useState(false);
     const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+
+    if (!open) {
+        return (
+            <div className="text-center py-6 border-t border-gray-200">
+                <button
+                    type="button"
+                    onClick={() => setOpen(true)}
+                    className="font-graphiknormal text-sm uppercase tracking-wide border border-gray-900 px-6 py-3 hover:bg-gray-900 hover:text-white transition-colors"
+                >
+                    Show comments
+                </button>
+                <p className="mt-3 text-xs text-gray-500 font-graphiklight">
+                    Comments are hosted by Disqus, which sets its own cookies once loaded.
+                </p>
+            </div>
+        );
+    }
 
     return (
         <DiscussionEmbed
