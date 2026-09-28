@@ -1,6 +1,6 @@
 /**
  * Single source of truth for post categorization in enrich-post.
- * Descriptions live in category-descriptions.json (also used by seedCategoryDescriptions.js).
+ * Descriptions live in category-descriptions.json. They are classifier prompts: never seed them into Sanity's public category.description.
  */
 
 import descriptions from './category-descriptions.json'

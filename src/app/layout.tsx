@@ -9,6 +9,9 @@ import { Analytics } from '@/components/layout/Analytics';
 
 import './styles.css';
 
+// Root layout: fonts, Termly consent, AdSense loader, analytics, and Studio visual editing.
+// Script order is load-bearing — Termly's Consent Mode defaults must run before any Google tag.
+
 export default async function RootLayout({
   children,
 }: {
@@ -25,10 +28,11 @@ export default async function RootLayout({
         <link rel="preload" href="/fonts/Prata-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
       </head>
       <body className="font-graphiknormal" suppressHydrationWarning>
-        {/* beforeInteractive hoists these into <head> in placement order: Termly's autoBlock must execute before the trackers. */}
+        {/* beforeInteractive hoists these into <head> in placement order: Termly's Consent Mode defaults must land before the trackers.
+            No autoBlock — it swallows Turbopack's runtime-loaded chunks, so React never hydrates (no menu, search, or feed footer). */}
         {TERMLY_WEBSITE_UUID && (
           <Script
-            src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`}
+            src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}`}
             data-name="termly-embed-banner"
             strategy="beforeInteractive"
           />
