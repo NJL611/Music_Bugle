@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Nav from "@/components/layout/Nav";
 import Image from 'next/image';
-import dynamic from "next/dynamic";
+import Footer from "@/components/layout/Footer";
 
 // STRIPE IMPORTS
 import CheckoutForm from "@/components/sections/CheckoutForm";
@@ -15,12 +15,6 @@ import { STRIPE_PUBLISHABLE_KEY } from "@/lib/constants";
 // No key (unconfigured build/preview) must not crash prerender — degrade the payment UI instead.
 const stripePromise = STRIPE_PUBLISHABLE_KEY ? loadStripe(STRIPE_PUBLISHABLE_KEY) : null;
 
-const Footer = dynamic(() => import("@/components/layout/Footer"), {
-    ssr: false,
-    loading: () => (
-        <div className="w-full py-12 text-center text-xs text-gray-400" />
-    ),
-});
 
 export default function SupportPage() {
     const [supportAmount, setSupportAmount] = useState<number | ''>(5);
@@ -83,7 +77,7 @@ export default function SupportPage() {
 
                             <div className="mt-8 p-6 bg-gray-50 rounded-sm border border-gray-200">
                                 <p className="text-sm text-gray-600 font-graphiklight leading-relaxed">
-                                    <strong className="font-graphiknormal text-gray-900">Note:</strong> Your support payment helps us maintain our independent music journalism platform. By supporting us, you're helping to keep quality music news accessible and ad-light. This is a support payment for content and services, not a charitable donation.
+                                    <strong className="font-graphiknormal text-gray-900">Note:</strong> Your support payment helps us maintain our independent music journalism platform. By supporting us, you&apos;re helping to keep quality music news accessible and ad-light. This is a support payment for content and services, not a charitable donation.
                                 </p>
                             </div>
                         </div>

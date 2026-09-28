@@ -49,13 +49,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {post?.tags?.map((tag: any) => {
             if (tag.slug) {
               return (
-                <Link href={`/tag/${tag.slug}`} key={tag._id} className="px-3 py-1 bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-full text-sm font-graphiknormal whitespace-nowrap">
+                <Link href={`/tag/${tag.slug}`} key={tag._id} className="px-3 py-1 bg-gray-100 hover:bg-theme-red hover:text-white transition-colors rounded-full text-sm font-graphiklight whitespace-nowrap">
                   {tag.title}
                 </Link>
               );
             }
             return (
-              <span key={tag._id} className="px-3 py-1 bg-gray-100 rounded-full text-sm font-graphiknormal whitespace-nowrap text-gray-500">
+              <span key={tag._id} className="px-3 py-1 bg-gray-100 rounded-full text-sm font-graphiklight whitespace-nowrap text-gray-500">
                 {tag.title}
               </span>
             );

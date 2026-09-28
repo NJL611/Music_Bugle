@@ -4,7 +4,7 @@ import { groq } from "next-sanity";
 
 // Full post data with complete body
 export const POSTS_QUERY = groq`
-  *[_type == "post" && defined(slug)] | order(publishedAt desc) [0...100] {
+  *[_type == "post" && defined(slug)] | order(coalesce(publishedAt, _createdAt) desc) [0...100] {
     _id,
     title,
     subtitle,
@@ -38,14 +38,14 @@ export const POSTS_QUERY = groq`
       "slug": slug.current,
       description
     }, []),
-    publishedAt,
+    "publishedAt": coalesce(publishedAt, _createdAt),
     _updatedAt
   }
 `;
 
 // Preview data with truncated body for lists/grids
 export const POSTS_PREVIEW_QUERY = groq`
-  *[_type == "post" && defined(slug)] | order(publishedAt desc) [0...100] {
+  *[_type == "post" && defined(slug)] | order(coalesce(publishedAt, _createdAt) desc) [0...100] {
     _id,
     title,
     subtitle,
@@ -67,7 +67,8 @@ export const POSTS_PREVIEW_QUERY = groq`
       _id,
       "slug": slug.current
     },
-    "body": body[0...1], 
+    // 3 blocks, not 1: migrated posts open with a "By …" byline paragraph that getPostExcerpt skips.
+    "body": body[0...3],
     "categories": coalesce(categories[]->{
       title,
       _id,
@@ -79,7 +80,7 @@ export const POSTS_PREVIEW_QUERY = groq`
       "slug": slug.current,
       description
     }, []),
-    publishedAt,
+    "publishedAt": coalesce(publishedAt, _createdAt),
     _updatedAt
   }
 `;
@@ -100,7 +101,8 @@ export const POST_QUERY = groq`
       },
       hotspot,
       crop,
-      alt
+      alt,
+      "credit": asset->creditLine
     },
     "author": author->{
       name,
@@ -129,7 +131,7 @@ export const POST_QUERY = groq`
       "slug": slug.current,
       description
     }, []),
-    publishedAt,
+    "publishedAt": coalesce(publishedAt, _createdAt),
     _updatedAt
   }
 `;
@@ -141,7 +143,7 @@ export const SEARCH_QUERY = groq`
     subtitle match $search ||
     categories[]->title match $search ||
     tags[]->title match $search
-  )] | order(publishedAt desc) [0...30] {
+  )] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
     _id,
     title,
     subtitle,
@@ -174,7 +176,7 @@ export const SEARCH_QUERY = groq`
       _id,
       "slug": slug.current
     }, []),
-    publishedAt,
+    "publishedAt": coalesce(publishedAt, _createdAt),
     _updatedAt
   }
 `;
@@ -191,7 +193,7 @@ export const TAG_QUERY = groq`
 `;
 
 export const POSTS_BY_TAG_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "tag" && slug.current == $slug]._id)] | order(publishedAt desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "tag" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
     _id,
     title,
     subtitle,
@@ -224,7 +226,7 @@ export const POSTS_BY_TAG_QUERY = groq`
       _id,
       "slug": slug.current
     }, []),
-    publishedAt,
+    "publishedAt": coalesce(publishedAt, _createdAt),
     _updatedAt
   }
 `;
@@ -249,7 +251,7 @@ export const CATEGORY_QUERY = groq`
 `;
 
 export const POSTS_BY_CATEGORY_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "category" && slug.current == $slug]._id)] | order(publishedAt desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "category" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
     _id,
     title,
     subtitle,
@@ -282,13 +284,14 @@ export const POSTS_BY_CATEGORY_QUERY = groq`
       _id,
       "slug": slug.current
     }, []),
-    publishedAt,
+    "publishedAt": coalesce(publishedAt, _createdAt),
     _updatedAt
   }
 `;
 
 export const ALL_CATEGORIES_QUERY = groq`
-  *[_type == "category" && defined(slug)] | order(title asc) {
+  *[_type == "category" && defined(slug) && slug.current != "trending"
+    && count(*[_type == "post" && !(_id in path("drafts.**")) && references(^._id)]) > 0] | order(title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -330,7 +333,8 @@ const POST_FEED_FIELDS = groq`
     _id,
     "slug": slug.current
   }, []),
-  publishedAt,
+  // WordPress imports carry publishedAt; Studio-authored posts only have Sanity's _createdAt.
+  "publishedAt": coalesce(publishedAt, _createdAt),
   _updatedAt
 `;
 
@@ -354,10 +358,9 @@ export const TRENDING_AUTO_POSTS_QUERY = groq`
   *[
     _type == "post" &&
     defined(slug) &&
-    defined(publishedAt) &&
-    publishedAt >= $cutoff &&
+    coalesce(publishedAt, _createdAt) >= $cutoff &&
     !(_id in $excludeIds)
-  ] | order(publishedAt desc) [0...$limit] {
+  ] | order(coalesce(publishedAt, _createdAt) desc) [0...$limit] {
     ${POST_FEED_FIELDS}
   }
 `;
@@ -383,16 +386,8 @@ export const AUTHOR_QUERY = groq`
   }
 `;
 
-export const ALL_AUTHORS_QUERY = groq`
-  *[_type == "author" && defined(slug)] | order(name asc) {
-    _id,
-    name,
-    "slug": slug.current
-  }
-`;
-
 export const POSTS_BY_AUTHOR_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(publishedAt desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
     ${POST_FEED_FIELDS}
   }
 `;
@@ -407,9 +402,9 @@ export const POST_SLUGS_QUERY = groq`
 `;
 
 export const SITEMAP_POSTS_QUERY = groq`
-  *[_type == "post" && defined(slug)] | order(publishedAt desc) {
+  *[_type == "post" && defined(slug)] | order(coalesce(publishedAt, _createdAt) desc) {
     "slug": slug.current,
-    publishedAt,
+    "publishedAt": coalesce(publishedAt, _createdAt),
     _updatedAt
   }
 `;

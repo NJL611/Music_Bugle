@@ -15,6 +15,8 @@ export const SHOWCASE_MODE = process.env.NEXT_PUBLIC_SITE_MODE !== 'full';
 export const NAV_ITEMS = SHOWCASE_MODE
     ? [
           { label: 'Q&A', link: '/category/q-and-a' },
+          { label: 'News', link: '/category/news' },
+          { label: 'Album Reviews', link: '/category/album-reviews' },
           { label: 'Trending', link: '/trending' },
           { label: 'Popular', link: '/popular' },
           { label: 'About', link: '/about' },
@@ -80,9 +82,10 @@ export const YOUTUBE_ID_REGEX = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/
 
 // --- Homepage Counts ---
 export const HOMEPAGE_COUNTS = {
-    CAROUSEL: 3,
-    TOP_STORY: 1,
-    SIDEBAR: 4,
+    LEAD: 1,
+    SECONDARY: 3,
+    HEADLINES: 3,
+    SIDEBAR: 3,
     NEW_RELEASES: 4,
     EDITORS_LARGE: 3,
     EDITORS_SMALL: 9,

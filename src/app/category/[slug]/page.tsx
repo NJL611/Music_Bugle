@@ -44,7 +44,8 @@ export default async function CategoryPage({ params }: PageProps) {
     fetchPopularSidebarPosts(),
   ]);
 
-  if (!category) {
+  // empty categories 404 so they aren't indexed as thin pages (AdSense "low value content")
+  if (!category || !posts?.length) {
     notFound();
   }
 

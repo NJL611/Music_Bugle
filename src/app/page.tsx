@@ -6,43 +6,55 @@ import { client } from "@sanity/lib/client";
 import { POSTS_PREVIEW_QUERY } from "@sanity/lib/queries";
 import Nav from "@/components/layout/Nav";
 import { distributePosts, distributePostsShowcase } from "@/lib/utils";
-import { TopStory, SidebarArticles } from "@/components/sections/HomeSections";
+import { fetchTrendingPosts } from "@/lib/fetchers";
+import { LeadStories, SidebarArticles } from "@/components/sections/HomeSections";
 import { SectionHeader } from "@/components/sections/SectionHeader";
 import { AdUnit } from "@/components/ui/AdUnit";
-import { AD_SIZES, SHOWCASE_MODE } from "@/lib/constants";
+import { HOMEPAGE_COUNTS, SHOWCASE_MODE } from "@/lib/constants";
 
 export const revalidate = 600;
 
-export default async function Home() {
-  const allPosts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
+// Trending auto-fill has a recency cutoff and can come back short, so the date-driven sidebar tops it up.
+// Imageless posts are skipped so every rail row gets a thumbnail.
+function buildTrendingRail(trending: SanityDocument[], fallback: SanityDocument[], exclude: (SanityDocument | null)[]) {
+  const seen = new Set(exclude.map((post) => post?._id));
+  return [...trending, ...fallback]
+    .filter((post) => {
+      if (!post.mainImage?.asset || seen.has(post._id)) return false;
+      seen.add(post._id);
+      return true;
+    })
+    .slice(0, HOMEPAGE_COUNTS.SIDEBAR);
+}
 
-  if (SHOWCASE_MODE) return <ShowcaseHome allPosts={allPosts} />;
+export default async function Home() {
+  const [allPosts, trending] = await Promise.all([
+    client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY),
+    fetchTrendingPosts(),
+  ]);
+
+  if (SHOWCASE_MODE) return <ShowcaseHome allPosts={allPosts} trending={trending.posts} />;
 
   const content = distributePosts(allPosts);
+  const rail = buildTrendingRail(trending.posts, content.sidebar, [content.lead, ...content.secondary, ...content.headlines]);
 
   return (
     <main className="bg-white min-h-screen">
       <Nav />
 
-      <div className="w-full mx-auto md:px-8 md:pt-6 pb-6 2xl:px-64">
+      <div className="w-full mx-auto md:px-8 pt-6 pb-6 2xl:px-64">
         <div className="flex flex-col lg:flex-row gap-8">
 
-          <div className="w-full lg:w-2/3 flex flex-col gap-8">
-            <div className="w-full md:overflow-hidden md:rounded-sm">
-              <Carousel posts={content.carousel} />
-            </div>
-
-            <div className="px-4 md:px-0">
-              {content.topStory && <TopStory post={content.topStory} />}
-            </div>
+          <div className="w-full lg:flex-1 lg:min-w-0 px-4 md:px-0">
+            <LeadStories lead={content.lead} secondary={content.secondary} headlines={content.headlines} />
           </div>
 
-          <div className="w-full lg:w-[31%] flex flex-col px-4 md:px-0">
+          <div className="w-full lg:w-[336px] lg:shrink-0 flex flex-col px-4 md:px-0">
             <AdUnit variant="sidebar" className="mb-6 rounded-sm" />
 
             <div className="mt-2">
-              <h4 className="text-lg   font-prata mb-4 border-b border-gray-200 pb-2">Latest News</h4>
-              <SidebarArticles posts={content.sidebar} />
+              <SectionHeader title="Trending" viewAllLink="/trending" className="mb-0!" />
+              <SidebarArticles posts={rail} />
             </div>
           </div>
 
@@ -92,7 +104,7 @@ export default async function Home() {
           title="Music Videos"
           viewAllLink="/category/music-videos"
         />
-        <MustReadSection posts={content.mustWatch} />
+        <MustReadSection posts={content.mustWatch} viewAllLink="/category/music-videos" />
       </div>
 
       <Footer posts={allPosts} />
@@ -100,81 +112,73 @@ export default async function Home() {
   );
 }
 
-// Every section here is date-driven so it always fills; the full layout's
-// category sections (news / releases / music-videos) are empty in this corpus.
-function ShowcaseHome({ allPosts }: { allPosts: SanityDocument[] }) {
+// Same section mix as the full layout, fed from the categories that actually have posts.
+function ShowcaseHome({ allPosts, trending }: { allPosts: SanityDocument[]; trending: SanityDocument[] }) {
   const content = distributePostsShowcase(allPosts);
+  const rail = buildTrendingRail(trending, content.sidebar, [content.lead, ...content.secondary, ...content.headlines]);
 
   return (
     <main className="bg-white min-h-screen">
       <Nav />
 
-      <div className="w-full mx-auto md:px-8 md:pt-6 pb-6 2xl:px-64">
+      <div className="w-full mx-auto md:px-8 pt-6 pb-6 2xl:px-64">
         <div className="flex flex-col lg:flex-row gap-8">
-          <div className="w-full lg:w-2/3 flex flex-col gap-8">
-            <div className="w-full md:overflow-hidden md:rounded-sm">
-              <Carousel posts={content.carousel} />
-            </div>
-
-            <div className="px-4 md:px-0">
-              {content.topStory && <TopStory post={content.topStory} />}
-            </div>
+          <div className="w-full lg:flex-1 lg:min-w-0 px-4 md:px-0">
+            <LeadStories lead={content.lead} secondary={content.secondary} headlines={content.headlines} />
           </div>
 
-          <div className="w-full lg:w-[31%] flex flex-col px-4 md:px-0">
+          <div className="w-full lg:w-[336px] lg:shrink-0 flex flex-col px-4 md:px-0">
             <AdUnit variant="sidebar" className="mb-6 rounded-sm" />
 
             <div className="mt-2">
-              <h4 className="text-lg font-prata mb-4 border-b border-gray-200 pb-2">Recent Stories</h4>
-              <SidebarArticles posts={content.sidebar} />
+              <SectionHeader title="Trending" viewAllLink="/trending" className="mb-0!" />
+              <SidebarArticles posts={rail} />
             </div>
           </div>
         </div>
 
         <div className="px-4 md:px-0">
           <PostFeed
-            posts={content.featured}
-            title="Q&A Interviews"
-            viewAllLink="/category/q-and-a"
+            posts={content.reviews}
+            title="Album Reviews"
+            viewAllLink="/category/album-reviews"
             columns={4}
             variant="grid"
           />
+
+          <div className="w-full mt-12">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="w-full lg:w-3/4">
+                <SectionHeader title="Q&A Interviews" viewAllLink="/category/q-and-a" />
+
+                <div className="mb-8">
+                  <PostFeed posts={content.interviewsLarge} columns={3} variant="grid" />
+                </div>
+
+                <PostFeed posts={content.interviewsSmall} columns={3} variant="list" layout="horizontal" />
+              </div>
+
+              <div className="w-full lg:w-1/4">
+                <div className="sticky top-4">
+                  <AdUnit variant="vertical" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <SupportBanner />
 
       <div className="w-full mx-auto px-4 md:px-8 py-6 2xl:px-64">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="w-full lg:w-3/4">
-            <PostFeed
-              posts={content.more}
-              title="More Interviews & Features"
-              viewAllLink="/category/q-and-a"
-              columns={3}
-              variant="grid"
-            />
-          </div>
-
-          <div className="w-full lg:w-1/4">
-            <div className="sticky top-4">
-              <AdUnit variant="vertical" />
-            </div>
-          </div>
-        </div>
+        <BottomSection posts={content.news} title="News" viewAllLink="/category/news" />
+        <MustReadSection posts={content.mustRead} viewAllLink="/category/q-and-a" />
       </div>
 
       <Footer posts={allPosts} />
     </main>
   );
 }
-
-const Carousel = dynamic(
-  () => import("@/components/sections/HomeSections").then((mod) => mod.Carousel),
-  {
-    loading: () => <div className="w-full aspect-video md:aspect-auto md:h-[450px] bg-[#444444] animate-pulse" />,
-  },
-);
 
 const PostFeed = dynamic(() => import("@/components/posts/PostFeed"), {
   loading: () => <div className="w-full min-h-[200px] animate-pulse bg-gray-100 rounded-sm" />,

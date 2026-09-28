@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { TwitterLogo, FacebookLogo, PinterestLogo, MailIcon } from '@/components/ui/Icons';
+
+const noopSubscribe = () => () => {};
 
 interface ShareButtonsProps {
     className?: string;
@@ -10,20 +12,15 @@ interface ShareButtonsProps {
 }
 
 export function ShareButtons({ className = '', itemClassName = '', title }: ShareButtonsProps) {
-    const [pageUrl, setPageUrl] = useState('');
-    const [pageTitle, setPageTitle] = useState('');
-
-    useEffect(() => {
-        setPageUrl(window.location.href);
-        setPageTitle(title || document.title);
-    }, [title]);
+    // server snapshot '' keeps SSR markup stable; the real URL fills in after hydration
+    const pageUrl = useSyncExternalStore(noopSubscribe, () => window.location.href, () => '');
 
     if (!pageUrl) {
         return <div className={`flex gap-2 ${className}`} aria-hidden="true" />;
     }
 
     const encodedUrl = encodeURIComponent(pageUrl);
-    const encodedTitle = encodeURIComponent(pageTitle);
+    const encodedTitle = encodeURIComponent(title || document.title);
 
     const shareLinks = [
         {

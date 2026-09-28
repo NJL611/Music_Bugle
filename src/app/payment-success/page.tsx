@@ -80,7 +80,7 @@ export default async function PaymentSuccess({
           {/* What's Next Section */}
           <div className="bg-gray-50 border border-gray-200 rounded-sm p-8 mb-12">
             <h2 className="text-[28px] font-prata text-gray-900 mb-6 text-center">
-              What's Next?
+              What&apos;s Next?
             </h2>
             <div className="space-y-4">
               <div className="flex items-start gap-4">

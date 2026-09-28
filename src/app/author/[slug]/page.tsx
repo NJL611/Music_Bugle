@@ -1,11 +1,22 @@
+// Author profile: photo, name, bio. Standalone (no post feed) while the site has a single author —
+// the feed duplicated the homepage; bring FeedLayout back if contributors are added.
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import type { Metadata } from "next";
-import { fetchAuthorData, fetchAuthorPosts, fetchPopularSidebarPosts } from "@/lib/fetchers";
-import FeedLayout from "@/components/layout/FeedLayout";
+import Nav from "@/components/layout/Nav";
+import { fetchAuthorData } from "@/lib/fetchers";
+import { urlForImage } from "@sanity/lib/image";
 import { METADATA, SITE_URL } from "@/lib/constants";
-import { bioToText, listingRobots } from "@/lib/utils";
+import { bioToText } from "@/lib/utils";
 
 type PageProps = { params: Promise<{ slug: string }> };
+
+const Footer = dynamic(() => import("@/components/layout/Footer"), {
+  loading: () => (
+    <div className="w-full py-12 text-center text-xs text-gray-400" />
+  ),
+});
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -15,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "Author Not Found" };
   }
 
-  const description = bioToText(author.bio) || `Articles by ${author.name} on ${METADATA.title}.`;
+  const description = bioToText(author.bio) || `${author.name}, ${METADATA.title}.`;
   const url = `${SITE_URL}/author/${slug}`;
 
   return {
@@ -28,7 +39,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "profile",
     },
     alternates: { canonical: url },
-    robots: listingRobots(author.postCount),
+    // bio-only page is thin; keep it out of the index (and sitemap) but let crawlers follow links
+    robots: { index: false, follow: true },
   };
 }
 
@@ -36,23 +48,46 @@ export const revalidate = 3600;
 
 export default async function AuthorPage({ params }: PageProps) {
   const { slug } = await params;
-
-  const [author, posts, popularPosts] = await Promise.all([
-    fetchAuthorData(slug),
-    fetchAuthorPosts(slug),
-    fetchPopularSidebarPosts(),
-  ]);
+  const author = await fetchAuthorData(slug);
 
   if (!author) {
     notFound();
   }
 
+  const bio = bioToText(author.bio);
+  const photo = author.image ? urlForImage(author.image) : null;
+
   return (
-    <FeedLayout
-      title={author.name}
-      description={bioToText(author.bio)}
-      mainPosts={posts || []}
-      popularPosts={popularPosts}
-    />
+    <main className="bg-white min-h-screen">
+      <Nav />
+
+      <div className="w-full mx-auto px-8 py-12 2xl:px-64">
+        <div className="max-w-3xl mx-auto text-center">
+          {photo && (
+            <Image
+              src={photo}
+              alt={author.image?.alt || author.name}
+              width={160}
+              height={160}
+              className="w-40 h-40 rounded-full object-cover mx-auto mb-8"
+              priority
+            />
+          )}
+          <h1 className="text-[42px] md:text-[56px] font-abril text-gray-900 mb-2 leading-tight">
+            {author.name}
+          </h1>
+          <p className="text-sm uppercase tracking-widest text-gray-500 font-graphiknormal mb-8">
+            Creator, {METADATA.title}
+          </p>
+          {bio && (
+            <p className="text-lg md:text-xl text-gray-600 font-graphiklight leading-relaxed text-left md:text-center">
+              {bio}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <Footer />
+    </main>
   );
 }
