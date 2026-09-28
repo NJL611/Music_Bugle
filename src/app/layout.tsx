@@ -6,6 +6,7 @@ import { GoogleTagManager } from '@next/third-parties/google';
 import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
 import { Analytics } from '@/components/layout/Analytics';
+import { TermlyInit } from '@/components/layout/TermlyInit';
 
 import './styles.css';
 
@@ -29,7 +30,7 @@ export default async function RootLayout({
       </head>
       <body className="font-graphiknormal" suppressHydrationWarning>
         {/* beforeInteractive hoists these into <head> in placement order: Termly's Consent Mode defaults must land before the trackers.
-            No autoBlock — it swallows Turbopack's runtime-loaded chunks, so React never hydrates (no menu, search, or feed footer). */}
+            No autoBlock — its createElement override swallows Turbopack's runtime chunks, so React never hydrates. */}
         {TERMLY_WEBSITE_UUID && (
           <Script
             src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}`}
@@ -37,6 +38,7 @@ export default async function RootLayout({
             strategy="beforeInteractive"
           />
         )}
+        {TERMLY_WEBSITE_UUID && <TermlyInit />}
         {ADSENSE_PUBLISHER_ID && (
           <Script
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}
