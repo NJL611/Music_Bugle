@@ -1,3 +1,6 @@
+// Next config: redirects (www -> bare, legacy aliases), image hosts, dev-only headers and wrappers.
+// Legacy WordPress permalinks are NOT here — src/proxy.ts owns them via the slug map.
+
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
@@ -39,23 +42,19 @@ const nextConfig = {
       },
     ];
   },
+  // Old WordPress dated permalinks are handled in src/proxy.ts (slug map); redirects here would shadow it.
   async redirects() {
     return [
+      // www serves the same pages; canonicals already point at the bare domain, this makes it one host.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.themusicbugle.com' }],
+        destination: 'https://themusicbugle.com/:path*',
+        permanent: true,
+      },
       {
         source: '/category/trending',
         destination: '/trending',
-        permanent: true,
-      },
-      // Alias known dead paths so they don't become soft-404s.
-      {
-        source: '/videos',
-        destination: '/category/music-videos',
-        permanent: true,
-      },
-      // Old WordPress dated permalinks -> new article path; slugs are identical.
-      {
-        source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug',
-        destination: '/article/:slug',
         permanent: true,
       },
     ];

@@ -1,3 +1,6 @@
+// Published article page with NewsArticle JSON-LD, tags, author bio and related posts.
+// force-static over 800+ slugs; drafts render at /preview/[slug] instead so this stays static.
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import nextDynamic from "next/dynamic";
@@ -10,7 +13,7 @@ import { MoreLikeThis } from "@/components/sections/PostSections";
 import Post from "@/components/posts/Post";
 import { NewsArticleJsonLd } from "@/components/seo/JsonLd";
 import { SITE_URL, METADATA } from "@/lib/constants";
-import { bioToText } from "@/lib/utils";
+import { bioToText, usableImageUrl } from "@/lib/utils";
 
 export const dynamic = 'force-static';
 export const revalidate = 86400;
@@ -34,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         title={post.title}
         description={post.description || post.subtitle}
         url={articleUrl}
-        image={post.mainImage?.asset?.url || post.featured_image}
+        image={post.mainImage?.asset?.url || usableImageUrl(post.featured_image) || METADATA.image}
         datePublished={post.publishedAt}
         dateModified={post._updatedAt}
         authorName={post.author?.name}

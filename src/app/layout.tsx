@@ -87,7 +87,5 @@ export const metadata: Metadata = {
     images: METADATA.image,
     card: 'summary_large_image',
   },
-  alternates: {
-    canonical: SITE_URL,
-  },
+  // No root canonical: every page inherits it, and pages without their own were canonicalizing to the homepage.
 };
