@@ -15,6 +15,8 @@ export const SHOWCASE_MODE = process.env.NEXT_PUBLIC_SITE_MODE !== 'full';
 export const NAV_ITEMS = SHOWCASE_MODE
     ? [
           { label: 'Q&A', link: '/category/q-and-a' },
+          { label: 'News', link: '/category/news' },
+          { label: 'Album Reviews', link: '/category/album-reviews' },
           { label: 'Trending', link: '/trending' },
           { label: 'Popular', link: '/popular' },
           { label: 'About', link: '/about' },
