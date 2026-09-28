@@ -1,3 +1,6 @@
+// About page: mission, coverage areas, values. AdSense reviewers read it as a trust page,
+// so the coverage list must only name sections that actually have posts.
+
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
 import { SITE_URL, METADATA } from "@/lib/constants";
@@ -12,6 +15,7 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/about`,
     type: "website",
   },
+  alternates: { canonical: `${SITE_URL}/about` },
 };
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {
@@ -64,22 +68,16 @@ export default function AboutPage() {
               </p>
               <ul className="list-disc list-inside space-y-3 mb-4 ml-4">
                 <li className="pl-2">
-                  <strong className="font-graphiknormal">News & Updates:</strong> Stay informed with the latest breaking news, tour announcements, and industry developments.
+                  <strong className="font-graphiknormal">Artist Interviews:</strong> Exclusive Q&amp;As with musicians, producers, and industry professionals — hundreds of conversations, in the artists&apos; own words.
                 </li>
                 <li className="pl-2">
-                  <strong className="font-graphiknormal">Artist Interviews:</strong> Exclusive conversations with musicians, producers, and industry professionals.
+                  <strong className="font-graphiknormal">Album Reviews:</strong> Our take on new releases across genres.
                 </li>
                 <li className="pl-2">
-                  <strong className="font-graphiknormal">Music Videos:</strong> Discover and explore the visual artistry behind your favorite songs.
+                  <strong className="font-graphiknormal">News:</strong> The Bugle Blotter, a regular roundup of news from around the music world.
                 </li>
                 <li className="pl-2">
-                  <strong className="font-graphiknormal">Album Reviews:</strong> In-depth analysis and thoughtful critiques of new releases across all genres.
-                </li>
-                <li className="pl-2">
-                  <strong className="font-graphiknormal">Upcoming Releases:</strong> Get a preview of what&apos;s coming next in the music world.
-                </li>
-                <li className="pl-2">
-                  <strong className="font-graphiknormal">Tours & Live Events:</strong> Coverage of concerts, festivals, and live performances.
+                  <strong className="font-graphiknormal">New & Upcoming Releases:</strong> Albums, EPs, and singles worth knowing about, from independent and emerging artists.
                 </li>
               </ul>
             </div>

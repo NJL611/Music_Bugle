@@ -1,3 +1,6 @@
+// Cookie preferences page: reopens the Termly consent manager.
+// Sets its own canonical: the root layout no longer provides one.
+
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
 import { SITE_URL } from "@/lib/constants";
@@ -12,6 +15,7 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/consent-preferences`,
         type: "website",
     },
+    alternates: { canonical: `${SITE_URL}/consent-preferences` },
 };
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {
