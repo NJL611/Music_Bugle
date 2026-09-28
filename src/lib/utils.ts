@@ -89,19 +89,36 @@ function takeCategoryPosts(
     return takeUniquePosts(categoryPosts, count, usedIds);
 }
 
-// Date-driven split for showcase mode: the live corpus is ~99% one category,
-// so the category-keyed sections of distributePosts would come back empty.
-// Visual slots draw imaged posts first — only ~40% of the corpus has one.
+// Showcase mode keys sections to the only categories with posts (q-and-a, news, album-reviews);
+// the full layout's release/music-video categories are empty. Visual slots need an image.
 export function distributePostsShowcase(posts: SanityDocument[] = []) {
     const usedIds = new Set<string>();
     const imaged = posts.filter((post) => post.mainImage?.asset);
+    const lead = takeUniquePosts(imaged, HOMEPAGE_COUNTS.LEAD, usedIds)[0] || null;
+    const secondary = takeUniquePosts(imaged, HOMEPAGE_COUNTS.SECONDARY, usedIds);
+    const headlines = takeUniquePosts(imaged, HOMEPAGE_COUNTS.HEADLINES, usedIds);
+    const reviews = takeCategoryPosts(imaged, 'album-reviews', HOMEPAGE_COUNTS.NEW_RELEASES, usedIds);
+    const interviews = takeCategoryPosts(
+        imaged,
+        'q-and-a',
+        HOMEPAGE_COUNTS.EDITORS_LARGE + HOMEPAGE_COUNTS.EDITORS_SMALL,
+        usedIds,
+    );
+    const news = takeCategoryPosts(imaged, 'news', HOMEPAGE_COUNTS.BOTTOM_SECTION, usedIds);
+    const mustRead = takeCategoryPosts(imaged, 'q-and-a', HOMEPAGE_COUNTS.MUST_WATCH, usedIds);
+    // Taken last so the Trending rail's backfill never steals from a category section.
+    const sidebar = takeUniquePosts(imaged, HOMEPAGE_COUNTS.SIDEBAR, usedIds);
+
     return {
-        lead: takeUniquePosts(imaged, HOMEPAGE_COUNTS.LEAD, usedIds)[0] || null,
-        secondary: takeUniquePosts(imaged, HOMEPAGE_COUNTS.SECONDARY, usedIds),
-        headlines: takeUniquePosts(imaged, HOMEPAGE_COUNTS.HEADLINES, usedIds),
-        featured: takeUniquePosts(imaged, 12, usedIds),
-        sidebar: takeUniquePosts(posts, HOMEPAGE_COUNTS.SIDEBAR, usedIds),
-        more: takeUniquePosts(imaged, 12, usedIds),
+        lead,
+        secondary,
+        headlines,
+        sidebar,
+        reviews,
+        interviewsLarge: interviews.slice(0, HOMEPAGE_COUNTS.EDITORS_LARGE),
+        interviewsSmall: interviews.slice(HOMEPAGE_COUNTS.EDITORS_LARGE),
+        news,
+        mustRead,
     };
 }
 
