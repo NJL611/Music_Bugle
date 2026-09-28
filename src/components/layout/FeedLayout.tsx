@@ -1,21 +1,17 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import type { SanityDocument } from "next-sanity";
 import { FeedPostRow } from "@/components/posts/PostFeed";
 import { PopularPostsWidget } from "@/components/layout/Sidebar";
 import { SidebarAdWidget } from "@/components/ui/AdUnit";
 
 import Nav from "@/components/layout/Nav";
+import Footer from "@/components/layout/Footer";
 import { CategoryFeatureGrid } from "@/components/sections/PostSections";
 import { MIN_INDEXABLE_LISTING_POSTS } from "@/lib/utils";
 
-const Footer = dynamic(() => import("@/components/layout/Footer"), {
-    ssr: false,
-    loading: () => (
-        <div className="w-full py-12 text-center text-xs text-gray-400" />
-    ),
-});
+// Shared shell for category, tag, trending and popular listings: header, feature grid, feed, sidebar, footer.
+// Footer stays a static import so its legal links are in the server HTML, not left to hydration.
 
 interface FeedLayoutProps {
     title: string;
