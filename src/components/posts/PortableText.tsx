@@ -1,3 +1,6 @@
+// Portable Text renderers for article bodies: blocks, images, spacers, YouTube, in-body ad slots.
+// YouTube embeds use youtube-nocookie.com so a bare page view sets no Google cookies before consent.
+
 import Image from "next/image";
 import { PortableTextComponents } from "@portabletext/react";
 import { AdUnit } from "@/components/ui/AdUnit";
@@ -12,7 +15,7 @@ function YouTubeEmbed({ videoId }: { videoId: string }) {
     return (
         <div className="youtube-container my-6 relative max-w-[750px] mx-auto" style={{ paddingBottom: '56.25%', height: 0 }}>
             <iframe
-                src={`https://www.youtube.com/embed/${videoId}`}
+                src={`https://www.youtube-nocookie.com/embed/${videoId}`}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
