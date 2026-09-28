@@ -15,11 +15,12 @@ import { HOMEPAGE_COUNTS, SHOWCASE_MODE } from "@/lib/constants";
 export const revalidate = 600;
 
 // Trending auto-fill has a recency cutoff and can come back short, so the date-driven sidebar tops it up.
+// Imageless posts are skipped so every rail row gets a thumbnail.
 function buildTrendingRail(trending: SanityDocument[], fallback: SanityDocument[], exclude: (SanityDocument | null)[]) {
   const seen = new Set(exclude.map((post) => post?._id));
   return [...trending, ...fallback]
     .filter((post) => {
-      if (seen.has(post._id)) return false;
+      if (!post.mainImage?.asset || seen.has(post._id)) return false;
       seen.add(post._id);
       return true;
     })
@@ -103,7 +104,7 @@ export default async function Home() {
           title="Music Videos"
           viewAllLink="/category/music-videos"
         />
-        <MustReadSection posts={content.mustWatch} />
+        <MustReadSection posts={content.mustWatch} viewAllLink="/category/music-videos" />
       </div>
 
       <Footer posts={allPosts} />
@@ -111,8 +112,7 @@ export default async function Home() {
   );
 }
 
-// Every section here is date-driven so it always fills; the full layout's
-// category sections (news / releases / music-videos) are empty in this corpus.
+// Same section mix as the full layout, fed from the categories that actually have posts.
 function ShowcaseHome({ allPosts, trending }: { allPosts: SanityDocument[]; trending: SanityDocument[] }) {
   const content = distributePostsShowcase(allPosts);
   const rail = buildTrendingRail(trending, content.sidebar, [content.lead, ...content.secondary, ...content.headlines]);
@@ -139,35 +139,40 @@ function ShowcaseHome({ allPosts, trending }: { allPosts: SanityDocument[]; tren
 
         <div className="px-4 md:px-0">
           <PostFeed
-            posts={content.featured}
-            title="Q&A Interviews"
-            viewAllLink="/category/q-and-a"
+            posts={content.reviews}
+            title="Album Reviews"
+            viewAllLink="/category/album-reviews"
             columns={4}
             variant="grid"
           />
+
+          <div className="w-full mt-12">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="w-full lg:w-3/4">
+                <SectionHeader title="Q&A Interviews" viewAllLink="/category/q-and-a" />
+
+                <div className="mb-8">
+                  <PostFeed posts={content.interviewsLarge} columns={3} variant="grid" />
+                </div>
+
+                <PostFeed posts={content.interviewsSmall} columns={3} variant="list" layout="horizontal" />
+              </div>
+
+              <div className="w-full lg:w-1/4">
+                <div className="sticky top-4">
+                  <AdUnit variant="vertical" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <SupportBanner />
 
       <div className="w-full mx-auto px-4 md:px-8 py-6 2xl:px-64">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="w-full lg:w-3/4">
-            <PostFeed
-              posts={content.more}
-              title="More Interviews & Features"
-              viewAllLink="/category/q-and-a"
-              columns={3}
-              variant="grid"
-            />
-          </div>
-
-          <div className="w-full lg:w-1/4">
-            <div className="sticky top-4">
-              <AdUnit variant="vertical" />
-            </div>
-          </div>
-        </div>
+        <BottomSection posts={content.news} title="News" viewAllLink="/category/news" />
+        <MustReadSection posts={content.mustRead} viewAllLink="/category/q-and-a" />
       </div>
 
       <Footer posts={allPosts} />

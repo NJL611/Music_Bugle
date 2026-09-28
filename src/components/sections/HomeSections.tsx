@@ -283,13 +283,13 @@ export function BottomSection({
     );
 }
 
-export function MustReadSection({ posts }: { posts: SanityDocument[] }) {
+export function MustReadSection({ posts, viewAllLink }: { posts: SanityDocument[]; viewAllLink: string }) {
     if (!posts || posts.length === 0) return null;
 
     return (
         <div className="w-full py-12 mb-12">
             <div className=" mx-auto">
-                <SectionHeader title="Must Read" viewAllLink="/category/music-videos" />
+                <SectionHeader title="Must Read" viewAllLink={viewAllLink} />
 
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -323,15 +323,29 @@ export function MustReadSection({ posts }: { posts: SanityDocument[] }) {
                         {posts.slice(2, 4).map((post) => {
                             const previewText = getPostExcerpt(post);
                             return (
-                                <Link key={post._id} href={resolvePostPath(post)} className="flex flex-col group cursor-pointer border-b border-gray-100 pb-6 last:border-0 last:pb-0">
-                                    <h3 className="text-xl   font-prata text-black mb-3 group-hover:text-theme-red transition-colors leading-tight">
-                                        {post.title}
-                                    </h3>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-6 mb-3 font-graphiklight">
-                                        {previewText}
-                                    </p>
-                                    <div className="mt-auto">
-                                        <PostMeta author={post.author} publishedAt={post.publishedAt} className="text-gray-600 text-xs" />
+                                <Link key={post._id} href={resolvePostPath(post)} className="flex gap-4 group cursor-pointer border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                                    {/* Thumbnail beside the text, not above it, so this column stays level with the two cards on the left. */}
+                                    <div className="relative w-[120px] aspect-3/2 shrink-0 overflow-hidden rounded-sm">
+                                        <Image
+                                            src={getPostImageOrFallback(post, 240, 160)}
+                                            alt=""
+                                            fill
+                                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                            loading="lazy"
+                                            quality={65}
+                                            sizes="120px"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col min-w-0">
+                                        <h3 className="text-xl   font-prata text-black mb-3 group-hover:text-theme-red transition-colors leading-tight">
+                                            {post.title}
+                                        </h3>
+                                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-3 font-graphiklight">
+                                            {previewText}
+                                        </p>
+                                        <div className="mt-auto">
+                                            <PostMeta author={post.author} publishedAt={post.publishedAt} className="text-gray-600 text-xs" />
+                                        </div>
                                     </div>
                                 </Link>
                             );
