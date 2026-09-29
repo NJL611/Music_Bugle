@@ -1,12 +1,10 @@
-// Author profile: photo, name, bio. Standalone (no post feed) while the site has a single author —
+// Author profile: name, bio. Standalone (no post feed) while the site has a single author —
 // the feed duplicated the homepage; bring FeedLayout back if contributors are added.
 import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import type { Metadata } from "next";
 import Nav from "@/components/layout/Nav";
 import { fetchAuthorData } from "@/lib/fetchers";
-import { urlForImage } from "@sanity/lib/image";
 import { METADATA, SITE_URL } from "@/lib/constants";
 import { bioToText } from "@/lib/utils";
 
@@ -55,7 +53,6 @@ export default async function AuthorPage({ params }: PageProps) {
   }
 
   const bio = bioToText(author.bio);
-  const photo = author.image ? urlForImage(author.image) : null;
 
   return (
     <main className="bg-white min-h-screen">
@@ -63,16 +60,6 @@ export default async function AuthorPage({ params }: PageProps) {
 
       <div className="w-full mx-auto px-8 py-12 2xl:px-64">
         <div className="max-w-3xl mx-auto text-center">
-          {photo && (
-            <Image
-              src={photo}
-              alt={author.image?.alt || author.name}
-              width={160}
-              height={160}
-              className="w-40 h-40 rounded-full object-cover mx-auto mb-8"
-              priority
-            />
-          )}
           <h1 className="text-[42px] md:text-[56px] font-abril text-gray-900 mb-2 leading-tight">
             {author.name}
           </h1>
