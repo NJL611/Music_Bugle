@@ -156,7 +156,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         description: meta.description || meta.subtitle || METADATA.description,
         images: meta.mainImage?.asset.url || METADATA.image,
         card: 'summary_large_image',
-        site: METADATA.twitterHandle,
       },
       alternates: {
         canonical: articleUrl,

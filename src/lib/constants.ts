@@ -59,13 +59,11 @@ export const FOOTER_COMPANY_ITEMS = [
     { label: 'Cookie Preferences', link: '/consent-preferences' },
 ];
 
-/** Profile links for footer/contact. Omit env vars for networks you do not use. */
+/** Profile links for footer/contact and Organization JSON-LD sameAs. Only list accounts that exist. */
 export const SOCIAL_LINKS = [
-    { label: 'Facebook', href: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK ?? '' },
-    { label: 'Twitter', href: process.env.NEXT_PUBLIC_SOCIAL_TWITTER ?? 'https://twitter.com/TheMusicBugle' },
-    { label: 'Instagram', href: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM ?? '' },
-    { label: 'Pinterest', href: process.env.NEXT_PUBLIC_SOCIAL_PINTEREST ?? '' },
-].filter((link) => link.href.length > 0);
+    { label: 'Facebook', href: 'https://www.facebook.com/TheMusicBugle/' },
+    { label: 'Instagram', href: 'https://www.instagram.com/the_music_bugle/' },
+];
 
 export const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'info@themusicbugle.com';
 
@@ -110,7 +108,6 @@ export const METADATA = {
     title: 'The Music Bugle',
     description: 'Music interviews, artist profiles, and features.',
     image: `${SITE_URL}/og-preview.jpg`,
-    twitterHandle: '@TheMusicBugle',
 };
 
 // --- Ad Sizes ---
