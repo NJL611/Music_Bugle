@@ -57,6 +57,12 @@ const nextConfig = {
         destination: '/trending',
         permanent: true,
       },
+      // WordPress served its feed at /feed/; old subscribers still poll it.
+      {
+        source: '/feed',
+        destination: '/feed.xml',
+        permanent: true,
+      },
     ];
   },
   images: {
