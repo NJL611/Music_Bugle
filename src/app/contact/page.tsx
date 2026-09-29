@@ -33,7 +33,6 @@ export const metadata: Metadata = {
     title: "Contact Us - The Music Bugle",
     description: "Contact The Music Bugle for music news inquiries, story tips, press requests, or feedback. Reach out via our contact form or email.",
     images: [METADATA.image],
-    creator: METADATA.twitterHandle,
   },
   alternates: {
     canonical: `${SITE_URL}/contact`,
