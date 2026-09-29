@@ -6,7 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import { AdUnit } from "@/components/ui/AdUnit";
 import { ShareButtons } from "@/components/ui/Primitives";
 import { portableText } from "@/components/posts/PortableText";
-import { formatDate, sanityImageBuilder, usableImageUrl } from "@/lib/utils";
+import { blockText, cleanPostBody, formatDate, sanityImageBuilder, usableImageUrl } from "@/lib/utils";
 
 const AD_INTERVAL = 8;
 const MIN_PARAGRAPHS_FOR_ADS = 8;
@@ -23,18 +23,7 @@ export default function Post({ post, posts, spacing }: Props) {
   const { title, subtitle, mainImage, body, featured_image, author, publishedAt, categories } = post;
   const primaryCategory = categories?.[0];
 
-  // WordPress imports open with a "By Author" line plus empty <p><br/></p> spacers; the header
-  // already shows the author, and the Spacer block now owns deliberate gaps.
-  const blockText = (b: PortableTextBlock) =>
-    b._type === "block" && (b.children as any[]).every((c) => c._type === "span")
-      ? (b.children as any[]).map((c) => c.text ?? "").join("").trim()
-      : null;
-  const firstContent = (body ?? []).findIndex((b: PortableTextBlock) => {
-    const t = blockText(b);
-    return !(t === "" || (t && t.length < 60 && /^(written\s+)?by\s+\S/i.test(t)));
-  });
-  const cleanBody: PortableTextBlock[] =
-    firstContent < 0 ? [] : body.slice(firstContent).filter((b: PortableTextBlock) => blockText(b) !== "");
+  const cleanBody = cleanPostBody(body);
 
   const paragraphCount =
     cleanBody.filter(
