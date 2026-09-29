@@ -72,10 +72,20 @@ function escapeXml(value: string): string {
     .replace(/"/g, '&quot;');
 }
 
+// Instagram rejects images outside 4:5–1.91:1 (4 of the first 50 were 2:3 portraits), so only those get cropped, around the Studio hotspot.
+function leadImageUrl(mainImage: SanityDocument['mainImage']): string {
+  // Upscaling is deliberate here: Flipboard rejects lead images under 400px.
+  const image = imageFromSource(mainImage).width(1200).format('jpg').quality(85);
+  const [w, h] = mainImage.asset._ref.split('-')[2].split('x').map(Number);
+  const { top = 0, bottom = 0, left = 0, right = 0 } = mainImage.crop ?? {};
+  const ratio = (w * (1 - left - right)) / (h * (1 - top - bottom));
+  const clamped = Math.min(Math.max(ratio, 0.8), 1.91);
+  return (clamped === ratio ? image : image.height(Math.round(1200 / clamped)).fit('crop')).url();
+}
+
 function toItem(post: SanityDocument): string {
   const url = `${SITE_URL}/article/${post.slug}`;
-  // Upscaling is deliberate here: Flipboard rejects lead images under 400px.
-  const image = imageFromSource(post.mainImage).width(1200).format('jpg').quality(85).url();
+  const image = leadImageUrl(post.mainImage);
   const excerpt = getPostExcerpt(post);
   // A reference to a deleted category resolves to null.
   const categories: string[] = post.categories.filter(Boolean);
