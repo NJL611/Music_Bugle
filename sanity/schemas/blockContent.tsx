@@ -5,6 +5,7 @@ import {
   defineType,
   defineArrayMember,
   isKeySegment,
+  isPortableTextTextBlock,
   type InputProps,
   type KeyedSegment,
   type PortableTextInputProps,
@@ -13,7 +14,7 @@ import {
 import {ImageIcon} from '@sanity/icons/Image'
 import {PlayIcon} from '@sanity/icons/Play'
 import {ExpandIcon} from '@sanity/icons/Expand'
-import {Button, Stack} from '@sanity/ui'
+import {Button, Stack, Text} from '@sanity/ui'
 
 // The condensed editor collapses insert buttons into the "..." overflow, so editors had to go
 // fullscreen to find YouTube. This pins buttons under the editor that insert after the block the
@@ -35,9 +36,18 @@ function BlockContentInput(inputProps: InputProps) {
     }
     if (open) props.onItemOpen([...props.path, {_key}])
   }
+  // Writers had to paste drafts into another app to check length against review targets.
+  const words = (props.value ?? []).reduce((n, block) => {
+    if (!isPortableTextTextBlock<{text?: string}>(block)) return n
+    const text = block.children.map((c) => c.text ?? '').join('')
+    return n + text.split(/\s+/).filter(Boolean).length
+  }, 0)
   return (
     <Stack gap={2}>
       {props.renderDefault(props)}
+      <Text size={1} muted>
+        {words.toLocaleString()} {words === 1 ? 'word' : 'words'}
+      </Text>
       <Button
         icon={PlayIcon}
         text="YouTube video"
