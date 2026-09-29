@@ -408,3 +408,24 @@ export const SITEMAP_POSTS_QUERY = groq`
     _updatedAt
   }
 `;
+
+// Imageless posts are left out: Flipboard and feed readers would render them as logo tiles.
+export const RSS_POSTS_QUERY = groq`
+  *[_type == "post" && defined(slug) && defined(mainImage.asset)] | order(coalesce(publishedAt, _createdAt) desc) [0...50] {
+    title,
+    subtitle,
+    "slug": slug.current,
+    mainImage,
+    "body": body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        "alt": coalesce(alt, asset->altText, asset->description),
+        "credit": asset->creditLine
+      }
+    },
+    "author": author->name,
+    "categories": coalesce(categories[]->title, []),
+    "publishedAt": coalesce(publishedAt, _createdAt)
+  }
+`;

@@ -17,7 +17,10 @@ import type { Metadata } from "next";
 export const revalidate = 600;
 
 export const metadata: Metadata = {
-  alternates: { canonical: SITE_URL },
+  alternates: {
+    canonical: SITE_URL,
+    types: { "application/rss+xml": `${SITE_URL}/feed.xml` },
+  },
 };
 
 // Trending auto-fill has a recency cutoff and can come back short, so the date-driven sidebar tops it up.

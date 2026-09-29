@@ -1,4 +1,5 @@
 import type { SanityDocument } from "next-sanity";
+import type { PortableTextBlock } from "@portabletext/react";
 import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { dataset, projectId } from "@sanity/env";
@@ -31,6 +32,25 @@ export function getPostExcerpt(post: SanityDocument): string | undefined {
         ?.map((block: any) => block?.children?.[0]?.text)
         .find((text: string | undefined) => text && !(text.length < 60 && BYLINE_REGEX.test(text)));
     return post.subtitle || bodyText || post.description;
+}
+
+/** Plain text of a span-only block; null for images, embeds and other non-text blocks. */
+export function blockText(b: PortableTextBlock): string | null {
+    return b._type === "block" && (b.children as any[]).every((c) => c._type === "span")
+        ? (b.children as any[]).map((c) => c.text ?? "").join("").trim()
+        : null;
+}
+
+// WordPress imports open with a "By Author" line plus empty <p><br/></p> spacers; the article
+// header and feed item already carry the author, and the Spacer block now owns deliberate gaps.
+export function cleanPostBody(body: PortableTextBlock[] | null = []): PortableTextBlock[] {
+    // GROQ returns null, not undefined, for a post with no body.
+    if (!body) return [];
+    const firstContent = body.findIndex((b) => {
+        const t = blockText(b);
+        return !(t === "" || (t && t.length < 60 && /^(written\s+)?by\s+\S/i.test(t)));
+    });
+    return firstContent < 0 ? [] : body.slice(firstContent).filter((b) => blockText(b) !== "");
 }
 
 export function getPostImage(post: SanityDocument, width = 1200, height?: number) {
