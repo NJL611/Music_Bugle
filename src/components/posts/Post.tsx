@@ -48,10 +48,6 @@ export default function Post({ post, posts, spacing }: Props) {
   );
   const readMinutes = Math.max(1, Math.round(wordCount / WORDS_PER_MINUTE));
 
-  const authorImageUrl = author?.image?.asset
-    ? sanityImageBuilder.image(author.image).width(72).height(72).fit("crop").auto("format").url()
-    : null;
-
   const processedBody: PortableTextBlock[] = [];
   let paragraphCounter = 0;
 
@@ -110,15 +106,6 @@ export default function Post({ post, posts, spacing }: Props) {
           {publishedAt ? (
             <div className="flex items-center justify-between gap-4 pb-6 mb-8 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                {authorImageUrl ? (
-                  <Image
-                    src={authorImageUrl}
-                    alt=""
-                    width={36}
-                    height={36}
-                    className="rounded-full w-9 h-9 object-cover"
-                  />
-                ) : null}
                 {/* Every node carries its own size: the global `* { font-size: 15px }` otherwise wins over inheritance. */}
                 <div className="leading-snug">
                   {author?.name ? (
