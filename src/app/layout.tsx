@@ -3,15 +3,27 @@ import Script from 'next/script';
 import { draftMode } from 'next/headers';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import { GoogleTagManager } from '@next/third-parties/google';
-import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, TERMLY_WEBSITE_UUID, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
+import { SITE_URL, METADATA, GOOGLE_ANALYTICS_ID, GOOGLE_TAG_MANAGER_ID, ADSENSE_PUBLISHER_ID } from '@/lib/constants';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
 import { Analytics } from '@/components/layout/Analytics';
-import { TermlyInit } from '@/components/layout/TermlyInit';
 
 import './styles.css';
 
-// Root layout: fonts, Termly consent, AdSense loader, analytics, and Studio visual editing.
-// Script order is load-bearing — Termly's Consent Mode defaults must run before any Google tag.
+// Root layout: fonts, Consent Mode defaults, AdSense loader, analytics, and Studio visual editing.
+// Script order is load-bearing — the consent defaults must run before any Google tag.
+
+// EEA + UK + Switzerland: where Google's CMP (AdSense Privacy & messaging, loaded by adsbygoogle.js) asks for consent.
+const CONSENT_REGIONS = [
+  'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU',
+  'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH',
+];
+const CONSENT_TYPES = ['ad_storage', 'ad_user_data', 'ad_personalization', 'analytics_storage'];
+const consent = (value: string, extra = {}) =>
+  JSON.stringify({ ...Object.fromEntries(CONSENT_TYPES.map((t) => [t, value])), ...extra });
+// Denied where the CMP asks, granted elsewhere — US law doesn't require opt-in, and a global deny hid most US readers from GA.
+const CONSENT_DEFAULTS_SCRIPT = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',${consent('denied', { region: CONSENT_REGIONS, wait_for_update: 500 })});
+gtag('consent','default',${consent('granted')});`;
 
 export default async function RootLayout({
   children,
@@ -29,16 +41,8 @@ export default async function RootLayout({
         <link rel="preload" href="/fonts/Prata-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
       </head>
       <body className="font-graphiknormal" suppressHydrationWarning>
-        {/* beforeInteractive hoists these into <head> in placement order: Termly's Consent Mode defaults must land before the trackers.
-            No autoBlock — its createElement override swallows Turbopack's runtime chunks, so React never hydrates. */}
-        {TERMLY_WEBSITE_UUID && (
-          <Script
-            src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}`}
-            data-name="termly-embed-banner"
-            strategy="beforeInteractive"
-          />
-        )}
-        {TERMLY_WEBSITE_UUID && <TermlyInit />}
+        {/* beforeInteractive runs these one by one in placement order, before hydration: the consent defaults must land before the trackers. */}
+        <Script id="consent-defaults" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULTS_SCRIPT }} />
         {ADSENSE_PUBLISHER_ID && (
           <Script
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}

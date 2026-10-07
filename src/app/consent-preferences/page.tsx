@@ -1,8 +1,9 @@
-// Cookie preferences page: reopens the Termly consent manager.
+// Cookie preferences page: reopens Google's consent message for EEA/UK/Swiss visitors, and lists ad opt-outs for everyone else.
 // Sets its own canonical: the root layout no longer provides one.
 
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
+import { ConsentSettingsButton } from "@/components/layout/ConsentSettingsButton";
 import { SITE_URL } from "@/lib/constants";
 import type { Metadata } from "next";
 
@@ -37,17 +38,23 @@ export default function ConsentPreferencesPage() {
 
                     <div className="body-text space-y-8">
                         <p className="mb-4">
-                            You can manage your cookie preferences at any time by clicking the link below. This allows you to adjust how we collect and use your data via cookies while you visit our website.
+                            If you are in the European Economic Area, the United Kingdom or Switzerland, we ask for your consent before we or our partners use cookies for analytics and advertising. You can review or change your choice at any time with the button below.
                         </p>
 
                         <p className="mb-8">
-                            <a href="#" className="termly-display-preferences text-theme-red hover:underline font-graphiknormal text-lg">
-                                Manage Cookie Preferences
-                            </a>
+                            <ConsentSettingsButton className="text-theme-red hover:underline font-graphiknormal text-lg" />
+                        </p>
+
+                        <p className="mb-4">
+                            Everywhere else, you can opt out of personalized advertising at{" "}
+                            <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">Google Ad Settings</a>{" "}
+                            and{" "}
+                            <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">aboutads.info choices</a>, and you can block or delete cookies in your browser settings. See our{" "}
+                            <a href="/privacy" className="text-theme-red hover:underline">Privacy Policy</a> for details.
                         </p>
 
                         <p className="mb-4 text-sm text-gray-500">
-                            If the preference center does not open, please ensure you have not blocked the consent management script.
+                            If nothing opens when you click the button, an ad or script blocker may be stopping Google&apos;s consent tool from loading.
                         </p>
                     </div>
                 </div>
