@@ -1,9 +1,9 @@
-// Cookie preferences page: reopens Google's consent message for EEA/UK/Swiss visitors, and lists ad opt-outs for everyone else.
+// Cookie preferences page: ad and cookie opt-outs for everyone, plus Google's consent settings for EEA/UK/Swiss visitors only.
 // Sets its own canonical: the root layout no longer provides one.
 
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
-import { ConsentSettingsButton } from "@/components/layout/ConsentSettingsButton";
+import { ConsentSettings } from "@/components/layout/ConsentSettings";
 import { SITE_URL } from "@/lib/constants";
 import type { Metadata } from "next";
 
@@ -37,16 +37,10 @@ export default function ConsentPreferencesPage() {
                     </h1>
 
                     <div className="body-text space-y-8">
-                        <p className="mb-4">
-                            If you are in the European Economic Area, the United Kingdom or Switzerland, we ask for your consent before we or our partners use cookies for analytics and advertising. You can review or change your choice at any time with the button below.
-                        </p>
-
-                        <p className="mb-8">
-                            <ConsentSettingsButton className="text-theme-red hover:underline font-graphiknormal text-lg" />
-                        </p>
+                        <ConsentSettings buttonClassName="text-theme-red hover:underline font-graphiknormal text-lg" />
 
                         <p className="mb-4">
-                            Everywhere else, you can opt out of personalized advertising at{" "}
+                            You can opt out of personalized advertising at{" "}
                             <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">Google Ad Settings</a>{" "}
                             and{" "}
                             <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">aboutads.info choices</a>, and you can block or delete cookies in your browser settings. See our{" "}
