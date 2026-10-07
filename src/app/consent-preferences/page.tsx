@@ -52,10 +52,6 @@ export default function ConsentPreferencesPage() {
                             <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">aboutads.info choices</a>, and you can block or delete cookies in your browser settings. See our{" "}
                             <a href="/privacy" className="text-theme-red hover:underline">Privacy Policy</a> for details.
                         </p>
-
-                        <p className="mb-4 text-sm text-gray-500">
-                            If nothing opens when you click the button, an ad or script blocker may be stopping Google&apos;s consent tool from loading.
-                        </p>
                     </div>
                 </div>
             </div>
