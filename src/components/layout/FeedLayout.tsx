@@ -45,7 +45,7 @@ export default function FeedLayout({
         <main className="bg-white min-h-screen">
             <Nav />
 
-            <div className="w-full mx-auto px-8 py-6 2xl:px-64">
+            <div className="min-h-[90vh] w-full mx-auto px-8 py-6 2xl:px-64">
 
                 <div className="mb-12 border-b border-gray-200 pb-6">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">

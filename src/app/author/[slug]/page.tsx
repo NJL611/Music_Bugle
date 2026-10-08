@@ -58,8 +58,8 @@ export default async function AuthorPage({ params }: PageProps) {
     <main className="bg-white min-h-screen">
       <Nav />
 
-      <div className="w-full mx-auto px-8 py-12 2xl:px-64">
-        <div className="max-w-3xl mx-auto text-center">
+      <div className="min-h-[90vh] flex flex-col before:flex-1 after:flex-[7] w-full mx-auto px-8 pt-16 pb-12 2xl:px-64">
+        <div className="w-full max-w-3xl mx-auto text-center">
           <h1 className="text-[42px] md:text-[56px] font-abril text-gray-900 mb-2 leading-tight">
             {author.name}
           </h1>

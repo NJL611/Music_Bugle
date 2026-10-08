@@ -23,7 +23,7 @@ Contains configuration files for the project environment, build process, and dep
 Following the Next.js App Router pattern, this directory defines the application's routes and global layout.
 
 ### Root & Global
-- **`layout.tsx`**: The root layout component. Includes fonts, metadata, and scripts like Google Analytics and Termly.
+- **`layout.tsx`**: The root layout component. Includes fonts, metadata, and scripts like the Consent Mode defaults, AdSense and Google Analytics.
 - **`page.tsx`**: The main homepage. Fetches posts from Sanity and distributes them across various sections (Carousel, Top Story, Sidebar, etc.).
 - **`globals.css`**: Global CSS styles, including Tailwind directives and custom font imports.
 - **`sitemap.ts`**: Generates a dynamic `sitemap.xml` for SEO.

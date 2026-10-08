@@ -28,7 +28,7 @@ Our mission is to **rescue this valuable asset** by migrating it to a modern arc
 *   **Payments:** [Stripe](https://stripe.com/) – donations via Embedded Checkout
 *   **Email:** [Resend](https://resend.com/) – contact form delivery
 *   **Comments:** [Disqus](https://disqus.com/)
-*   **Analytics & ads:** Google Analytics / Tag Manager, AdSense, Termly consent
+*   **Analytics & ads:** Google Analytics / Tag Manager, AdSense, Google consent (AdSense Privacy & messaging)
 *   **Deployment:** [Vercel](https://vercel.com/) (CI/CD, Preview Deployments)
 
 ---
@@ -150,7 +150,7 @@ We operate in informal one-week sprints with a development process that mirrors 
     SANITY_API_READ_TOKEN=
     ```
 
-    Optional but required for specific features: Stripe (`STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`), contact form (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_TO_EMAIL`), analytics/ads (`NEXT_PUBLIC_GOOGLE_*`, `NEXT_PUBLIC_ADSENSE_*`, `NEXT_PUBLIC_TERMLY_WEBSITE_UUID`), and `SITE_URL`.
+    Optional but required for specific features: Stripe (`STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`), contact form (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_TO_EMAIL`), analytics/ads (`NEXT_PUBLIC_GOOGLE_*`, `NEXT_PUBLIC_ADSENSE_*`), and `SITE_URL`.
 
 5. Run the development server:
    ```bash

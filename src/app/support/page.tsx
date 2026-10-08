@@ -48,7 +48,7 @@ export default function SupportPage() {
         <main className="flex min-h-screen flex-col bg-white">
             <Nav />
 
-            <div className="w-full mx-auto px-8 py-12 2xl:px-64">
+            <div className="min-h-[90vh] w-full mx-auto px-8 py-12 2xl:px-64">
                 {/* Hero Section */}
                 <div className="text-center mb-12">
                     <h1 className="text-[42px] md:text-[56px] font-abril text-gray-900 mb-6 leading-tight">

@@ -40,8 +40,8 @@ export default async function PaymentSuccess({
     <main className="bg-white min-h-screen">
       <Nav />
 
-      <div className="w-full mx-auto px-8 py-12 2xl:px-64">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-[90vh] flex flex-col before:flex-1 after:flex-[7] w-full mx-auto px-8 pt-16 pb-12 2xl:px-64">
+        <div className="w-full max-w-4xl mx-auto">
           {/* Success Icon and Message */}
           <div className="text-center mb-12">
             <div className="mb-6">
