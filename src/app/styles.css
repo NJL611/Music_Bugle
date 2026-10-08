@@ -208,6 +208,12 @@
   color: #4b5563;
 }
 
+/* .body-text's `font-weight: lighter` drops the body to 100, so preflight's `bolder` only climbs
+   back to 400 and bold vanished. Prata has no bold face, so 700 makes the browser synthesize it. */
+.node-content-body :is(strong, b) {
+  font-weight: 700;
+}
+
 /* Headings hang off the same variable so switching preset keeps the whole page in proportion. */
 .node-content-body > h1,
 .node-content-body > h2,

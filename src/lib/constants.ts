@@ -1,7 +1,6 @@
 export const SITE_URL = process.env.SITE_URL || 'https://themusicbugle.com';
 export const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || '';
 export const GOOGLE_TAG_MANAGER_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || '';
-export const TERMLY_WEBSITE_UUID = process.env.NEXT_PUBLIC_TERMLY_WEBSITE_UUID || '';
 export const SHOW_ADS = process.env.NEXT_PUBLIC_SHOW_ADS === 'true';
 export const ADSENSE_PUBLISHER_ID = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID || '';
 // Default ad unit slot ID (from the AdSense dashboard). Responsive units won't fill without one.
@@ -45,7 +44,7 @@ export const TRENDING_ITEMS = SHOWCASE_MODE
       ];
 
 /** Static date shown on legal pages — update when policy text changes. */
-export const LEGAL_LAST_UPDATED = 'May 22, 2026';
+export const LEGAL_LAST_UPDATED = 'October 6, 2026';
 
 export const STRIPE_PUBLISHABLE_KEY =
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||

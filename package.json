@@ -26,7 +26,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@next/third-parties": "16.3.0-canary.32",
+    "@next/third-parties": "^16.3.8",
     "@portabletext/react": "^7.0.1",
     "@portabletext/to-html": "^6.0.0",
     "@sanity/client": "^7.26.2",
@@ -41,7 +41,7 @@
     "@types/styled-components": "^5.1.36",
     "anchor-pki": "^0.3.2",
     "disqus-react": "^1.1.5",
-    "next": "16.3.0-canary.32",
+    "next": "^16.3.8",
     "next-sanity": "^13.3.3",
     "react": "19.2.5",
     "react-dom": "19.2.5",
@@ -49,7 +49,7 @@
     "resend": "^6.12.3",
     "sanity": "6.16.0",
     "sanity-plugin-media": "^6.1.7",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.5",
     "stripe": "^18.0.0",
     "styled-components": "^6.1.19"
   },
@@ -63,14 +63,20 @@
     "@types/react-dom": "^18",
     "autoprefixer": "10.4.20",
     "eslint": "^9.39.1",
-    "eslint-config-next": "16.3.0-canary.32",
-    "postcss": "8.5.1",
+    "eslint-config-next": "^16.3.8",
+    "postcss": "^8.5.28",
     "tailwindcss": "^4.1.17",
     "typescript": "^5"
   },
   "overrides": {
     "cacache": {
       "tar": "^7.5.22"
+    },
+    "adm-zip": "^0.6.1",
+    "smol-toml": "^1.7.1",
+    "undici": "^7.29.1",
+    "@vercel/frameworks": {
+      "js-yaml": "^3.15.2"
     }
   }
 }
