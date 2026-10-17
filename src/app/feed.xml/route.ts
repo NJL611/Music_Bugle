@@ -5,7 +5,7 @@ import { toHTML, escapeHTML, type PortableTextComponents } from '@portabletext/t
 import { client } from '@sanity/lib/client';
 import { RSS_POSTS_QUERY } from '@sanity/lib/queries';
 import { METADATA, SITE_URL, YOUTUBE_ID_REGEX, YOUTUBE_REGEX } from '@/lib/constants';
-import { blockText, cleanPostBody, getPostExcerpt, imageFromSource, usableImageUrl } from '@/lib/utils';
+import { blockText, cleanPostBody, getPostExcerpt, imageFromSource, resolvePostPath, usableImageUrl } from '@/lib/utils';
 
 export const revalidate = 600;
 
@@ -47,6 +47,10 @@ const bodyComponents: Partial<PortableTextComponents> = {
     youtube: ({ value }) => (value?.url ? youTubeLink(value.url) : ''),
     ad: () => '',
     spacer: () => '',
+  },
+  marks: {
+    internalLink: ({ children, value }) =>
+      value?.slug ? `<a href="${escapeHTML(`${SITE_URL}${resolvePostPath(value.slug)}`)}">${children}</a>` : children,
   },
 };
 
