@@ -35,6 +35,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export const revalidate = 3600;
 
+// Without this Next renders every hit dynamically (no-store), and bot crawls burned the Sanity API CDN quota.
+export async function generateStaticParams() {
+  return [];
+}
+
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
 
