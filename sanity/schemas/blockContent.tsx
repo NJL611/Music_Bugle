@@ -14,6 +14,7 @@ import {
 import {ImageIcon} from '@sanity/icons/Image'
 import {PlayIcon} from '@sanity/icons/Play'
 import {ExpandIcon} from '@sanity/icons/Expand'
+import {DocumentIcon} from '@sanity/icons/Document'
 import {Button, Stack, Text} from '@sanity/ui'
 
 // The condensed editor collapses insert buttons into the "..." overflow, so editors had to go
@@ -117,6 +118,22 @@ export default defineType({
                 title: 'URL',
                 name: 'href',
                 type: 'url',
+              },
+            ],
+          },
+          // Searchable by title, and a reference survives the target being re-slugged, unlike a pasted URL.
+          {
+            title: 'Article link',
+            name: 'internalLink',
+            type: 'object',
+            icon: DocumentIcon,
+            fields: [
+              {
+                title: 'Article',
+                name: 'reference',
+                type: 'reference',
+                to: [{type: 'post'}],
+                options: {disableNew: true},
               },
             ],
           },

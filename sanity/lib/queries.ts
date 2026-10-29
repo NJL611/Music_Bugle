@@ -117,6 +117,12 @@ export const POST_QUERY = groq`
         ...,
         "alt": coalesce(alt, asset->altText, asset->description),
         "credit": asset->creditLine
+      },
+      _type == "block" => {
+        markDefs[]{
+          ...,
+          _type == "internalLink" => {"slug": reference->slug.current}
+        }
       }
     },
     "categories": coalesce(categories[]->{
@@ -422,6 +428,12 @@ export const RSS_POSTS_QUERY = groq`
         ...,
         "alt": coalesce(alt, asset->altText, asset->description),
         "credit": asset->creditLine
+      },
+      _type == "block" => {
+        markDefs[]{
+          ...,
+          _type == "internalLink" => {"slug": reference->slug.current}
+        }
       }
     },
     "author": author->name,

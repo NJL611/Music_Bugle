@@ -2,9 +2,10 @@
 // YouTube embeds use youtube-nocookie.com so a bare page view sets no Google cookies before consent.
 
 import Image from "next/image";
+import Link from "next/link";
 import { PortableTextComponents } from "@portabletext/react";
 import { AdUnit } from "@/components/ui/AdUnit";
-import { sanityImageBuilder } from "@/lib/utils";
+import { resolvePostPath, sanityImageBuilder } from "@/lib/utils";
 import { YOUTUBE_REGEX, YOUTUBE_ID_REGEX } from "@/lib/constants";
 
 export function getYouTubeId(url: string): string | null {
@@ -71,6 +72,22 @@ export const portableText: PortableTextComponents = {
                 </a>
             );
         },
+        // slug is null when the linked post is unpublished or deleted, so fall back to plain text.
+        internalLink: ({ children, value }) =>
+            value?.slug ? (
+                <Link
+                    href={resolvePostPath(value.slug)}
+                    className="portable-text-link"
+                    style={{
+                        color: '#B94445',
+                        fontFamily: "'Prata', serif",
+                    }}
+                >
+                    {children}
+                </Link>
+            ) : (
+                <>{children}</>
+            ),
     },
     types: {
         image: ({ value }) => {
