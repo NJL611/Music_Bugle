@@ -5,6 +5,9 @@ import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { dataset, projectId } from "@sanity/env";
 import { HOMEPAGE_CATEGORIES, HOMEPAGE_COUNTS } from "@/lib/constants";
 
+// Shared post helpers: paths, excerpts, body cleanup, card image URLs, homepage distribution.
+// Card images all come through getPostImage, which hands next/image a large source to downscale.
+
 // Sanity Helpers
 const builder = imageUrlBuilder({ projectId, dataset });
 
@@ -53,16 +56,22 @@ export function cleanPostBody(body: PortableTextBlock[] | null = []): PortableTe
     return firstContent < 0 ? [] : body.slice(firstContent).filter((b) => blockText(b) !== "");
 }
 
+// next/image only downscales, and 300px cards go full-width on phones and tablets — so callers'
+// width/height set just the crop ratio; the source is always wide enough for any render.
+const SOURCE_IMAGE_WIDTH = 1600;
+
 export function getPostImage(post: SanityDocument, width = 1200, height?: number) {
     if (post.mainImage?.asset?._ref || post.mainImage?.asset?._id) {
         // Pass the whole image object, not .asset — the editor's hotspot lives on the parent and
         // is only honoured by fit("crop"), which is what fixed-ratio card slots actually do.
         let img = sanityImageBuilder
             .image(post.mainImage)
-            .width(width)
+            .width(SOURCE_IMAGE_WIDTH)
             .auto("format");
 
-        img = height ? img.height(height).fit("crop") : img.fit("clip");
+        img = height
+            ? img.height(Math.round((height * SOURCE_IMAGE_WIDTH) / width)).fit("crop")
+            : img.fit("clip");
 
         return img.url();
     }

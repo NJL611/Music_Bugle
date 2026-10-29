@@ -1,3 +1,6 @@
+// Site-wide constants: env-driven flags (ads, analytics, site mode), nav, layout counts, image sizes.
+// *_IMAGE_SIZES must describe the slot's real rendered width, or next/image picks too small a file.
+
 export const SITE_URL = process.env.SITE_URL || 'https://themusicbugle.com';
 export const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || '';
 export const GOOGLE_TAG_MANAGER_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || '';
@@ -70,6 +73,7 @@ export const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'info@themusicbu
 export const GRID_IMAGE_SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 25vw, 300px";
 export const HERO_IMAGE_SIZES = "(max-width: 768px) 100vw, 50vw";
 export const SIDEBAR_IMAGE_SIZES = "(max-width: 640px) 45vw, 124px";
+export const SIDEBAR_LIST_IMAGE_SIZES = "(max-width: 1024px) 100vw, 25vw";
 export const FEATURE_IMAGE_SIZES = "(max-width: 768px) 100vw, 800px";
 
 // --- Regex ---

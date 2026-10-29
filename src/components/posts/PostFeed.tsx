@@ -5,8 +5,11 @@ import Image from "next/image";
 import type { SanityDocument } from "next-sanity";
 import { SectionHeader } from "@/components/sections/SectionHeader";
 import { PostMeta } from "@/components/posts/PostMeta";
-import { GRID_IMAGE_SIZES, SIDEBAR_IMAGE_SIZES } from "@/lib/constants";
+import { GRID_IMAGE_SIZES, SIDEBAR_IMAGE_SIZES, SIDEBAR_LIST_IMAGE_SIZES } from "@/lib/constants";
 import { getPostImage, getPostImageOrFallback, formatDate, resolvePostPath } from "@/lib/utils";
+
+// Post card lists: grid, stacked list (the article sidebar) and horizontal thumb rows, plus FeedPostRow.
+// The stacked list is full-width below lg, so it can't share the grid's sizes.
 
 const GRID_CLASS_MAP: Record<NonNullable<PostFeedProps["columns"]>, string> = {
   1: "grid-cols-1",
@@ -198,7 +201,7 @@ export default function PostFeed({
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
-                    sizes={GRID_IMAGE_SIZES}
+                    sizes={isGrid ? GRID_IMAGE_SIZES : SIDEBAR_LIST_IMAGE_SIZES}
                   />
                 </div>
               )}
