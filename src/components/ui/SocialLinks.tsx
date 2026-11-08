@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/ui/Link';
 import { SOCIAL_LINKS } from '@/lib/constants';
 import { FacebookLogo, TwitterLogo, InstagramLogo, PinterestLogo } from '@/components/ui/Icons';
 

@@ -1,7 +1,7 @@
 // Homepage section components, composed by src/app/page.tsx (both the full and showcase layouts).
 // LeadStories + SidebarArticles render above the fold; page.tsx lazy-loads the rest via next/dynamic.
 'use client';
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import Image from "next/image";
 import type { SanityDocument } from "next-sanity";
 import { getPostExcerpt, resolvePostPath, getPostImage, getPostImageOrFallback, formatDate } from "@/lib/utils";

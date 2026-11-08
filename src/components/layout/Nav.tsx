@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import Link from 'next/link';
+import Link from '@/components/ui/Link';
 import { useRouter } from 'next/navigation';
 import { LogoIcon, SearchIcon, HamburgerIcon } from '@/components/ui/Icons';
 import { Button } from '@/components/ui/Primitives';

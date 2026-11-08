@@ -1,6 +1,6 @@
 'use client';
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import Image from "next/image";
 import type { SanityDocument } from "next-sanity";
 import { DiscussionEmbed } from 'disqus-react';

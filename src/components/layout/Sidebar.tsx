@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import type { SanityDocument } from "next-sanity";
 import PostFeed from "@/components/posts/PostFeed";
 import { SidebarAdWidget } from "@/components/ui/AdUnit";

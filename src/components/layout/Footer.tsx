@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/ui/Link';
 import type { SanityDocument } from 'next-sanity';
 import { LogoFooter } from '@/components/ui/Icons';
 import { SocialLinks } from '@/components/ui/SocialLinks';
