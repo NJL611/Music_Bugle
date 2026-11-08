@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import Nav from "@/components/layout/Nav";
 import { SITE_URL } from "@/lib/constants";
 import type { Metadata } from "next";

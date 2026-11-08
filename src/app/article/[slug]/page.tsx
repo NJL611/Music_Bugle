@@ -1,7 +1,7 @@
 // Published article page with NewsArticle JSON-LD, tags, author bio and related posts.
 // force-static over 800+ slugs; drafts render at /preview/[slug] instead so this stays static.
 
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { notFound } from "next/navigation";
 import nextDynamic from "next/dynamic";
 import type { SanityDocument } from "next-sanity";

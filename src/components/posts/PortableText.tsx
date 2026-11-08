@@ -2,7 +2,7 @@
 // YouTube embeds use youtube-nocookie.com so a bare page view sets no Google cookies before consent.
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { PortableTextComponents } from "@portabletext/react";
 import { AdUnit } from "@/components/ui/AdUnit";
 import { resolvePostPath, sanityImageBuilder } from "@/lib/utils";

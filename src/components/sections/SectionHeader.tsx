@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { ChevronRight } from "@/components/ui/Icons";
 
 export function SectionHeader({ title, viewAllLink, className = "" }: { title: string; viewAllLink?: string; className?: string }) {

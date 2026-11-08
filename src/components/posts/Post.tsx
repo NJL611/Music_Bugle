@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import Image from "next/image";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import type { SanityDocument } from "next-sanity";
