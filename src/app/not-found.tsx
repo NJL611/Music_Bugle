@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/ui/Link';
 import type { SanityDocument } from 'next-sanity';
 import Nav from '@/components/layout/Nav';
 import Footer from '@/components/layout/Footer';
