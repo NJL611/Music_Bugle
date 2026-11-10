@@ -199,7 +199,7 @@ export const TAG_QUERY = groq`
 `;
 
 export const POSTS_BY_TAG_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "tag" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "tag" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [$start...$end] {
     _id,
     title,
     subtitle,
@@ -252,12 +252,14 @@ export const CATEGORY_QUERY = groq`
     _id,
     title,
     "slug": slug.current,
-    description
+    description,
+    "postCount": count(*[_type == "post" && defined(slug) && references(^._id)]),
+    "latestAt": *[_type == "post" && defined(slug) && references(^._id)] | order(coalesce(publishedAt, _createdAt) desc)[0]{"at": coalesce(publishedAt, _createdAt)}.at
   }
 `;
 
 export const POSTS_BY_CATEGORY_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "category" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "category" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [$start...$end] {
     _id,
     title,
     subtitle,
@@ -301,7 +303,16 @@ export const ALL_CATEGORIES_QUERY = groq`
     _id,
     title,
     "slug": slug.current,
-    description
+    description,
+    "postCount": count(*[_type == "post" && !(_id in path("drafts.**")) && references(^._id)]),
+    "latestAt": *[_type == "post" && !(_id in path("drafts.**")) && references(^._id)] | order(coalesce(publishedAt, _createdAt) desc)[0]{"at": coalesce(publishedAt, _createdAt)}.at
+  }
+`;
+
+export const SITEMAP_AUTHORS_QUERY = groq`
+  *[_type == "author" && defined(slug)]{
+    "slug": slug.current,
+    "postCount": count(*[_type == "post" && !(_id in path("drafts.**")) && references(^._id)])
   }
 `;
 
@@ -393,7 +404,7 @@ export const AUTHOR_QUERY = groq`
 `;
 
 export const POSTS_BY_AUTHOR_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [$start...$end] {
     ${POST_FEED_FIELDS}
   }
 `;

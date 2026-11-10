@@ -3,7 +3,7 @@ import type { SanityDocument } from 'next-sanity';
 import { LogoFooter } from '@/components/ui/Icons';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 import { formatDate, resolvePostPath } from '@/lib/utils';
-import { NAV_ITEMS, FOOTER_COMPANY_ITEMS } from '@/lib/constants';
+import { NAV_ITEMS, FOOTER_COMPANY_ITEMS, SUPPORT_PAYMENTS_ENABLED } from '@/lib/constants';
 
 // Site-wide footer: nav, about blurb, latest posts, company and legal links.
 // "The latest" renders only where the page passes posts — most pages don't, so the grid drops to two columns.
@@ -29,7 +29,7 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                 <div className="flex flex-col">
                     <h3 className="text-base font-prata mb-3">About us</h3>
                     <p className="text-gray-400 font-graphiklight leading-relaxed max-w-sm mb-4">
-                        The Music Bugle is committed to independent, reader-supported music journalism. Your support helps us keep covering the stories that matter.
+                        The Music Bugle is an independent music publication: artist interviews, album reviews and news from around the music world.
                     </p>
                     <div className="flex items-center gap-4">
                         <a href="mailto:info@themusicbugle.com" className={`text-gray-400 font-graphiklight ${MUTED_LINK}`}>info@themusicbugle.com</a>
@@ -69,7 +69,7 @@ export default function Footer({ posts = [] }: { posts?: SanityDocument[] }) {
                 <div className="flex flex-wrap justify-center gap-4">
                     <Link href="/terms" className={MUTED_LINK}>Terms of Service</Link>
                     <Link href="/privacy" className={MUTED_LINK}>Privacy Policy</Link>
-                    <Link href="/refund" className={MUTED_LINK}>Refund Policy</Link>
+                    {SUPPORT_PAYMENTS_ENABLED && <Link href="/refund" className={MUTED_LINK}>Refund Policy</Link>}
                 </div>
                 <p>© {new Date().getFullYear()} The Music Bugle. All rights reserved.</p>
             </div>

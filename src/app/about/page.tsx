@@ -3,7 +3,7 @@
 
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
-import { SITE_URL, METADATA } from "@/lib/constants";
+import { SITE_URL, METADATA, SUPPORT_PAYMENTS_ENABLED } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -77,7 +77,10 @@ export default function AboutPage() {
                   <strong className="font-graphiknormal">News:</strong> The Bugle Blotter, a regular roundup of news from around the music world.
                 </li>
                 <li className="pl-2">
-                  <strong className="font-graphiknormal">New & Upcoming Releases:</strong> Albums, EPs, and singles worth knowing about, from independent and emerging artists.
+                  <strong className="font-graphiknormal">Test Pressing:</strong> A weekly pick of new songs from our inbox, from independent and emerging artists.
+                </li>
+                <li className="pl-2">
+                  <strong className="font-graphiknormal">Discography Dissection:</strong> An artist&apos;s full catalog, ranked worst to first.
                 </li>
               </ul>
             </div>
@@ -152,6 +155,7 @@ export default function AboutPage() {
           </section>
 
           {/* Support Section */}
+          {SUPPORT_PAYMENTS_ENABLED && (
           <section className="mb-16 border-t border-gray-200 pt-12">
             <h2 className="text-[32px] md:text-[40px] font-prata text-gray-900 mb-6">
               Support The Music Bugle
@@ -173,6 +177,7 @@ export default function AboutPage() {
               </p>
             </div>
           </section>
+          )}
         </div>
       </div>
 

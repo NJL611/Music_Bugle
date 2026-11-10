@@ -1,8 +1,12 @@
 import dynamic from "next/dynamic";
 import Link from "@/components/ui/Link";
 import Nav from "@/components/layout/Nav";
-import { SITE_URL } from "@/lib/constants";
+import { SITE_URL, SUPPORT_PAYMENTS_ENABLED } from "@/lib/constants";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+// Stripe's return_url after a support payment: thank-you page with the amount.
+// noindex, and 404 while SUPPORT_PAYMENTS_ENABLED is off.
 
 export const metadata: Metadata = {
   title: "Payment Successful",
@@ -33,6 +37,7 @@ export default async function PaymentSuccess({
 }: {
   searchParams: Promise<{ amount?: string }>;
 }) {
+  if (!SUPPORT_PAYMENTS_ENABLED) notFound();
   const { amount } = await searchParams;
   const displayAmount = amount ? parseFloat(amount).toFixed(2) : null;
 

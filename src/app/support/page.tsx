@@ -4,7 +4,9 @@ import Nav from "@/components/layout/Nav";
 import Image from 'next/image';
 import Footer from "@/components/layout/Footer";
 
-// STRIPE IMPORTS
+// Reader support page: amount picker plus Stripe Payment Element, one-time payments only.
+// Monthly was removed because /api/create-payment-intent never creates a Subscription; add one before restoring it.
+
 import CheckoutForm from "@/components/sections/CheckoutForm";
 import { convertToSubcurrency } from "@/lib/utils";
 import { Elements } from "@stripe/react-stripe-js";
@@ -18,7 +20,6 @@ const stripePromise = STRIPE_PUBLISHABLE_KEY ? loadStripe(STRIPE_PUBLISHABLE_KEY
 
 export default function SupportPage() {
     const [supportAmount, setSupportAmount] = useState<number | ''>(5);
-    const [selectedTier, setSelectedTier] = useState<'one-time' | 'monthly'>('one-time');
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -88,30 +89,7 @@ export default function SupportPage() {
                                 Support Amount
                             </h2>
 
-                            {/* Support Type Toggle */}
-                            <div className="mb-6 flex gap-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedTier('one-time')}
-                                    className={`flex-1 px-6 py-3 rounded-sm font-graphiknormal transition-colors ${selectedTier === 'one-time'
-                                        ? 'bg-theme-red text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                >
-                                    One-time Support
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedTier('monthly')}
-                                    className={`flex-1 px-6 py-3 rounded-sm font-graphiknormal transition-colors ${selectedTier === 'monthly'
-                                        ? 'bg-theme-red text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                >
-                                    Monthly Support
-                                </button>
-                            </div>
-
+                            {/* One-time only: the API creates a PaymentIntent, never a Subscription, so a monthly option can't work. */}
                             {/* Quick Amount Buttons */}
                             <div className="grid grid-cols-3 gap-3 mb-6">
                                 {[5, 10, 25].map((amount) => (
@@ -156,10 +134,7 @@ export default function SupportPage() {
                             {supportAmount && supportAmount >= 1 && (
                                 <div className="border-t border-gray-200 pt-6">
                                     <p className="text-sm font-graphiknormal text-gray-700 mb-4">
-                                        {selectedTier === 'one-time'
-                                            ? `One-time support payment of $${supportAmount}`
-                                            : `Monthly recurring support payment of $${supportAmount} per month`
-                                        }
+                                        {`One-time support payment of $${supportAmount}`}
                                     </p>
                                     <p className="text-xs text-gray-500 mb-4 font-graphiklight">
                                         By proceeding, you agree to our <a href="/terms" className="text-theme-red hover:underline">Terms of Service</a> and <a href="/privacy" className="text-theme-red hover:underline">Privacy Policy</a>. See our <a href="/refund" className="text-theme-red hover:underline">Refund Policy</a> for cancellation details.
@@ -168,7 +143,7 @@ export default function SupportPage() {
                                         <Elements
                                             stripe={stripePromise}
                                             options={{
-                                                mode: selectedTier === 'monthly' ? "subscription" : "payment",
+                                                mode: "payment",
                                                 amount: convertToSubcurrency(supportAmount),
                                                 currency: "usd",
                                                 appearance: {
@@ -177,10 +152,7 @@ export default function SupportPage() {
                                                 },
                                             }}
                                         >
-                                            <CheckoutForm
-                                                amount={supportAmount}
-                                                isSubscription={selectedTier === 'monthly'}
-                                            />
+                                            <CheckoutForm amount={supportAmount} />
                                         </Elements>
                                     ) : (
                                         <p className="text-sm text-gray-500 font-graphiklight">
@@ -208,12 +180,6 @@ export default function SupportPage() {
                                 <h4 className="text-[20px] font-prata text-gray-900 mb-2">Is this a donation?</h4>
                                 <p className="body-text">
                                     No, this is a support payment for content and services. Your support helps us maintain our independent music journalism platform and deliver quality content. This is a payment for services, not a charitable donation.
-                                </p>
-                            </div>
-                            <div>
-                                <h4 className="text-[20px] font-prata text-gray-900 mb-2">Can I cancel my monthly support?</h4>
-                                <p className="body-text">
-                                    Yes, you can cancel your monthly recurring support at any time. Simply contact us or manage your recurring support through your payment method. Your support will continue until the end of your current billing period.
                                 </p>
                             </div>
                         </div>

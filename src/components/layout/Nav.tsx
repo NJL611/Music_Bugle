@@ -5,7 +5,10 @@ import { useRouter } from 'next/navigation';
 import { LogoIcon, SearchIcon, HamburgerIcon } from '@/components/ui/Icons';
 import { Button } from '@/components/ui/Primitives';
 import { useWindowUtils } from '@/lib/hooks';
-import { NAV_ITEMS, TRENDING_ITEMS } from '@/lib/constants';
+import { NAV_ITEMS, SUPPORT_PAYMENTS_ENABLED, TRENDING_ITEMS } from '@/lib/constants';
+
+// Site header: logo, section links, search, Support/Contact buttons, and the compact-screen menu.
+// Client component (search state, menu toggle); the Support button only shows while payments are enabled.
 
 export default function Nav({ }) {
   const size = useWindowUtils();
@@ -57,7 +60,7 @@ export default function Nav({ }) {
           <div onClick={toggleSearch} className="cursor-pointer">
             <SearchIcon />
           </div>
-          <Button text='Support' href='/support' className='bg-theme-button text-white py-1.5! px-4!' />
+          {SUPPORT_PAYMENTS_ENABLED && <Button text='Support' href='/support' className='bg-theme-button text-white py-1.5! px-4!' />}
           <Button text='Contact' href='/contact' className='bg-theme-button text-white py-1.5! px-4!' />
         </div>
       </div>
@@ -89,7 +92,7 @@ export default function Nav({ }) {
           </div>
 
           <div className="flex flex-col gap-3 w-3/4">
-            <Button text='Support' href='/support' className="bg-theme-button text-white w-full" />
+            {SUPPORT_PAYMENTS_ENABLED && <Button text='Support' href='/support' className="bg-theme-button text-white w-full" />}
             <Button text='Contact' href='/contact' className="bg-theme-button text-white w-full" />
           </div>
         </div>
