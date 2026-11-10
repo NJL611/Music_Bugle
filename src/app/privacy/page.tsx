@@ -111,6 +111,9 @@ export default function PrivacyPage() {
                 We display third-party advertisements on our website through Google AdSense and its advertising partners. These services may use cookies, device identifiers, and similar technologies to serve ads, limit how often you see an ad, measure ad performance, and show ads that may be relevant to your interests.
               </p>
               <p className="mb-4">
+                Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites. Google&apos;s use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet.
+              </p>
+              <p className="mb-4">
                 Google and its partners may collect or receive information from your browser or device when you visit our site, including through cookies. This may include your IP address, browser type, pages viewed, and interactions with ads. For more information about how Google uses data in advertising, see{" "}
                 <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-theme-red hover:underline">Google&apos;s Advertising Technologies Policy</a>{" "}
                 and{" "}
@@ -134,7 +137,9 @@ export default function PrivacyPage() {
                 <li><strong>Google Analytics and Google Tag Manager:</strong> To analyze website traffic and usage patterns</li>
                 <li><strong>Google Privacy &amp; messaging:</strong> To ask visitors in the EEA, the UK and Switzerland for cookie consent and remember their choices</li>
                 <li><strong>Stripe:</strong> To process support payments securely</li>
+                <li><strong>YouTube:</strong> To play videos embedded in articles. Embeds use YouTube&apos;s privacy-enhanced mode (youtube-nocookie.com), so YouTube sets cookies only once you play a video</li>
                 <li><strong>Disqus:</strong> To host and display article comments</li>
+                <li><strong>Sanity:</strong> To store and manage our articles and images. Pages are served by Vercel, so your browser does not connect to Sanity directly</li>
                 <li><strong>Resend:</strong> To deliver messages sent through our contact form</li>
                 <li><strong>Vercel:</strong> To host the website, which includes standard server logs such as IP addresses</li>
               </ul>

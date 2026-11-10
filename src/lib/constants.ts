@@ -47,7 +47,7 @@ export const TRENDING_ITEMS = SHOWCASE_MODE
       ];
 
 /** Static date shown on legal pages — update when policy text changes. */
-export const LEGAL_LAST_UPDATED = 'October 6, 2026';
+export const LEGAL_LAST_UPDATED = 'November 9, 2026';
 
 // Reader payments are off until AdSense approval: /support, /refund, /payment-success and the payment API 404,
 // and every link to them is hidden. Flip to true to bring them back (check the Stripe keys first).
@@ -201,16 +201,17 @@ export const AD_SIZES = {
     },
     RESPONSIVE_LEADERBOARD: {
         width: "w-[320px] md:w-[728px] lg:w-[970px]",
-        height: "h-[50px] md:h-[90px] lg:h-[90px]"
+        height: "min-h-[50px] md:min-h-[90px]"
     },
-    // Custom UI sizes
+    // Custom UI sizes. Heights are min-h so the slot is reserved before the ad loads (no layout shift).
+    // 300px wide: the article sidebar is sticky, and Google caps sticky ads at 300px.
     SIDEBAR: {
-        width: "w-[300px] md:w-[336px]",
-        height: "h-[250px] md:h-[280px]"
+        width: "w-[300px]",
+        height: "min-h-[250px]"
     },
     LARGE_VERTICAL: {
         width: "w-[300px]",
-        height: "h-[600px]"
+        height: "min-h-[600px]"
     },
 
 

@@ -1,5 +1,6 @@
 // Homepage section components, composed by src/app/page.tsx (both the full and showcase layouts).
 // LeadStories + SidebarArticles render above the fold; page.tsx lazy-loads the rest via next/dynamic.
+
 'use client';
 import Link from "@/components/ui/Link";
 import Image from "next/image";
@@ -235,7 +236,7 @@ export function BottomSection({
 
     return (
         <div className="w-full mt-12 mb-12">
-            <AdUnit width="w-[320px] md:w-[728px]" height="h-[50px] md:h-[90px]" className="mx-auto" />
+            <AdUnit variant="responsive-leaderboard" width="w-[320px] md:w-[728px]" className="mx-auto" />
             <SectionHeader
                 title={title}
                 viewAllLink={viewAllLink}
