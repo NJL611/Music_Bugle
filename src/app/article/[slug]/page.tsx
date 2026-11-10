@@ -126,9 +126,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
 
     const articleUrl = `${SITE_URL}/article/${slug}`;
+    // Some imported titles carry trailing spaces, which show up as "Title  - The Music Bugle".
+    const title = meta.title?.trim() || 'No Title';
 
     return {
-      title: meta.title || 'No Title',
+      title,
       description: meta.description || meta.subtitle || METADATA.description,
       image: meta.mainImage?.asset.url || METADATA.image,
       keywords: meta.keywords || 'music, news, latest updates',
@@ -136,7 +138,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       publishedTime: meta.publishedAt || '',
       modifiedTime: meta._updatedAt || '',
       openGraph: {
-        title: meta.title,
+        title,
         description: meta.description || meta.subtitle || METADATA.description,
         url: articleUrl,
         locale: 'en-US',
@@ -152,7 +154,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         modified_time: meta._updatedAt || '',
       },
       twitter: {
-        title: meta.title,
+        title,
         description: meta.description || meta.subtitle || METADATA.description,
         images: meta.mainImage?.asset.url || METADATA.image,
         card: 'summary_large_image',
