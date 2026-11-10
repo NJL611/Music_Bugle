@@ -36,6 +36,8 @@ function buildTrendingRail(trending: SanityDocument[], fallback: SanityDocument[
     .slice(0, HOMEPAGE_COUNTS.SIDEBAR);
 }
 
+const HOME_HEADING = <h1 className="sr-only">The Music Bugle: music interviews, album reviews and news</h1>;
+
 export default async function Home() {
   const [allPosts, trending] = await Promise.all([
     client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY),
@@ -50,6 +52,7 @@ export default async function Home() {
   return (
     <main className="bg-white min-h-screen">
       <Nav />
+      {HOME_HEADING}
 
       <div className="w-full mx-auto md:px-8 pt-6 pb-6 2xl:px-64">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -129,6 +132,7 @@ function ShowcaseHome({ allPosts, trending }: { allPosts: SanityDocument[]; tren
   return (
     <main className="bg-white min-h-screen">
       <Nav />
+      {HOME_HEADING}
 
       <div className="w-full mx-auto md:px-8 pt-6 pb-6 2xl:px-64">
         <div className="flex flex-col lg:flex-row gap-8">
