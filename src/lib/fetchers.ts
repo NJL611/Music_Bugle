@@ -13,9 +13,12 @@ import {
     TRENDING_PAGE_QUERY,
     TRENDING_PRIORITY_POSTS_QUERY,
 } from "@sanity/lib/queries";
-import { HOMEPAGE_COUNTS } from "@/lib/constants";
+import { HOMEPAGE_COUNTS, LISTING_PAGE_SIZE } from "@/lib/constants";
 import { mergeTrendingPosts, resolveTrendingPageMeta, type TrendingPageConfig } from "@/lib/trending";
 import { resolvePopularPageMeta, type PopularPageConfig } from "@/lib/popular";
+
+// Sanity fetches for listing pages: archives (paged by LISTING_PAGE_SIZE), trending and popular.
+// Archive posts come one page at a time; the counts that size the pagination live on the *_QUERY data docs.
 
 export function fetchPopularPostsFromQuery() {
     return client.fetch<SanityDocument[]>(POSTS_PREVIEW_QUERY);
@@ -56,24 +59,29 @@ export function fetchCategoryData(slug: string) {
     return client.fetch<SanityDocument | null>(CATEGORY_QUERY, { slug });
 }
 
-export function fetchCategoryPosts(slug: string) {
-    return client.fetch<SanityDocument[]>(POSTS_BY_CATEGORY_QUERY, { slug });
+function pageRange(page: number) {
+    const start = (page - 1) * LISTING_PAGE_SIZE;
+    return { start, end: start + LISTING_PAGE_SIZE };
+}
+
+export function fetchCategoryPosts(slug: string, page = 1) {
+    return client.fetch<SanityDocument[]>(POSTS_BY_CATEGORY_QUERY, { slug, ...pageRange(page) });
 }
 
 export function fetchAuthorData(slug: string) {
     return client.fetch<SanityDocument | null>(AUTHOR_QUERY, { slug });
 }
 
-export function fetchAuthorPosts(slug: string) {
-    return client.fetch<SanityDocument[]>(POSTS_BY_AUTHOR_QUERY, { slug });
+export function fetchAuthorPosts(slug: string, page = 1) {
+    return client.fetch<SanityDocument[]>(POSTS_BY_AUTHOR_QUERY, { slug, ...pageRange(page) });
 }
 
 export function fetchTagData(slug: string) {
     return client.fetch<SanityDocument | null>(TAG_QUERY, { slug });
 }
 
-export function fetchTagPosts(slug: string) {
-    return client.fetch<SanityDocument[]>(POSTS_BY_TAG_QUERY, { slug });
+export function fetchTagPosts(slug: string, page = 1) {
+    return client.fetch<SanityDocument[]>(POSTS_BY_TAG_QUERY, { slug, ...pageRange(page) });
 }
 
 export async function fetchTrendingPage() {

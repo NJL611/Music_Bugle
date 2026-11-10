@@ -1,8 +1,14 @@
 import { MetadataRoute } from 'next';
 import type { SanityDocument } from 'next-sanity';
 import { client } from '@sanity/lib/client';
-import { SITEMAP_POSTS_QUERY, ALL_CATEGORIES_QUERY } from '@sanity/lib/queries';
-import { SITE_URL } from '@/lib/constants';
+import { SITEMAP_POSTS_QUERY, ALL_CATEGORIES_QUERY, SITEMAP_AUTHORS_QUERY } from '@sanity/lib/queries';
+import { SITE_URL, SUPPORT_PAYMENTS_ENABLED } from '@/lib/constants';
+import { listingRobots } from '@/lib/utils';
+
+// sitemap.xml: static pages, indexable category/author archives, and every published article.
+// Archives go through listingRobots so the sitemap never lists a page that is itself noindex.
+
+type ListingRow = { slug: string; postCount: number; latestAt?: string };
 
 type ChangeFrequency =
   | 'always'
@@ -19,10 +25,13 @@ function toLastModified(value: string | undefined): string {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [articles, categories] = await Promise.all([
+  const [articles, categories, authors] = await Promise.all([
     client.fetch<SanityDocument[]>(SITEMAP_POSTS_QUERY),
-    client.fetch<Array<{ slug: string }>>(ALL_CATEGORIES_QUERY),
+    client.fetch<ListingRow[]>(ALL_CATEGORIES_QUERY),
+    client.fetch<ListingRow[]>(SITEMAP_AUTHORS_QUERY),
   ]);
+  // Only list archives the page itself would let Google index.
+  const indexable = (row: ListingRow) => Boolean(row.slug) && listingRobots(row.postCount, row.latestAt).index;
 
   const posts = articles.map(({ slug, publishedAt, _updatedAt }) => ({
     url: `${SITE_URL}/article/${slug}`,
@@ -36,9 +45,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/contact',
     '/privacy',
     '/terms',
-    '/refund',
+    ...(SUPPORT_PAYMENTS_ENABLED ? ['/refund', '/support'] : []),
     '/consent-preferences',
-    '/support',
     '/trending',
     '/popular',
   ].map((route) => ({
@@ -46,13 +54,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'monthly' as ChangeFrequency,
   }));
 
-  const categoryRoutes = categories
-    .filter((category) => category.slug)
-    .map(({ slug }) => ({
-      url: `${SITE_URL}/category/${slug}`,
-      changeFrequency: 'weekly' as ChangeFrequency,
-    }));
+  const listingRoutes = [
+    ...categories.filter(indexable).map(({ slug }) => `/category/${slug}`),
+    ...authors.filter(indexable).map(({ slug }) => `/author/${slug}`),
+  ].map((path) => ({
+    url: `${SITE_URL}${path}`,
+    changeFrequency: 'weekly' as ChangeFrequency,
+  }));
 
-  // author pages are noindex (bio-only), so they stay out of the sitemap
-  return [...staticRoutes, ...categoryRoutes, ...posts];
+  return [...staticRoutes, ...listingRoutes, ...posts];
 }

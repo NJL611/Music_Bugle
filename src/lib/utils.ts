@@ -278,9 +278,18 @@ export function bioToText(bio?: Array<{ children?: Array<{ text?: string }> }>):
 /** Tag/author archives below this many posts carry no content of their own worth indexing. */
 export const MIN_INDEXABLE_LISTING_POSTS = 3;
 
+/** A section whose newest post is older than this reads as abandoned (Upcoming Releases stopped in 2019). */
+const STALE_LISTING_MS = 2 * 365 * 86_400_000;
+
 // Thin archives are the "low value content" surface AdSense flags: a tag page with one post is a
 // near-duplicate of that post. follow stays true so link equity still reaches the articles.
-export function listingRobots(postCount: number | undefined) {
-    return { index: (postCount ?? 0) >= MIN_INDEXABLE_LISTING_POSTS, follow: true };
+export function listingRobots(postCount: number | undefined, latestAt?: string) {
+    const fresh = !latestAt || Date.now() - Date.parse(latestAt) < STALE_LISTING_MS;
+    return { index: (postCount ?? 0) >= MIN_INDEXABLE_LISTING_POSTS && fresh, follow: true };
+}
+
+/** Page 1 lives at the archive's own URL; later pages at `<base>/page/N`. */
+export function listingPagePath(basePath: string, page: number) {
+    return page > 1 ? `${basePath}/page/${page}` : basePath;
 }
 

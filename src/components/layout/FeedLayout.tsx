@@ -8,19 +8,38 @@ import { SidebarAdWidget } from "@/components/ui/AdUnit";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import { CategoryFeatureGrid } from "@/components/sections/PostSections";
-import { MIN_INDEXABLE_LISTING_POSTS } from "@/lib/utils";
+import Link from "@/components/ui/Link";
+import { MIN_INDEXABLE_LISTING_POSTS, listingPagePath } from "@/lib/utils";
 
-// Shared shell for category, tag, trending and popular listings: header, feature grid, feed, sidebar, footer.
+// Shared shell for category, tag, author, trending and popular listings: header, feature grid, feed, sidebar, footer.
 // Footer stays a static import so its legal links are in the server HTML, not left to hydration.
+
+interface ListingPagination {
+    page: number;
+    totalPages: number;
+    basePath: string;
+}
 
 interface FeedLayoutProps {
     title: string;
     description?: string;
     mainPosts: SanityDocument[];
     popularPosts: SanityDocument[];
-    allPostsForFooter?: SanityDocument[];
     categoryLabel?: string; // Added to customize the small label above title
     showAds?: boolean;
+    pagination?: ListingPagination;
+}
+
+// Plain <a> links (server HTML) so crawlers and AdSense reviewers can walk the whole archive.
+function Pagination({ page, totalPages, basePath }: ListingPagination) {
+    const linkClass = "font-graphiknormal hover:text-theme-red transition-colors";
+    return (
+        <nav aria-label="Pagination" className="flex items-center justify-between border-t border-gray-200 pt-6 text-sm">
+            {page > 1 ? <Link href={listingPagePath(basePath, page - 1)} className={linkClass}>← Newer</Link> : <span />}
+            <span className="text-gray-500 font-graphiklight">Page {page} of {totalPages}</span>
+            {page < totalPages ? <Link href={listingPagePath(basePath, page + 1)} className={linkClass}>Older →</Link> : <span />}
+        </nav>
+    );
 }
 
 export default function FeedLayout({
@@ -28,9 +47,9 @@ export default function FeedLayout({
     description,
     mainPosts,
     popularPosts,
-    allPostsForFooter,
     categoryLabel = "Category",
-    showAds = true
+    showAds = true,
+    pagination,
 }: FeedLayoutProps) {
 
     // AdSense "minimum content requirements": no ads on screens with little or no
@@ -39,7 +58,6 @@ export default function FeedLayout({
     const showGrid = mainPosts.length > 4;
     const featuredGridPosts = showGrid ? mainPosts.slice(0, 4) : [];
     const feedPosts = showGrid ? mainPosts.slice(4) : mainPosts;
-    const footerPosts = allPostsForFooter && allPostsForFooter.length > 0 ? allPostsForFooter : popularPosts;
 
     return (
         <main className="bg-white min-h-screen">
@@ -80,6 +98,8 @@ export default function FeedLayout({
                                     No articles found in this section.
                                 </div>
                             )}
+
+                            {pagination && pagination.totalPages > 1 && <Pagination {...pagination} />}
                         </div>
 
                     </div>
@@ -99,7 +119,8 @@ export default function FeedLayout({
                 </div>
             </div>
 
-            <Footer posts={footerPosts} />
+            {/* No posts passed: the curated popular list used to stand in here and labelled 2020 posts "The latest". */}
+            <Footer />
         </main>
     );
 }

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 
 const YOUTUBE_REGEX = /^(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be)\/.+$/
 const YOUTUBE_ID_REGEX =
-  /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?(?:[^#\s]*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
 
 const id = (url) => url.match(YOUTUBE_ID_REGEX)?.[1] ?? null
 
@@ -13,6 +13,8 @@ for (const url of [
   'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=42s',
   'https://www.youtube.com/shorts/dQw4w9WgXcQ',
   'https://m.youtube.com/watch?v=dQw4w9WgXcQ',
+  'https://www.youtube.com/watch?time_continue=5&v=dQw4w9WgXcQ',
+  'https://www.youtube.com/watch?feature=youtu.be&v=dQw4w9WgXcQ&t=3',
 ]) {
   assert.equal(YOUTUBE_REGEX.test(url), true, url)
   assert.equal(id(url), 'dQw4w9WgXcQ', url)
