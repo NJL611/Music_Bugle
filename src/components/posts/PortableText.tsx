@@ -145,7 +145,8 @@ export const portableText: PortableTextComponents = {
             const videoId = value?.url ? getYouTubeId(value.url) : null;
             return videoId ? <YouTubeEmbed videoId={videoId} /> : null;
         },
-        ad: () => <AdUnit />,
+        // Margin keeps body links (e.g. "Watch the video on YouTube") away from the ad: accidental clicks.
+        ad: () => <AdUnit className="my-10" />,
         spacer: ({ value }) => {
             const heights: Record<string, string> = { small: 'h-6', medium: 'h-12', large: 'h-24' };
             return <div aria-hidden className={heights[value?.size] ?? 'h-12'} />;

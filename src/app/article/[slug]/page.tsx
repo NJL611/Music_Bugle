@@ -81,14 +81,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </div>
         </div>
       )}
+      {/* Above "More like this", not under Disqus: an ad right after the "Show comments" button draws accidental clicks. */}
+      <AdUnit variant="responsive-leaderboard" className="my-12" />
       <div className="lg:px-24 mx-auto pb-10 px-6">
         <MoreLikeThis posts={posts} currentPostId={post._id} />
       </div>
       <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
         <Disqus post={post} />
-      </div>
-      <div className="py-12">
-        <AdUnit variant="responsive-leaderboard" />
       </div>
       <Footer />
 
