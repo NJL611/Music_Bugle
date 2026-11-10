@@ -409,9 +409,16 @@ export const POSTS_BY_AUTHOR_QUERY = groq`
   }
 `;
 
-// Article pages need ~12 previews (sidebar 4, popular 5, related 4). Without the slice every
-// article ships all ~800 preview docs — with image metadata — in its RSC payload (~3.4 MB/page).
-export const POSTS_PREVIEW_LIMITED_QUERY = groq`${POSTS_PREVIEW_QUERY}[0...$limit]`;
+// Article sidebar (Related, Trending) and "More like this" in one request; fetchArticleSuggestions dedupes.
+// Related ranks by shared tags, then shared category, then date; small slices keep the RSC payload light.
+export const ARTICLE_SUGGESTIONS_QUERY = groq`{
+  "related": *[_type == "post" && defined(slug) && _id != $id && (references($tagIds) || references($categoryIds))]
+    | order(count(tags[_ref in $tagIds]) desc, count(categories[_ref in $categoryIds]) desc, coalesce(publishedAt, _createdAt) desc)
+    [0...8] { ${POST_FEED_FIELDS} },
+  "pinned": *[_type == "post" && defined(slug) && defined(trendingPriority)] | order(trendingPriority asc) [0...8] { ${POST_FEED_FIELDS} },
+  "featured": *[_id == "trendingPage"][0].featuredPosts[]-> { ${POST_FEED_FIELDS} },
+  "latest": *[_type == "post" && defined(slug)] | order(coalesce(publishedAt, _createdAt) desc) [0...12] { ${POST_FEED_FIELDS} }
+}`;
 
 // Slug-only projections for build/SEO surfaces that need every post but none of its content.
 export const POST_SLUGS_QUERY = groq`

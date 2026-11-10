@@ -18,12 +18,13 @@ const WORDS_PER_MINUTE = 230;
 
 interface Props {
   post: SanityDocument;
-  posts: SanityDocument[];
+  related: SanityDocument[];
+  trending: SanityDocument[];
   /** Body spacing preset; only the preview route sets it, live articles use the default. */
   spacing?: "tight" | "standard" | "airy";
 }
 
-export default function Post({ post, posts, spacing }: Props) {
+export default function Post({ post, related, trending, spacing }: Props) {
   const { title, subtitle, mainImage, body, featured_image, author, publishedAt, categories } = post;
   const primaryCategory = categories?.[0];
 
@@ -155,7 +156,7 @@ export default function Post({ post, posts, spacing }: Props) {
           ) : null}
         </div>
         <div className="md:col-span-2 relative">
-          <Sidebar posts={posts} />
+          <Sidebar related={related} trending={trending} />
         </div>
       </div>
     </main>

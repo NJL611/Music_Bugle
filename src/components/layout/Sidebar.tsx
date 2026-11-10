@@ -8,38 +8,33 @@ import { HOMEPAGE_COUNTS } from "@/lib/constants";
 import { formatDate, resolvePostPath } from "@/lib/utils";
 
 
-// --- Sidebar Component ---
+// Article sidebar: ad, Related Articles and Trending; PopularPostsWidget is the listing pages' Popular box.
+// Related and Trending arrive already deduped by fetchArticleSuggestions, so the two lists never overlap.
 
 interface SidebarProps {
-    posts: SanityDocument[];
+    related: SanityDocument[];
+    trending: SanityDocument[];
 }
 
-export default function Sidebar({ posts }: SidebarProps) {
-    if (!posts || posts.length === 0) return null;
-
-    const suggestionPosts = posts.slice(0, 4);
-    const renderSuggestionFeed = () => (
-        <PostFeed posts={suggestionPosts} columns={1} variant="list" showImage />
+function SuggestionSection({ title, posts }: { title: string; posts: SanityDocument[] }) {
+    if (posts.length === 0) return null;
+    return (
+        <div className="mb-8">
+            <span className="text-lg   block mb-4 pb-2">{title}</span>
+            <div className="-mt-4 border-t-0">
+                <PostFeed posts={posts} columns={1} variant="list" showImage />
+            </div>
+        </div>
     );
+}
 
+export default function Sidebar({ related, trending }: SidebarProps) {
     return (
         <aside className="w-full sticky top-2">
             <div className="w-full lg:px-6 py-2 border-t lg:border-0">
-                {/* Ad Section */}
                 <SidebarAdWidget className="mx-auto mt-5 z-10 mb-8" />
-
-
-                {/* Related Articles */}
-                <div className="mb-8">
-                    <span className="text-lg   block mb-4 pb-2">Related Articles</span>
-                    <div className="-mt-4 border-t-0">{renderSuggestionFeed()}</div>
-                </div>
-
-                {/* Trending Section */}
-                <div>
-                    <span className="text-lg   block mb-4 pb-2">Trending</span>
-                    <div className="-mt-4 border-t-0">{renderSuggestionFeed()}</div>
-                </div>
+                <SuggestionSection title="Related Articles" posts={related} />
+                <SuggestionSection title="Trending" posts={trending} />
             </div>
         </aside>
     );
