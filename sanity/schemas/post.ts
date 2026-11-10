@@ -46,6 +46,11 @@ export default defineType({
       options: {
         hotspot: true,
       },
+      // The site's lists filter on mainImage.asset, so a post published without one silently drops off the homepage and sidebars.
+      validation: (Rule) =>
+        Rule.custom((value: { asset?: unknown } | undefined) =>
+          value?.asset ? true : 'Add a featured image. Posts without one are hidden from the homepage, Trending and sidebars.',
+        ),
       fields: [
         {
           name: 'alt',
