@@ -3,7 +3,7 @@ import type { SanityDocument } from 'next-sanity';
 export const POPULAR_DEFAULTS = {
   title: 'Popular',
   description:
-    'The stories readers are engaging with most — curated by our editors until analytics is connected.',
+    'The interviews and reviews readers keep coming back to, picked by our editors.',
   autoFillDays: 14,
   autoFillLimit: 12,
 } as const;

@@ -2,6 +2,10 @@
 
 import { groq } from "next-sanity";
 
+// Curated and recommended lists skip posts with no Sanity image: ~95 WordPress imports lost theirs for good.
+// Archives still list every post, imageless ones last, so those articles keep their internal links.
+const HAS_IMAGE = groq`defined(mainImage.asset)`;
+
 // Full post data with complete body
 export const POSTS_QUERY = groq`
   *[_type == "post" && defined(slug)] | order(coalesce(publishedAt, _createdAt) desc) [0...100] {
@@ -45,7 +49,7 @@ export const POSTS_QUERY = groq`
 
 // Preview data with truncated body for lists/grids
 export const POSTS_PREVIEW_QUERY = groq`
-  *[_type == "post" && defined(slug)] | order(coalesce(publishedAt, _createdAt) desc) [0...100] {
+  *[_type == "post" && defined(slug) && ${HAS_IMAGE}] | order(coalesce(publishedAt, _createdAt) desc) [0...100] {
     _id,
     title,
     subtitle,
@@ -199,7 +203,7 @@ export const TAG_QUERY = groq`
 `;
 
 export const POSTS_BY_TAG_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "tag" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "tag" && slug.current == $slug]._id)] | order(${HAS_IMAGE} desc, coalesce(publishedAt, _createdAt) desc) [$start...$end] {
     _id,
     title,
     subtitle,
@@ -252,12 +256,14 @@ export const CATEGORY_QUERY = groq`
     _id,
     title,
     "slug": slug.current,
-    description
+    description,
+    "postCount": count(*[_type == "post" && defined(slug) && references(^._id)]),
+    "latestAt": *[_type == "post" && defined(slug) && references(^._id)] | order(coalesce(publishedAt, _createdAt) desc)[0]{"at": coalesce(publishedAt, _createdAt)}.at
   }
 `;
 
 export const POSTS_BY_CATEGORY_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "category" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "category" && slug.current == $slug]._id)] | order(${HAS_IMAGE} desc, coalesce(publishedAt, _createdAt) desc) [$start...$end] {
     _id,
     title,
     subtitle,
@@ -301,7 +307,16 @@ export const ALL_CATEGORIES_QUERY = groq`
     _id,
     title,
     "slug": slug.current,
-    description
+    description,
+    "postCount": count(*[_type == "post" && !(_id in path("drafts.**")) && references(^._id)]),
+    "latestAt": *[_type == "post" && !(_id in path("drafts.**")) && references(^._id)] | order(coalesce(publishedAt, _createdAt) desc)[0]{"at": coalesce(publishedAt, _createdAt)}.at
+  }
+`;
+
+export const SITEMAP_AUTHORS_QUERY = groq`
+  *[_type == "author" && defined(slug)]{
+    "slug": slug.current,
+    "postCount": count(*[_type == "post" && !(_id in path("drafts.**")) && references(^._id)])
   }
 `;
 
@@ -350,12 +365,12 @@ export const TRENDING_PAGE_QUERY = groq`
     description,
     autoFillDays,
     autoFillLimit,
-    "featuredPosts": featuredPosts[]-> { ${POST_FEED_FIELDS} }
+    "featuredPosts": featuredPosts[defined(@->mainImage.asset)]-> { ${POST_FEED_FIELDS} }
   }
 `;
 
 export const TRENDING_PRIORITY_POSTS_QUERY = groq`
-  *[_type == "post" && defined(slug) && defined(trendingPriority)] | order(trendingPriority asc) {
+  *[_type == "post" && defined(slug) && defined(trendingPriority) && ${HAS_IMAGE}] | order(trendingPriority asc) {
     ${POST_FEED_FIELDS}
   }
 `;
@@ -364,6 +379,7 @@ export const TRENDING_AUTO_POSTS_QUERY = groq`
   *[
     _type == "post" &&
     defined(slug) &&
+    ${HAS_IMAGE} &&
     coalesce(publishedAt, _createdAt) >= $cutoff &&
     !(_id in $excludeIds)
   ] | order(coalesce(publishedAt, _createdAt) desc) [0...$limit] {
@@ -377,7 +393,7 @@ export const POPULAR_PAGE_QUERY = groq`
     description,
     autoFillDays,
     autoFillLimit,
-    "featuredPosts": featuredPosts[]-> { ${POST_FEED_FIELDS} }
+    "featuredPosts": featuredPosts[defined(@->mainImage.asset)]-> { ${POST_FEED_FIELDS} }
   }
 `;
 
@@ -393,14 +409,21 @@ export const AUTHOR_QUERY = groq`
 `;
 
 export const POSTS_BY_AUTHOR_QUERY = groq`
-  *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(coalesce(publishedAt, _createdAt) desc) [0...30] {
+  *[_type == "post" && defined(slug) && references(*[_type == "author" && slug.current == $slug]._id)] | order(${HAS_IMAGE} desc, coalesce(publishedAt, _createdAt) desc) [$start...$end] {
     ${POST_FEED_FIELDS}
   }
 `;
 
-// Article pages need ~12 previews (sidebar 4, popular 5, related 4). Without the slice every
-// article ships all ~800 preview docs — with image metadata — in its RSC payload (~3.4 MB/page).
-export const POSTS_PREVIEW_LIMITED_QUERY = groq`${POSTS_PREVIEW_QUERY}[0...$limit]`;
+// Article sidebar (Related, Trending) and "More like this" in one request; fetchArticleSuggestions dedupes.
+// Related ranks by shared tags, then shared category, then date; small slices keep the RSC payload light.
+export const ARTICLE_SUGGESTIONS_QUERY = groq`{
+  "related": *[_type == "post" && defined(slug) && ${HAS_IMAGE} && _id != $id && (references($tagIds) || references($categoryIds))]
+    | order(count(tags[_ref in $tagIds]) desc, count(categories[_ref in $categoryIds]) desc, coalesce(publishedAt, _createdAt) desc)
+    [0...8] { ${POST_FEED_FIELDS} },
+  "pinned": *[_type == "post" && defined(slug) && defined(trendingPriority) && ${HAS_IMAGE}] | order(trendingPriority asc) [0...8] { ${POST_FEED_FIELDS} },
+  "featured": *[_id == "trendingPage"][0].featuredPosts[defined(@->mainImage.asset)]-> { ${POST_FEED_FIELDS} },
+  "latest": *[_type == "post" && defined(slug) && ${HAS_IMAGE}] | order(coalesce(publishedAt, _createdAt) desc) [0...12] { ${POST_FEED_FIELDS} }
+}`;
 
 // Slug-only projections for build/SEO surfaces that need every post but none of its content.
 export const POST_SLUGS_QUERY = groq`

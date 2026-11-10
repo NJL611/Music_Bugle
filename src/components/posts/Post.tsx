@@ -3,23 +3,28 @@ import Image from "next/image";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import type { SanityDocument } from "next-sanity";
 import Sidebar from "@/components/layout/Sidebar";
-import { AdUnit } from "@/components/ui/AdUnit";
 import { ShareButtons } from "@/components/ui/Primitives";
 import { portableText } from "@/components/posts/PortableText";
 import { blockText, cleanPostBody, formatDate, sanityImageBuilder, usableImageUrl } from "@/lib/utils";
 
+// Article body shared by /article and /preview: header, hero image, body with in-body ads, sidebar.
+// In-body ads are capped and never follow a Q&A question line, so no ad splits a question from its answer.
+
 const AD_INTERVAL = 8;
 const MIN_PARAGRAPHS_FOR_ADS = 8;
+const MAX_IN_BODY_ADS = 3;
+const QA_QUESTION = /^\s*music bugle\s*[-–—:]/i;
 const WORDS_PER_MINUTE = 230;
 
 interface Props {
   post: SanityDocument;
-  posts: SanityDocument[];
+  related: SanityDocument[];
+  trending: SanityDocument[];
   /** Body spacing preset; only the preview route sets it, live articles use the default. */
   spacing?: "tight" | "standard" | "airy";
 }
 
-export default function Post({ post, posts, spacing }: Props) {
+export default function Post({ post, related, trending, spacing }: Props) {
   const { title, subtitle, mainImage, body, featured_image, author, publishedAt, categories } = post;
   const primaryCategory = categories?.[0];
 
@@ -38,17 +43,23 @@ export default function Post({ post, posts, spacing }: Props) {
   const readMinutes = Math.max(1, Math.round(wordCount / WORDS_PER_MINUTE));
 
   const processedBody: PortableTextBlock[] = [];
-  let paragraphCounter = 0;
+  let sinceLastAd = 0;
+  let adsPlaced = 0;
 
   cleanBody.forEach((block, index) => {
     processedBody.push(block);
-
-    if (shouldInsertAds && block._type === "block" && block.style === "normal") {
-      paragraphCounter++;
-
-      if (paragraphCounter % AD_INTERVAL === 0) {
-        processedBody.push({ _type: "ad", _key: `ad-${index}`, children: [] });
-      }
+    if (!shouldInsertAds || block._type !== "block" || block.style !== "normal") return;
+    sinceLastAd++;
+    // The last block is skipped too: an ad there would sit against the share buttons.
+    if (
+      sinceLastAd >= AD_INTERVAL &&
+      adsPlaced < MAX_IN_BODY_ADS &&
+      index < cleanBody.length - 1 &&
+      !QA_QUESTION.test(blockText(block) ?? "")
+    ) {
+      processedBody.push({ _type: "ad", _key: `ad-${index}`, children: [] });
+      adsPlaced++;
+      sinceLastAd = 0;
     }
   });
 
@@ -66,11 +77,8 @@ export default function Post({ post, posts, spacing }: Props) {
 
   return (
     <main className="mx-auto">
-      <div className="py-8 md:pt-10 md:pb-6">
-        <AdUnit variant="responsive-leaderboard" />
-      </div>
-
-      <div className="lg:pl-24 px-6 lg:pr-6 mx-auto mt-5 grid grid-cols-1 lg:grid-cols-8 border-b border-t border-gray-200">
+      {/* No ad above the article: right under the nav it draws accidental clicks. mt-21 keeps the old gap. */}
+      <div className="lg:pl-24 px-6 lg:pr-6 mx-auto mt-21 grid grid-cols-1 lg:grid-cols-8 border-b border-t border-gray-200">
         <div className="lg:col-span-6 lg:border-r border-gray-200 lg:pr-6">
           <div className="mt-8 md:mt-10 text-center text-[11px] uppercase tracking-[.16em] font-graphiknormal text-theme-red">
             {primaryCategory?.slug ? (
@@ -148,7 +156,7 @@ export default function Post({ post, posts, spacing }: Props) {
           ) : null}
         </div>
         <div className="md:col-span-2 relative">
-          <Sidebar posts={posts} />
+          <Sidebar related={related} trending={trending} />
         </div>
       </div>
     </main>

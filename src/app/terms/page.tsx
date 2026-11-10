@@ -3,7 +3,7 @@
 
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
-import { SITE_URL, LEGAL_LAST_UPDATED } from "@/lib/constants";
+import { SITE_URL, LEGAL_LAST_UPDATED, SUPPORT_PAYMENTS_ENABLED } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -61,22 +61,19 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">3. Support Payments</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">3. Copyright and Photo Credits</h2>
               <p className="mb-4">
-                The Music Bugle offers support payment options for users who wish to support independent music journalism. By making a support payment, you acknowledge that:
+                Articles, interviews and reviews on this website are the work of The Music Bugle and its contributors. Photos and artwork are usually supplied by artists, their labels or their publicists for editorial use, and they remain the property of their owners.
               </p>
-              <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
-                <li>Support payments are for content and services, not charitable donations</li>
-                <li>Support payments help maintain our independent journalism</li>
-                <li>Support payments are processed through Stripe and subject to Stripe&apos;s terms of service</li>
-                <li>Recurring monthly support payments can be cancelled at any time</li>
-              </ul>
+              <p className="mb-4">
+                If you own a photo or other material on this website and believe it is used without permission, email <a href="mailto:info@themusicbugle.com" className="text-theme-red hover:underline">info@themusicbugle.com</a> with the page address and the details of your claim. We will review it promptly and remove or credit the material as appropriate.
+              </p>
             </section>
 
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">4. User Content</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">4. Comments</h2>
               <p className="mb-4">
-                Users may post comments, reviews, and other content. By posting content, you grant The Music Bugle a non-exclusive, royalty-free, perpetual, and worldwide license to use, reproduce, modify, and distribute such content.
+                Readers can comment on articles through Disqus, which applies its own terms of service. Please do not post spam, harassment, hate speech, or anything unlawful or infringing. We may remove any comment that breaks these rules. By posting a comment, you grant The Music Bugle a non-exclusive, royalty-free, perpetual, and worldwide license to display and distribute it.
               </p>
             </section>
 
@@ -118,12 +115,26 @@ export default function TermsPage() {
             <section>
               <h2 className="text-[28px] font-prata text-gray-900 mb-4">10. Governing Law</h2>
               <p className="mb-4">
-                Any claim relating to The Music Bugle&apos;s website shall be governed by the laws of the jurisdiction in which The Music Bugle operates without regard to its conflict of law provisions.
+                Any claim relating to The Music Bugle&apos;s website shall be governed by the laws of the State of New York, United States, without regard to its conflict of law provisions.
               </p>
             </section>
 
+            {SUPPORT_PAYMENTS_ENABLED && (
+              <section>
+                <h2 className="text-[28px] font-prata text-gray-900 mb-4">11. Support Payments</h2>
+                <p className="mb-4">
+                  Readers can make one-time support payments to help fund independent music journalism. By making a support payment, you acknowledge that:
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+                  <li>Support payments are voluntary contributions, not charitable donations</li>
+                  <li>Payments are processed by Stripe and subject to Stripe&apos;s terms of service</li>
+                  <li>Refunds follow our <a href="/refund" className="text-theme-red hover:underline">Refund Policy</a></li>
+                </ul>
+              </section>
+            )}
+
             <section>
-              <h2 className="text-[28px] font-prata text-gray-900 mb-4">11. Contact Information</h2>
+              <h2 className="text-[28px] font-prata text-gray-900 mb-4">{SUPPORT_PAYMENTS_ENABLED ? 12 : 11}. Contact Information</h2>
               <p className="mb-4">
                 If you have any questions about these Terms of Service, please contact us at:
               </p>

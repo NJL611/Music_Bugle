@@ -13,6 +13,13 @@ interface AdUnitProps {
     adSlot?: string;
 }
 
+const AD_FORMATS: Record<NonNullable<AdUnitProps['variant']>, string> = {
+    default: 'rectangle',
+    sidebar: 'rectangle',
+    vertical: 'vertical',
+    'responsive-leaderboard': 'horizontal',
+};
+
 export function AdUnit({
     width,
     height,
@@ -40,13 +47,15 @@ export function AdUnit({
         finalHeight = height || AD_SIZES.RESPONSIVE_LEADERBOARD.height;
     } else {
         finalWidth = width || "w-[300px] md:w-[336px]";
-        finalHeight = height || "h-[250px] md:h-[280px]";
+        finalHeight = height || "min-h-[250px] md:min-h-[280px]";
     }
 
     // Initialize AdSense on mount & route changes (production only)
     useEffect(() => {
         if (!SHOW_ADS) return;
         if (process.env.NODE_ENV === 'development') return;
+        // Automated browsers are most of our traffic; their impressions and clicks would count as invalid traffic.
+        if (navigator.webdriver) return;
 
         // Small delay to let the DOM settle after navigation
         const timer = setTimeout(() => {
@@ -95,14 +104,17 @@ export function AdUnit({
             <div className="h-[22px] flex items-center">
                 <span className="px-2 text-[10px] tracking-wider text-gray-400 font-medium">Advertisement</span>
             </div>
-            <ins
-                className="adsbygoogle"
-                style={{ display: 'block' }}
-                data-ad-client={ADSENSE_PUBLISHER_ID}
-                data-ad-slot={effectiveSlot}
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-            />
+            <div className={finalHeight}>
+                {/* A fixed shape per slot: "auto" can drop a 250px-tall unit into a 50px banner slot. */}
+                <ins
+                    className="adsbygoogle"
+                    style={{ display: 'block' }}
+                    data-ad-client={ADSENSE_PUBLISHER_ID}
+                    data-ad-slot={effectiveSlot}
+                    data-ad-format={AD_FORMATS[variant]}
+                    data-full-width-responsive={variant === 'default' ? 'true' : 'false'}
+                />
+            </div>
         </div>
     );
 }

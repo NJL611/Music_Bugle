@@ -11,7 +11,7 @@ import { fetchTrendingPosts } from "@/lib/fetchers";
 import { LeadStories, SidebarArticles } from "@/components/sections/HomeSections";
 import { SectionHeader } from "@/components/sections/SectionHeader";
 import { AdUnit } from "@/components/ui/AdUnit";
-import { HOMEPAGE_COUNTS, SHOWCASE_MODE, SITE_URL } from "@/lib/constants";
+import { HOMEPAGE_COUNTS, SHOWCASE_MODE, SITE_URL, SUPPORT_PAYMENTS_ENABLED } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const revalidate = 600;
@@ -104,7 +104,7 @@ export default async function Home() {
 
       </div>
 
-      <SupportBanner />
+      {SUPPORT_PAYMENTS_ENABLED && <SupportBanner />}
 
       <div className={"w-full mx-auto px-4 md:px-8 py-6 2xl:px-64"}>
         <LatestPosts posts={content.latestNews} />
@@ -177,7 +177,7 @@ function ShowcaseHome({ allPosts, trending }: { allPosts: SanityDocument[]; tren
         </div>
       </div>
 
-      <SupportBanner />
+      {SUPPORT_PAYMENTS_ENABLED && <SupportBanner />}
 
       <div className="w-full mx-auto px-4 md:px-8 py-6 2xl:px-64">
         <BottomSection posts={content.news} title="News" viewAllLink="/category/news" />

@@ -47,7 +47,11 @@ export const TRENDING_ITEMS = SHOWCASE_MODE
       ];
 
 /** Static date shown on legal pages — update when policy text changes. */
-export const LEGAL_LAST_UPDATED = 'October 6, 2026';
+export const LEGAL_LAST_UPDATED = 'November 9, 2026';
+
+// Reader payments are off until AdSense approval: /support, /refund, /payment-success and the payment API 404,
+// and every link to them is hidden. Flip to true to bring them back (check the Stripe keys first).
+export const SUPPORT_PAYMENTS_ENABLED = false;
 
 export const STRIPE_PUBLISHABLE_KEY =
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
@@ -57,7 +61,7 @@ export const STRIPE_PUBLISHABLE_KEY =
 export const FOOTER_COMPANY_ITEMS = [
     { label: 'About', link: '/about' },
     { label: 'Contact us', link: '/contact' },
-    { label: 'Support Us', link: '/support' },
+    ...(SUPPORT_PAYMENTS_ENABLED ? [{ label: 'Support Us', link: '/support' }] : []),
     { label: 'Cookie Preferences', link: '/consent-preferences' },
 ];
 
@@ -79,7 +83,8 @@ export const FEATURE_IMAGE_SIZES = "(max-width: 768px) 100vw, 800px";
 // --- Regex ---
 export const YOUTUBE_REGEX = /^(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be)\/.+$/;
 // ?si= tracking params on YouTube "Share" links used to be swallowed into the captured id.
-export const YOUTUBE_ID_REGEX = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+// v= may follow other params (watch?time_continue=5&v=…); those links rendered as bare text.
+export const YOUTUBE_ID_REGEX = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?(?:[^#\s]*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
 
 // --- Homepage Counts ---
 export const HOMEPAGE_COUNTS = {
@@ -95,6 +100,9 @@ export const HOMEPAGE_COUNTS = {
     MUST_WATCH: 4,
     POPULAR_SIDEBAR: 5,
 };
+
+/** Posts per category/tag/author archive page. */
+export const LISTING_PAGE_SIZE = 30;
 
 /** Category slugs for homepage sections that require category-filtered posts. */
 export const HOMEPAGE_CATEGORIES = {
@@ -193,16 +201,17 @@ export const AD_SIZES = {
     },
     RESPONSIVE_LEADERBOARD: {
         width: "w-[320px] md:w-[728px] lg:w-[970px]",
-        height: "h-[50px] md:h-[90px] lg:h-[90px]"
+        height: "min-h-[50px] md:min-h-[90px]"
     },
-    // Custom UI sizes
+    // Custom UI sizes. Heights are min-h so the slot is reserved before the ad loads (no layout shift).
+    // 300px wide: the article sidebar is sticky, and Google caps sticky ads at 300px.
     SIDEBAR: {
-        width: "w-[300px] md:w-[336px]",
-        height: "h-[250px] md:h-[280px]"
+        width: "w-[300px]",
+        height: "min-h-[250px]"
     },
     LARGE_VERTICAL: {
         width: "w-[300px]",
-        height: "h-[600px]"
+        height: "min-h-[600px]"
     },
 
 

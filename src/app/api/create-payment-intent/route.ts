@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SUPPORT_PAYMENTS_ENABLED } from "@/lib/constants";
+
+// Creates the Stripe PaymentIntent behind the /support form. Off with SUPPORT_PAYMENTS_ENABLED:
+// an open endpoint taking any amount is a card-testing target, so it 404s until it validates input.
 
 export async function POST(request: NextRequest) {
+  if (!SUPPORT_PAYMENTS_ENABLED) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
   const secretKey = process.env.STRIPE_SECRET_KEY;
   // Init at request time, not module load: a missing key must 503, not crash the build.
   if (!secretKey) {

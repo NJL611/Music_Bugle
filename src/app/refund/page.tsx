@@ -3,8 +3,9 @@
 
 import dynamic from "next/dynamic";
 import Nav from "@/components/layout/Nav";
-import { SITE_URL, LEGAL_LAST_UPDATED } from "@/lib/constants";
+import { SITE_URL, LEGAL_LAST_UPDATED, SUPPORT_PAYMENTS_ENABLED } from "@/lib/constants";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Refund and Cancellation Policy",
@@ -25,6 +26,7 @@ const Footer = dynamic(() => import("@/components/layout/Footer"), {
 });
 
 export default function RefundPage() {
+  if (!SUPPORT_PAYMENTS_ENABLED) notFound();
   return (
     <main className="bg-white min-h-screen">
       <Nav />

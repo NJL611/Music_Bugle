@@ -5,8 +5,9 @@ import Link from "@/components/ui/Link";
 import { notFound } from "next/navigation";
 import nextDynamic from "next/dynamic";
 import type { SanityDocument } from "next-sanity";
-import { POSTS_PREVIEW_LIMITED_QUERY, POST_QUERY, POST_SLUGS_QUERY } from "@sanity/lib/queries";
+import { POST_QUERY, POST_SLUGS_QUERY } from "@sanity/lib/queries";
 import { client } from "@sanity/lib/client";
+import { fetchArticleSuggestions } from "@/lib/fetchers";
 import Nav from "@/components/layout/Nav";
 import { AdUnit } from "@/components/ui/AdUnit";
 import { MoreLikeThis } from "@/components/sections/PostSections";
@@ -27,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
-  const posts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_LIMITED_QUERY, { limit: 13 });
+  const { related, trending, more } = await fetchArticleSuggestions(post);
   const articleUrl = `${SITE_URL}/article/${slug}`;
   const authorBio = bioToText(post.author?.bio);
 
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         authorBio={authorBio}
       />
       <Nav />
-      <Post post={post} posts={posts} />
+      <Post post={post} related={related} trending={trending} />
       <div className="w-full lg:pl-24 px-6 lg:pr-12 py-8 border-b border-gray-200">
         <span className="block text-lg mb-4 font-prata  ">Tags:</span>
         <div className="flex gap-2 flex-wrap">
@@ -81,14 +82,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </div>
         </div>
       )}
+      {/* Above "More like this", not under Disqus: an ad right after the "Show comments" button draws accidental clicks. */}
+      <AdUnit variant="responsive-leaderboard" className="my-12" />
       <div className="lg:px-24 mx-auto pb-10 px-6">
-        <MoreLikeThis posts={posts} currentPostId={post._id} />
+        <MoreLikeThis posts={more} currentPostId={post._id} />
       </div>
       <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
         <Disqus post={post} />
-      </div>
-      <div className="py-12">
-        <AdUnit variant="responsive-leaderboard" />
       </div>
       <Footer />
 
@@ -126,9 +126,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
 
     const articleUrl = `${SITE_URL}/article/${slug}`;
+    // Some imported titles carry trailing spaces, which show up as "Title  - The Music Bugle".
+    const title = meta.title?.trim() || 'No Title';
 
     return {
-      title: meta.title || 'No Title',
+      title,
       description: meta.description || meta.subtitle || METADATA.description,
       image: meta.mainImage?.asset.url || METADATA.image,
       keywords: meta.keywords || 'music, news, latest updates',
@@ -136,7 +138,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       publishedTime: meta.publishedAt || '',
       modifiedTime: meta._updatedAt || '',
       openGraph: {
-        title: meta.title,
+        title,
         description: meta.description || meta.subtitle || METADATA.description,
         url: articleUrl,
         locale: 'en-US',
@@ -152,7 +154,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         modified_time: meta._updatedAt || '',
       },
       twitter: {
-        title: meta.title,
+        title,
         description: meta.description || meta.subtitle || METADATA.description,
         images: meta.mainImage?.asset.url || METADATA.image,
         card: 'summary_large_image',
