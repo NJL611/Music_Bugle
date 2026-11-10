@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import { createClient } from "next-sanity";
 import type { SanityDocument } from "next-sanity";
-import { POSTS_PREVIEW_LIMITED_QUERY, POST_QUERY } from "@sanity/lib/queries";
-import { client } from "@sanity/lib/client";
+import { POST_QUERY } from "@sanity/lib/queries";
+import { fetchArticleSuggestions } from "@/lib/fetchers";
 import { dataset, projectId } from "@sanity/env";
 import Nav from "@/components/layout/Nav";
 import Post from "@/components/posts/Post";
@@ -51,7 +51,7 @@ export default async function PreviewPage({
     notFound();
   }
 
-  const posts = await client.fetch<SanityDocument[]>(POSTS_PREVIEW_LIMITED_QUERY, { limit: 13 });
+  const { related, trending } = await fetchArticleSuggestions(post);
 
   const requested = (await searchParams).spacing;
   const spacing: Spacing = SPACING_PRESETS.includes(requested as Spacing)
@@ -84,7 +84,7 @@ export default async function PreviewPage({
       </div>
       <Nav />
       {/* VisualEditing mounts once in the root layout, gated on draft mode. */}
-      <Post post={post} posts={posts} spacing={spacing} />
+      <Post post={post} related={related} trending={trending} spacing={spacing} />
     </>
   );
 }
