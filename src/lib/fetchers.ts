@@ -151,6 +151,8 @@ export async function fetchArticleSuggestions(post: SanityDocument) {
     const related = take(4, lists.related);
     const trending = take(4, lists.pinned, lists.featured, lists.latest);
     const more = take(4, lists.related, lists.latest);
-    return { related, trending, more };
+    // Footer's "The latest" skips the dedupe: deduped, it would show older posts under that heading.
+    const latest = (lists.latest ?? []).filter((p): p is SanityDocument => !!p?._id && p._id !== id);
+    return { related, trending, more, latest };
 }
 
