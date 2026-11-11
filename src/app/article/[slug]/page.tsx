@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
-  const { related, trending, more } = await fetchArticleSuggestions(post);
+  const { related, trending, more, latest } = await fetchArticleSuggestions(post);
   const articleUrl = `${SITE_URL}/article/${slug}`;
   const authorBio = bioToText(post.author?.bio);
 
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="lg:px-24 mx-auto pt-8 pb-10 px-6">
         <Disqus post={post} />
       </div>
-      <Footer />
+      <Footer posts={latest} />
 
     </>
   );
