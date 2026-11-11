@@ -76,7 +76,8 @@ export function AdUnit({
     }, [pathname]);
 
     // If ads are disabled, render nothing — no empty containers, no layout gaps
-    if (!SHOW_ADS) {
+    // Draft previews are only ever opened by editors, so ads there would just be self-generated impressions.
+    if (!SHOW_ADS || pathname?.startsWith('/preview/')) {
         return null;
     }
 
@@ -100,7 +101,7 @@ export function AdUnit({
 
     // Production: render real AdSense <ins> element
     return (
-        <div ref={adRef} className={`mx-auto max-w-full ${finalWidth} ${className}`}>
+        <div ref={adRef} className={`ad-slot mx-auto max-w-full ${finalWidth} ${className}`}>
             <div className="h-[22px] flex items-center">
                 <span className="px-2 text-[10px] tracking-wider text-gray-400 font-medium">Advertisement</span>
             </div>
