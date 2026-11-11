@@ -232,6 +232,11 @@
 .node-content-body > h3 { font-size: calc(var(--article-size) * 1.3); }
 .node-content-body > h4 { font-size: calc(var(--article-size) * 1.1); }
 
+/* Google marks a slot "unfilled" when it has no ad to serve; without this it stays a blank labeled box. */
+.ad-slot:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+  display: none;
+}
+
 .node-content-body > *:first-child {
   margin-top: 0;
 }
