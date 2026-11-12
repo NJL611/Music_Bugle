@@ -36,7 +36,7 @@ export function LeadStories({ lead, secondary, headlines = [] }: { lead: SanityD
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                         priority
                         fetchPriority="high"
-                        quality={70}
+                        quality={75}
                         sizes={HERO_IMAGE_SIZES}
                     />
                 </div>
@@ -52,7 +52,7 @@ export function LeadStories({ lead, secondary, headlines = [] }: { lead: SanityD
             {/* Fills the gap left by the taller secondary column. */}
             {headlines.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    {headlines.map((post) => (
+                    {headlines.map((post, index) => (
                         <Link key={post._id} href={resolvePostPath(post)} className="flex flex-col group">
                             <div className="relative w-full aspect-video lg:aspect-[2/1] mb-2 overflow-hidden rounded-sm">
                                 <Image
@@ -60,6 +60,8 @@ export function LeadStories({ lead, secondary, headlines = [] }: { lead: SanityD
                                     alt={post.title}
                                     fill
                                     className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                    // On phones the first headline is as large as the lead and sits in the first viewport, so it can be the LCP.
+                                    loading={index === 0 ? "eager" : "lazy"}
                                     quality={65}
                                     sizes={GRID_IMAGE_SIZES}
                                 />
