@@ -81,6 +81,8 @@ export default async function Home() {
             variant="grid"
           />
 
+          <AdUnit variant="responsive-leaderboard" className="mt-12" />
+
           <div className="w-full mt-12">
             <div className="flex flex-col lg:flex-row gap-8">
 
@@ -116,7 +118,10 @@ export default async function Home() {
           title="Music Videos"
           viewAllLink="/category/music-videos"
         />
+        <AdUnit variant="responsive-leaderboard" />
         <MustReadSection posts={content.mustWatch} viewAllLink="/category/music-videos" />
+        {/* Negative margin eats Must Read's bottom spacing; an unfilled slot is display:none, so the gap returns. */}
+        <AdUnit variant="responsive-leaderboard" className="-mt-12 mb-6" />
       </div>
 
       <Footer posts={allPosts} />
@@ -159,6 +164,8 @@ function ShowcaseHome({ allPosts, trending }: { allPosts: SanityDocument[]; tren
             variant="grid"
           />
 
+          <AdUnit variant="responsive-leaderboard" className="mt-12" />
+
           <div className="w-full mt-12">
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="w-full lg:w-3/4">
@@ -168,10 +175,13 @@ function ShowcaseHome({ allPosts, trending }: { allPosts: SanityDocument[]; tren
                   <PostFeed posts={content.interviewsLarge} columns={3} variant="grid" />
                 </div>
 
+                {/* Below lg this replaces the 300x600, which would stack right on top of the News leaderboard. */}
+                <AdUnit className="mb-8 lg:hidden" />
+
                 <PostFeed posts={content.interviewsSmall} columns={3} variant="list" layout="horizontal" />
               </div>
 
-              <div className="w-full lg:w-1/4">
+              <div className="hidden lg:block lg:w-1/4">
                 <div className="sticky top-4">
                   <AdUnit variant="vertical" />
                 </div>
@@ -185,7 +195,9 @@ function ShowcaseHome({ allPosts, trending }: { allPosts: SanityDocument[]; tren
 
       <div className="w-full mx-auto px-4 md:px-8 py-6 2xl:px-64">
         <BottomSection posts={content.news} title="News" viewAllLink="/category/news" />
+        <AdUnit variant="responsive-leaderboard" />
         <MustReadSection posts={content.mustRead} viewAllLink="/category/q-and-a" />
+        <AdUnit variant="responsive-leaderboard" className="-mt-12 mb-6" />
       </div>
 
       <Footer posts={allPosts} />
