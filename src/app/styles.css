@@ -237,6 +237,11 @@
   display: none;
 }
 
+/* Label only once the ad has filled. visibility, not display: the label's height stays reserved, so no layout shift. */
+.ad-slot:not(:has(ins.adsbygoogle[data-ad-status="filled"])) .ad-label {
+  visibility: hidden;
+}
+
 .node-content-body > *:first-child {
   margin-top: 0;
 }

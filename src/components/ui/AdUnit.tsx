@@ -60,7 +60,8 @@ export function AdUnit({
         // Small delay to let the DOM settle after navigation
         const timer = setTimeout(() => {
             try {
-                if (adRef.current && !isInitialized.current) {
+                // offsetParent is null when a breakpoint hides the slot; pushing then throws "No slot size for availableWidth=0".
+                if (adRef.current && adRef.current.offsetParent !== null && !isInitialized.current) {
                     ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
                     isInitialized.current = true;
                 }
@@ -102,7 +103,7 @@ export function AdUnit({
     // Production: render real AdSense <ins> element
     return (
         <div ref={adRef} className={`ad-slot mx-auto max-w-full ${finalWidth} ${className}`}>
-            <div className="h-[22px] flex items-center">
+            <div className="ad-label h-[22px] flex items-center">
                 <span className="px-2 text-[10px] tracking-wider text-gray-400 font-medium">Advertisement</span>
             </div>
             <div className={finalHeight}>
